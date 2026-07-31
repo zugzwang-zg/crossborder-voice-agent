@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.7.0",
+  "prompt_version": "v9_consistency_guard",
+  "prompt_path": "prompts/v9_consistency_guard_prompt.md",
+  "provider": "openai",
+  "base_url": "https://api.aijws.com",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "text_verbosity": "low",
+  "max_output_tokens": 2500,
+  "timeout_seconds": 90,
+  "max_retries": 5,
+  "retry_base_seconds": 2.0,
+  "store": false,
+  "pricing_usd_per_1m": {
+    "input": 1.0,
+    "cached_input": 0.1,
+    "output": 6.0
+  },
+  "input_path": "data/processed/reviews_cleaned.csv",
+  "output_path": "data/processed/review_analysis_v11.jsonl",
+  "error_path": "data/processed/review_analysis_errors_v11.jsonl",
+  "run_log_path": "runs/review_analysis_v11.json"
+}

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="800" viewBox="0 0 1120 800" role="img">
+<title>Baseline 与 Improved 模型评测对比</title>
+<desc>八项指标的分组水平条形图，数值范围为百分之零到百分之一百。</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="24" y="34" font-family="sans-serif" font-size="22" font-weight="600" fill="#0f172a">Baseline 与 Improved 模型评测对比</text>
+<rect x="220" y="50" width="14" height="14" rx="2" fill="#64748b"/><text x="242" y="62" font-family="sans-serif" font-size="13" fill="#334155">Baseline</text>
+<rect x="335" y="50" width="14" height="14" rx="2" fill="#2563eb"/><text x="357" y="62" font-family="sans-serif" font-size="13" fill="#334155">Improved</text>
+<line x1="220.0" y1="80" x2="220.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="220.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">0%</text>
+<line x1="376.0" y1="80" x2="376.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="376.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">20%</text>
+<line x1="532.0" y1="80" x2="532.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="532.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">40%</text>
+<line x1="688.0" y1="80" x2="688.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="688.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">60%</text>
+<line x1="844.0" y1="80" x2="844.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="844.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">80%</text>
+<line x1="1000.0" y1="80" x2="1000.0" y2="770" stroke="#e2e8f0" stroke-width="1"/>
+<text x="1000.0" y="790" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#64748b">100%</text>
+<text x="208" y="113" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">情感 Accuracy</text>
+<rect x="220" y="92" width="678.6" height="18" rx="3" fill="#64748b"/>
+<text x="906.6" y="106" font-family="sans-serif" font-size="12" fill="#0f172a">87.0%</text>
+<rect x="220" y="119" width="694.2" height="18" rx="3" fill="#2563eb"/>
+<text x="922.2" y="133" font-family="sans-serif" font-size="12" fill="#0f172a">89.0%</text>
+<text x="208" y="183" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">情感 Macro-F1</text>
+<rect x="220" y="162" width="511.8" height="18" rx="3" fill="#64748b"/>
+<text x="739.8" y="176" font-family="sans-serif" font-size="12" fill="#0f172a">65.6%</text>
+<rect x="220" y="189" width="523.8" height="18" rx="3" fill="#2563eb"/>
+<text x="751.8" y="203" font-family="sans-serif" font-size="12" fill="#0f172a">67.2%</text>
+<text x="208" y="253" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">属性 Precision</text>
+<rect x="220" y="232" width="563.3" height="18" rx="3" fill="#64748b"/>
+<text x="791.3" y="246" font-family="sans-serif" font-size="12" fill="#0f172a">72.2%</text>
+<rect x="220" y="259" width="648.8" height="18" rx="3" fill="#2563eb"/>
+<text x="876.8" y="273" font-family="sans-serif" font-size="12" fill="#0f172a">83.2%</text>
+<text x="208" y="323" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">属性 Recall</text>
+<rect x="220" y="302" width="493.7" height="18" rx="3" fill="#64748b"/>
+<text x="721.7" y="316" font-family="sans-serif" font-size="12" fill="#0f172a">63.3%</text>
+<rect x="220" y="329" width="520.0" height="18" rx="3" fill="#2563eb"/>
+<text x="748.0" y="343" font-family="sans-serif" font-size="12" fill="#0f172a">66.7%</text>
+<text x="208" y="393" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">属性 F1</text>
+<rect x="220" y="372" width="526.3" height="18" rx="3" fill="#64748b"/>
+<text x="754.3" y="386" font-family="sans-serif" font-size="12" fill="#0f172a">67.5%</text>
+<rect x="220" y="399" width="577.4" height="18" rx="3" fill="#2563eb"/>
+<text x="805.4" y="413" font-family="sans-serif" font-size="12" fill="#0f172a">74.0%</text>
+<text x="208" y="463" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">痛点完全匹配率</text>
+<rect x="220" y="442" width="499.2" height="18" rx="3" fill="#64748b"/>
+<text x="727.2" y="456" font-family="sans-serif" font-size="12" fill="#0f172a">64.0%</text>
+<rect x="220" y="469" width="553.8" height="18" rx="3" fill="#2563eb"/>
+<text x="781.8" y="483" font-family="sans-serif" font-size="12" fill="#0f172a">71.0%</text>
+<text x="208" y="533" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">证据原文有效率</text>
+<rect x="220" y="512" width="780.0" height="18" rx="3" fill="#64748b"/>
+<text x="1008.0" y="526" font-family="sans-serif" font-size="12" fill="#0f172a">100.0%</text>
+<rect x="220" y="539" width="780.0" height="18" rx="3" fill="#2563eb"/>
+<text x="1008.0" y="553" font-family="sans-serif" font-size="12" fill="#0f172a">100.0%</text>
+<text x="208" y="603" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">JSON 解析成功率</text>
+<rect x="220" y="582" width="780.0" height="18" rx="3" fill="#64748b"/>
+<text x="1008.0" y="596" font-family="sans-serif" font-size="12" fill="#0f172a">100.0%</text>
+<rect x="220" y="609" width="780.0" height="18" rx="3" fill="#2563eb"/>
+<text x="1008.0" y="623" font-family="sans-serif" font-size="12" fill="#0f172a">100.0%</text>
+<text x="208" y="673" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">人工证据语义有效率</text>
+<rect x="220" y="652" width="686.4" height="18" rx="3" fill="#64748b"/>
+<text x="914.4" y="666" font-family="sans-serif" font-size="12" fill="#0f172a">88.0%</text>
+<rect x="220" y="679" width="748.8" height="18" rx="3" fill="#2563eb"/>
+<text x="976.8" y="693" font-family="sans-serif" font-size="12" fill="#0f172a">96.0%</text>
+<text x="208" y="743" text-anchor="end" font-family="sans-serif" font-size="14" fill="#0f172a">商业建议人工评分</text>
+<rect x="220" y="722" width="674.7" height="18" rx="3" fill="#64748b"/>
+<text x="902.7" y="736" font-family="sans-serif" font-size="12" fill="#0f172a">4.33/5</text>
+<rect x="220" y="749" width="676.7" height="18" rx="3" fill="#2563eb"/>
+<text x="904.7" y="763" font-family="sans-serif" font-size="12" fill="#0f172a">4.34/5</text>
+</svg>

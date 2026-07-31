@@ -1,0 +1,12 @@
+﻿motivation_code,name,support_reviews,en_reviews,es_reviews,stars_1,stars_2,stars_3,stars_4,stars_5,mean_confidence
+specific_user_need,特定人群需求,26,16,10,0,0,0,15,11,0.9808
+gift,送礼,20,8,12,0,0,0,6,14,0.9855
+repeat_purchase,复购,15,6,9,0,0,0,4,11,0.9833
+price_value,价格驱动,10,6,4,0,0,0,4,6,0.984
+recommendation,推荐驱动,9,5,4,0,0,0,3,6,0.9867
+availability,可获得性,4,2,2,0,0,0,0,4,0.9825
+appearance_preference,外观颜色偏好,2,2,0,0,0,0,1,1,0.99
+brand_familiarity,品牌熟悉,2,0,2,0,0,0,0,2,0.985
+efficacy_claim,效果驱动,2,2,0,0,0,0,0,2,0.985
+travel_portability,旅行便携,2,1,1,0,0,0,0,2,0.985
+convenience,便利驱动,1,1,0,0,0,0,0,1,0.99

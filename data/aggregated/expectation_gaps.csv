@@ -1,0 +1,9 @@
+﻿gap_code,name,support_reviews,en_reviews,es_reviews,stars_1,stars_2,stars_3,stars_4,stars_5,mean_confidence
+performance,效果落差,80,42,38,11,31,24,11,3,0.9734
+delivery,配送落差,32,10,22,17,5,6,3,1,0.9894
+photo_description,图片描述落差,28,13,15,10,9,8,1,0,0.9814
+size_quantity,尺寸数量落差,24,15,9,3,8,11,0,2,0.9746
+color_shade,颜色落差,16,9,7,4,7,0,5,0,0.9869
+product_form,产品形态落差,14,7,7,9,2,1,2,0,0.9793
+authenticity,真实性落差,6,3,3,4,2,0,0,0,0.98
+price,价格落差,2,0,2,0,1,0,0,1,0.985

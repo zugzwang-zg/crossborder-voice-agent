@@ -1,0 +1,659 @@
+{
+  "status": "complete",
+  "dataset": {
+    "records": 100,
+    "languages": {
+      "en": 50,
+      "es": 50
+    },
+    "role": "frozen_held_out_final_evaluation"
+  },
+  "comparison": {
+    "baseline": "v1_basic",
+    "improved": "v9_consistency_guard",
+    "model": "gpt-5.6-luna",
+    "schema_version": "1.7.0"
+  },
+  "versions": {
+    "baseline": {
+      "records_expected": 100,
+      "records_parsed": 100,
+      "invalid_json_lines": 0,
+      "json_parse_success_rate": 1.0,
+      "sentiment": {
+        "accuracy": 0.87,
+        "macro_f1": 0.6561,
+        "correct": 87,
+        "total": 100,
+        "per_class": {
+          "negative": {
+            "support": 31,
+            "precision": 0.8235,
+            "recall": 0.9032,
+            "f1": 0.8615
+          },
+          "mixed": {
+            "support": 36,
+            "precision": 0.875,
+            "recall": 0.7778,
+            "f1": 0.8235
+          },
+          "neutral": {
+            "support": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "positive": {
+            "support": 32,
+            "precision": 0.9118,
+            "recall": 0.9688,
+            "f1": 0.9394
+          }
+        }
+      },
+      "aspects": {
+        "precision": 0.7222,
+        "recall": 0.633,
+        "f1": 0.6747,
+        "record_exact_match_accuracy": 0.25,
+        "exact_match_records": 25,
+        "records": 100,
+        "true_positives": 169,
+        "false_positives": 65,
+        "false_negatives": 98,
+        "gold_label_instances": 267,
+        "predicted_label_instances": 234
+      },
+      "issues": {
+        "precision": 0.661,
+        "recall": 0.8041,
+        "f1": 0.7256,
+        "record_exact_match_accuracy": 0.64,
+        "exact_match_records": 64,
+        "records": 100,
+        "true_positives": 78,
+        "false_positives": 40,
+        "false_negatives": 19,
+        "gold_label_instances": 97,
+        "predicted_label_instances": 118
+      },
+      "evidence_substring": {
+        "validity": 1.0,
+        "valid_claims": 1095,
+        "total_claims": 1095
+      },
+      "by_language": {
+        "en": {
+          "sentiment": {
+            "accuracy": 0.9,
+            "macro_f1": 0.8991,
+            "correct": 45,
+            "total": 50,
+            "per_class": {
+              "negative": {
+                "support": 18,
+                "precision": 0.8889,
+                "recall": 0.8889,
+                "f1": 0.8889
+              },
+              "mixed": {
+                "support": 16,
+                "precision": 0.8667,
+                "recall": 0.8125,
+                "f1": 0.8387
+              },
+              "positive": {
+                "support": 16,
+                "precision": 0.9412,
+                "recall": 1.0,
+                "f1": 0.9697
+              }
+            }
+          },
+          "aspects": {
+            "precision": 0.6967,
+            "recall": 0.625,
+            "f1": 0.6589,
+            "record_exact_match_accuracy": 0.22,
+            "exact_match_records": 11,
+            "records": 50,
+            "true_positives": 85,
+            "false_positives": 37,
+            "false_negatives": 51,
+            "gold_label_instances": 136,
+            "predicted_label_instances": 122
+          },
+          "issues": {
+            "precision": 0.6471,
+            "recall": 0.8302,
+            "f1": 0.7273,
+            "record_exact_match_accuracy": 0.6,
+            "exact_match_records": 30,
+            "records": 50,
+            "true_positives": 44,
+            "false_positives": 24,
+            "false_negatives": 9,
+            "gold_label_instances": 53,
+            "predicted_label_instances": 68
+          }
+        },
+        "es": {
+          "sentiment": {
+            "accuracy": 0.84,
+            "macro_f1": 0.6369,
+            "correct": 42,
+            "total": 50,
+            "per_class": {
+              "negative": {
+                "support": 13,
+                "precision": 0.75,
+                "recall": 0.9231,
+                "f1": 0.8276
+              },
+              "mixed": {
+                "support": 20,
+                "precision": 0.8824,
+                "recall": 0.75,
+                "f1": 0.8108
+              },
+              "neutral": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "positive": {
+                "support": 16,
+                "precision": 0.8824,
+                "recall": 0.9375,
+                "f1": 0.9091
+              }
+            }
+          },
+          "aspects": {
+            "precision": 0.75,
+            "recall": 0.6412,
+            "f1": 0.6913,
+            "record_exact_match_accuracy": 0.28,
+            "exact_match_records": 14,
+            "records": 50,
+            "true_positives": 84,
+            "false_positives": 28,
+            "false_negatives": 47,
+            "gold_label_instances": 131,
+            "predicted_label_instances": 112
+          },
+          "issues": {
+            "precision": 0.68,
+            "recall": 0.7727,
+            "f1": 0.7234,
+            "record_exact_match_accuracy": 0.68,
+            "exact_match_records": 34,
+            "records": 50,
+            "true_positives": 34,
+            "false_positives": 16,
+            "false_negatives": 10,
+            "gold_label_instances": 44,
+            "predicted_label_instances": 50
+          }
+        }
+      }
+    },
+    "improved": {
+      "records_expected": 100,
+      "records_parsed": 100,
+      "invalid_json_lines": 0,
+      "json_parse_success_rate": 1.0,
+      "sentiment": {
+        "accuracy": 0.89,
+        "macro_f1": 0.6715,
+        "correct": 89,
+        "total": 100,
+        "per_class": {
+          "negative": {
+            "support": 31,
+            "precision": 0.8485,
+            "recall": 0.9032,
+            "f1": 0.875
+          },
+          "mixed": {
+            "support": 36,
+            "precision": 0.8824,
+            "recall": 0.8333,
+            "f1": 0.8571
+          },
+          "neutral": {
+            "support": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "positive": {
+            "support": 32,
+            "precision": 0.9394,
+            "recall": 0.9688,
+            "f1": 0.9539
+          }
+        }
+      },
+      "aspects": {
+        "precision": 0.8318,
+        "recall": 0.6667,
+        "f1": 0.7402,
+        "record_exact_match_accuracy": 0.28,
+        "exact_match_records": 28,
+        "records": 100,
+        "true_positives": 178,
+        "false_positives": 36,
+        "false_negatives": 89,
+        "gold_label_instances": 267,
+        "predicted_label_instances": 214
+      },
+      "issues": {
+        "precision": 0.7778,
+        "recall": 0.7216,
+        "f1": 0.7486,
+        "record_exact_match_accuracy": 0.71,
+        "exact_match_records": 71,
+        "records": 100,
+        "true_positives": 70,
+        "false_positives": 20,
+        "false_negatives": 27,
+        "gold_label_instances": 97,
+        "predicted_label_instances": 90
+      },
+      "evidence_substring": {
+        "validity": 1.0,
+        "valid_claims": 852,
+        "total_claims": 852
+      },
+      "by_language": {
+        "en": {
+          "sentiment": {
+            "accuracy": 0.92,
+            "macro_f1": 0.9197,
+            "correct": 46,
+            "total": 50,
+            "per_class": {
+              "negative": {
+                "support": 18,
+                "precision": 0.9412,
+                "recall": 0.8889,
+                "f1": 0.9143
+              },
+              "mixed": {
+                "support": 16,
+                "precision": 0.875,
+                "recall": 0.875,
+                "f1": 0.875
+              },
+              "positive": {
+                "support": 16,
+                "precision": 0.9412,
+                "recall": 1.0,
+                "f1": 0.9697
+              }
+            }
+          },
+          "aspects": {
+            "precision": 0.7876,
+            "recall": 0.6544,
+            "f1": 0.7148,
+            "record_exact_match_accuracy": 0.26,
+            "exact_match_records": 13,
+            "records": 50,
+            "true_positives": 89,
+            "false_positives": 24,
+            "false_negatives": 47,
+            "gold_label_instances": 136,
+            "predicted_label_instances": 113
+          },
+          "issues": {
+            "precision": 0.7059,
+            "recall": 0.6792,
+            "f1": 0.6923,
+            "record_exact_match_accuracy": 0.66,
+            "exact_match_records": 33,
+            "records": 50,
+            "true_positives": 36,
+            "false_positives": 15,
+            "false_negatives": 17,
+            "gold_label_instances": 53,
+            "predicted_label_instances": 51
+          }
+        },
+        "es": {
+          "sentiment": {
+            "accuracy": 0.86,
+            "macro_f1": 0.6518,
+            "correct": 43,
+            "total": 50,
+            "per_class": {
+              "negative": {
+                "support": 13,
+                "precision": 0.75,
+                "recall": 0.9231,
+                "f1": 0.8276
+              },
+              "mixed": {
+                "support": 20,
+                "precision": 0.8889,
+                "recall": 0.8,
+                "f1": 0.8421
+              },
+              "neutral": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "positive": {
+                "support": 16,
+                "precision": 0.9375,
+                "recall": 0.9375,
+                "f1": 0.9375
+              }
+            }
+          },
+          "aspects": {
+            "precision": 0.8812,
+            "recall": 0.6794,
+            "f1": 0.7673,
+            "record_exact_match_accuracy": 0.3,
+            "exact_match_records": 15,
+            "records": 50,
+            "true_positives": 89,
+            "false_positives": 12,
+            "false_negatives": 42,
+            "gold_label_instances": 131,
+            "predicted_label_instances": 101
+          },
+          "issues": {
+            "precision": 0.8718,
+            "recall": 0.7727,
+            "f1": 0.8193,
+            "record_exact_match_accuracy": 0.76,
+            "exact_match_records": 38,
+            "records": 50,
+            "true_positives": 34,
+            "false_positives": 5,
+            "false_negatives": 10,
+            "gold_label_instances": 44,
+            "predicted_label_instances": 39
+          }
+        }
+      }
+    }
+  },
+  "targets": {
+    "json_parse_success_rate": {
+      "target": 0.95,
+      "actual": 1.0,
+      "status": "pass"
+    },
+    "sentiment_accuracy": {
+      "target": 0.8,
+      "actual": 0.89,
+      "status": "pass"
+    },
+    "aspect_f1": {
+      "target": 0.7,
+      "actual": 0.7402,
+      "status": "pass"
+    },
+    "evidence_validity": {
+      "target": 0.9,
+      "actual": 0.96,
+      "status": "pass"
+    }
+  },
+  "manual_review": {
+    "evidence": {
+      "status": "complete",
+      "completed": 50,
+      "required": 50,
+      "by_version": {
+        "baseline": {
+          "valid": 22,
+          "reviewed": 25,
+          "semantic_evidence_validity": 0.88
+        },
+        "improved": {
+          "valid": 24,
+          "reviewed": 25,
+          "semantic_evidence_validity": 0.96
+        }
+      }
+    },
+    "business_advice": {
+      "status": "complete",
+      "completed": 40,
+      "required": 40,
+      "by_version": {
+        "baseline": {
+          "reviewed_actions": 20,
+          "dimension_means": {
+            "specificity_score_1_5": 3.95,
+            "data_grounding_score_1_5": 4.85,
+            "actionability_score_1_5": 4.1,
+            "over_inference_control_score_1_5": 4.4
+          },
+          "overall_mean": 4.325
+        },
+        "improved": {
+          "reviewed_actions": 20,
+          "dimension_means": {
+            "specificity_score_1_5": 4.0,
+            "data_grounding_score_1_5": 4.85,
+            "actionability_score_1_5": 3.95,
+            "over_inference_control_score_1_5": 4.55
+          },
+          "overall_mean": 4.338
+        }
+      }
+    }
+  },
+  "failure_cases": [
+    {
+      "error_score": 10,
+      "version": "baseline",
+      "review_id": "en_0657287",
+      "language": "en",
+      "stars": "1",
+      "review_title": "Two bows missing& alligator clips are flimsy not sturdy",
+      "review_body": "Cute bows, but definitely not what I expected! Two bows that my daughter wanted didn’t come inside so two missing bows and the alligator clips used are cheap! We didn’t use the bows at all a waste of money I missed the return window so now we are stuck with bows that won’t be used 👎🏽",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "negative",
+      "gold_aspects": "fulfillment.item_accuracy|product.appearance.design_look|product.quality.material_build|value.price_value",
+      "predicted_aspects": "product.quality.durability_breakage|product.usability.dispenser|value.price_value",
+      "aspect_false_positives": "product.quality.durability_breakage|product.usability.dispenser",
+      "aspect_false_negatives": "fulfillment.item_accuracy|product.appearance.design_look|product.quality.material_build",
+      "gold_issues": "missing_parts|price_value_problem",
+      "predicted_issues": "durability_problem|missing_parts|other_explicit_issue|price_value_problem",
+      "issue_false_positives": "durability_problem|other_explicit_issue",
+      "issue_false_negatives": "",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative|issue_false_positive"
+    },
+    {
+      "error_score": 9,
+      "version": "improved",
+      "review_id": "en_0977370",
+      "language": "en",
+      "stars": "3",
+      "review_title": "Buy 2",
+      "review_body": "Really soft and silky and matches pretty well but I needed a more full look as I have shoulder length hair and these didn't deliver. They are definitely not as full as the pictures. I was pretty disappointed. I need them for Easter and mothers day and had to buy an extra set and paid an extra 3.99 for one day shipping. We will see how they hold up",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "mixed",
+      "gold_aspects": "listing_trust.photo_description_match|product.appearance.color_shade|product.sensory.texture_consistency|value.price_value|value.size_quantity",
+      "predicted_aspects": "listing_trust.photo_description_match|product.appearance.design_look|product.efficacy.general_effect|product.sensory.texture_consistency",
+      "aspect_false_positives": "product.appearance.design_look|product.efficacy.general_effect",
+      "aspect_false_negatives": "product.appearance.color_shade|value.price_value|value.size_quantity",
+      "gold_issues": "description_photo_mismatch|price_value_problem|size_quantity_mismatch",
+      "predicted_issues": "description_photo_mismatch|insufficient_effect|other_explicit_issue",
+      "issue_false_positives": "insufficient_effect|other_explicit_issue",
+      "issue_false_negatives": "price_value_problem|size_quantity_mismatch",
+      "failure_types": "aspect_false_positive|aspect_false_negative|issue_false_positive|issue_false_negative"
+    },
+    {
+      "error_score": 9,
+      "version": "baseline",
+      "review_id": "es_0262123",
+      "language": "es",
+      "stars": "3",
+      "review_title": "Si es para vapeo, usar con cuidado",
+      "review_body": "Como algodón para desmaquillarse es perfecto. Para vapeo, hay que quitar las capas mas externas para que no de ningún sabor.",
+      "gold_sentiment": "positive",
+      "predicted_sentiment": "mixed",
+      "gold_aspects": "product.efficacy.cleansing|product.usability.ease_of_use",
+      "predicted_aspects": "product.efficacy.general_effect|product.sensory.scent|product.suitability.body_area_fit",
+      "aspect_false_positives": "product.efficacy.general_effect|product.sensory.scent|product.suitability.body_area_fit",
+      "aspect_false_negatives": "product.efficacy.cleansing|product.usability.ease_of_use",
+      "gold_issues": "",
+      "predicted_issues": "insufficient_effect",
+      "issue_false_positives": "insufficient_effect",
+      "issue_false_negatives": "",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative|issue_false_positive"
+    },
+    {
+      "error_score": 8,
+      "version": "baseline",
+      "review_id": "es_0912409",
+      "language": "es",
+      "stars": "4",
+      "review_title": "Me encanta",
+      "review_body": "Me encanta!! Tengo la piel grasa y nunca pense en usar un aceite.pero este me gusta mucho.no ha aportado mas grasa de la que ya tengo.la piel la noto mas hidratada y muy suave.en los poros no he notado que los haya disminuido.el olor me encanta.estoy deseando que llegue la noche para aplicarmelo porque es como un momento de relax.cunde muchisimo.lo volveria a comprar",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "positive",
+      "gold_aspects": "product.efficacy.general_effect|product.efficacy.skin_texture|product.sensory.greasiness|product.sensory.scent|product.suitability.skin_hair_fit|value.size_quantity",
+      "predicted_aspects": "product.efficacy.general_effect|product.efficacy.skin_texture|product.efficacy.speed_duration",
+      "aspect_false_positives": "product.efficacy.speed_duration",
+      "aspect_false_negatives": "product.sensory.greasiness|product.sensory.scent|product.suitability.skin_hair_fit|value.size_quantity",
+      "gold_issues": "insufficient_effect",
+      "predicted_issues": "insufficient_effect",
+      "issue_false_positives": "",
+      "issue_false_negatives": "",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative"
+    },
+    {
+      "error_score": 7,
+      "version": "baseline",
+      "review_id": "en_0077091",
+      "language": "en",
+      "stars": "3",
+      "review_title": "Drainage Tube",
+      "review_body": "Just opened, but the drainage tub doesn't clip/attach to the unit. So much for product testing before shipping. Hopefully it works well.",
+      "gold_sentiment": "negative",
+      "predicted_sentiment": "negative",
+      "gold_aspects": "product.quality.material_build|product.usability.ease_of_use",
+      "predicted_aspects": "fulfillment.item_accuracy|product.efficacy.general_effect|product.quality.mechanical_electrical",
+      "aspect_false_positives": "fulfillment.item_accuracy|product.efficacy.general_effect|product.quality.mechanical_electrical",
+      "aspect_false_negatives": "product.quality.material_build|product.usability.ease_of_use",
+      "gold_issues": "difficult_to_use",
+      "predicted_issues": "difficult_to_use|mechanical_malfunction|other_explicit_issue",
+      "issue_false_positives": "mechanical_malfunction|other_explicit_issue",
+      "issue_false_negatives": "",
+      "failure_types": "aspect_false_positive|aspect_false_negative|issue_false_positive"
+    },
+    {
+      "error_score": 7,
+      "version": "improved",
+      "review_id": "en_0116976",
+      "language": "en",
+      "stars": "1",
+      "review_title": "Tears out hair - Do Not Buy!!!",
+      "review_body": "I wore these for an 8hr day at work. I put 2 in my hair to keep my bangs back. I got home to take them out and they tore out huge chunks of hair!! If you value your hair you will not buy these. My hair was straightened, smooth, and dry. No excuse for the amount of hair I lost in only 1 day.",
+      "gold_sentiment": "negative",
+      "predicted_sentiment": "mixed",
+      "gold_aspects": "product.sensory.comfort_irritation|product.suitability.skin_hair_fit",
+      "predicted_aspects": "product.efficacy.hair_styling",
+      "aspect_false_positives": "product.efficacy.hair_styling",
+      "aspect_false_negatives": "product.sensory.comfort_irritation|product.suitability.skin_hair_fit",
+      "gold_issues": "adverse_reaction|other_explicit_issue",
+      "predicted_issues": "adverse_reaction",
+      "issue_false_positives": "",
+      "issue_false_negatives": "other_explicit_issue",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative|issue_false_negative"
+    },
+    {
+      "error_score": 7,
+      "version": "improved",
+      "review_id": "en_0146413",
+      "language": "en",
+      "stars": "1",
+      "review_title": "I would not recommend it for oily or complex skin types",
+      "review_body": "It has nice smell but that's all. It feels heavy and very oily on your skin. It does not supply any moisture nor effectively keeps it from your skin. I've gotten a lot of pimples and my skin even got itchy. Not recommend at all...",
+      "gold_sentiment": "negative",
+      "predicted_sentiment": "mixed",
+      "gold_aspects": "product.efficacy.general_effect|product.sensory.comfort_irritation|product.sensory.greasiness|product.sensory.scent|product.suitability.skin_hair_fit",
+      "predicted_aspects": "product.efficacy.general_effect|product.sensory.comfort_irritation|product.sensory.greasiness|product.sensory.scent",
+      "aspect_false_positives": "",
+      "aspect_false_negatives": "product.suitability.skin_hair_fit",
+      "gold_issues": "adverse_reaction|no_effect|texture_problem",
+      "predicted_issues": "adverse_reaction|insufficient_effect",
+      "issue_false_positives": "insufficient_effect",
+      "issue_false_negatives": "no_effect|texture_problem",
+      "failure_types": "sentiment_mismatch|aspect_false_negative|issue_false_positive|issue_false_negative"
+    },
+    {
+      "error_score": 7,
+      "version": "baseline",
+      "review_id": "es_0497325",
+      "language": "es",
+      "stars": "4",
+      "review_title": "Están muy bien, apenas se notan",
+      "review_body": "La verdad es que, sin ser excesivamente largas, sí que hacen que parezca que tengo el pelo bastante más largo y, sobre todo, aportan muchísimo volumen. Vienen muy bien peinadas así que además cuando te las pones parece que tienes unos rizos muy bonitos. a mí no me parece que sean excesivamente brillantes, pero lo que es verdad es que a la luz toman un tono rojizo y se notan algo distintas a mi color (castaño oscuro) aunque más que quedar poco natural parece que llevo reflejos. La mayor pega es que se enredan mucho, muchísimo. Además como las peines se quedan sin forma y que parecen un estropajo,Yo me muevo bastante y mi pelo es fino y se enreda mucho por lo que dudo que me duren más de 15 de puestas sin quedarse totalmente enredadas y dejar de estar bonitas. Otra pega es que los enganches no aguantan muy bien en el pelo fino (prefiero los de clip). De todos modos, teniendo en cuenta el precio, están muy bien de calidad y no es demasiado costoso comprarse otras cuando se estropeen, cosa que haré.",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "mixed",
+      "gold_aspects": "product.appearance.color_shade|product.efficacy.hair_styling|product.quality.durability_breakage|product.suitability.skin_hair_fit|value.price_value",
+      "predicted_aspects": "product.appearance.color_shade|product.appearance.finish_shine|product.efficacy.general_effect|product.efficacy.hair_styling",
+      "aspect_false_positives": "product.appearance.finish_shine|product.efficacy.general_effect",
+      "aspect_false_negatives": "product.quality.durability_breakage|product.suitability.skin_hair_fit|value.price_value",
+      "gold_issues": "difficult_to_use|durability_problem",
+      "predicted_issues": "durability_problem|other_explicit_issue",
+      "issue_false_positives": "other_explicit_issue",
+      "issue_false_negatives": "difficult_to_use",
+      "failure_types": "aspect_false_positive|aspect_false_negative|issue_false_positive|issue_false_negative"
+    },
+    {
+      "error_score": 7,
+      "version": "baseline",
+      "review_id": "es_0702047",
+      "language": "es",
+      "stars": "4",
+      "review_title": "Muy brillante",
+      "review_body": "No hace mucha espuma, pero te deja el pelo muy brillante",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "positive",
+      "gold_aspects": "product.efficacy.cleansing|product.efficacy.hair_styling",
+      "predicted_aspects": "product.appearance.finish_shine|product.efficacy.general_effect",
+      "aspect_false_positives": "product.appearance.finish_shine|product.efficacy.general_effect",
+      "aspect_false_negatives": "product.efficacy.cleansing|product.efficacy.hair_styling",
+      "gold_issues": "",
+      "predicted_issues": "",
+      "issue_false_positives": "",
+      "issue_false_negatives": "",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative"
+    },
+    {
+      "error_score": 6,
+      "version": "baseline",
+      "review_id": "es_0301352",
+      "language": "es",
+      "stars": "1",
+      "review_title": "Producto recibido en malas condiciones",
+      "review_body": "Producto recibido en condiciones no adecuadas, el envase estaba abierto, las botellas vienen dentro de una bolsa de plástico con parte del producto fuera de las mismas, no se corresponde con la imagen de venta en la que se aprecia que cada producto viene en su propia caja. Adjunto foto. Se aprecia que el vendedor no cuida la calidad de su envío, una lástima ya que el producto no se lo merece.",
+      "gold_sentiment": "mixed",
+      "predicted_sentiment": "negative",
+      "gold_aspects": "listing_trust.photo_description_match|packaging.arrival_condition|packaging.seal_leak_protection",
+      "predicted_aspects": "fulfillment.seller_service|listing_trust.photo_description_match|packaging.arrival_condition",
+      "aspect_false_positives": "fulfillment.seller_service",
+      "aspect_false_negatives": "packaging.seal_leak_protection",
+      "gold_issues": "description_photo_mismatch|leakage_spillage|opened_used_item",
+      "predicted_issues": "description_photo_mismatch|leakage_spillage|opened_used_item|seller_support_problem",
+      "issue_false_positives": "seller_support_problem",
+      "issue_false_negatives": "",
+      "failure_types": "sentiment_mismatch|aspect_false_positive|aspect_false_negative|issue_false_positive"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# The core pipeline and validation suite use only the Python standard library.
+# This file is intentionally dependency-free.

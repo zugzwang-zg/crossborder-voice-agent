@@ -1,0 +1,63 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+
+# Editors and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Python test/runtime caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local API runs and logs
+runs/
+*.log
+dashboard/.dev-server*.log
+
+# Full or review-level MARC derivatives are kept locally.
+# The public repository retains only data/sample and aggregated tables.
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/development/
+data/evaluation/
+data/annotation/*
+!data/annotation/.gitkeep
+data/business_value/
+data/sample/mock_*
+data/aggregated/dev_preview/
+data/aggregated/pilot_100_preview/
+
+# Human-review workbooks and generated inspection dumps
+reports/*.xlsx
+reports/*.xlsx.inspect.ndjson
+
+# Local development and relay-diagnostic reports
+reports/step6_dev_*
+reports/step6_v*
+reports/step6_pipeline_validation.md
+reports/step7_dev_*
+reports/step7_pilot_*
+reports/step7_*diagnostic*
+reports/step7_new_endpoint_attempt.md
+reports/step7_original_endpoint_*
+reports/step7_tutorial_config_audit.md
+reports/step10_*
+
+# Dashboard build artefacts and local dependencies
+dashboard/node_modules/
+dashboard/.next/
+dashboard/dist/
+dashboard/.sites/
+dashboard/*.tsbuildinfo
+dashboard/public/data/dashboard-data.json
+
+# Temporary portfolio-build files
+.codex-tmp/
