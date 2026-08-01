@@ -13,6 +13,7 @@ CrossBorder Voice 将 Amazon 英语与西班牙语美妆评论转换为可筛选
 > **适用边界：** 数据来自 2015—2019 年，用于方法验证，不代表当前市场趋势
 
 [技术演示文稿](assets/CrossBorder_Voice_Project_Presentation.pptx) ·
+[在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
 [模型评测](reports/evaluation_report.md) ·
 [消费者洞察](reports/consumer_insights.md)
 
@@ -147,6 +148,8 @@ python scripts/aggregate_insights.py
 ```
 
 ### 交互式看板
+
+无需安装或配置 API key，可直接打开[公开演示网页](https://crossborder-voice-86182.reidmozzie.chatgpt.site)。网页默认使用 10 条安全演示样本，不会调用付费模型 API。
 
 要求 Node.js 22.13+ 与 pnpm。
 

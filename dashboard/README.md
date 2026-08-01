@@ -2,6 +2,8 @@
 
 Interactive consumer-insight dashboard built with Next.js, React, TypeScript and vinext.
 
+[Open the public demo](https://crossborder-voice-86182.reidmozzie.chatgpt.site). The hosted demo uses static sample data and does not require an API key.
+
 ## Views
 
 - Overview: dataset size, sentiment and star-rating distributions
