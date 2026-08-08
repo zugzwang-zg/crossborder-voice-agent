@@ -37,6 +37,10 @@ review_body
 product_category
 ```
 
+输入验证、可选商品字段、别名和缺失值处理详见
+[`REVIEW_DATA_CONTRACT.md`](REVIEW_DATA_CONTRACT.md)。MARC 不提供商品标题、
+品牌、细分品类或可靠国家字段，因此这些字段不得从语言或评论文本中猜测。
+
 `reviewer_id` 未纳入本项目分析，因此没有写入抽样文件。
 
 ## 可复现抽样方法

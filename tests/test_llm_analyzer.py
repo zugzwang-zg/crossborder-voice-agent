@@ -841,6 +841,9 @@ class PipelineTests(unittest.TestCase):
                 "stars": "1",
                 "review_title": "Bad pump",
                 "review_body": "It broke.",
+                "product_id": "product_en_1",
+                "product_category": "beauty",
+                "product_subcategory": "dispensers",
             },
             {
                 "review_id": "normal_1",
@@ -848,6 +851,9 @@ class PipelineTests(unittest.TestCase):
                 "stars": "5",
                 "review_title": "Muy bueno",
                 "review_body": "Me encanta.",
+                "product_id": "product_es_1",
+                "product_category": "beauty",
+                "product_subcategory": "serums",
             },
         ]
         with self.input_path.open(
@@ -890,6 +896,11 @@ class PipelineTests(unittest.TestCase):
         ]
         self.assertEqual(len(lines), 2)
         self.assertEqual(len({line["review_id"] for line in lines}), 2)
+        self.assertEqual(lines[0]["source"]["contract_version"], "1.0.0")
+        self.assertEqual(lines[0]["source"]["product_id"], "product_en_1")
+        self.assertEqual(
+            lines[1]["source"]["product_subcategory"], "serums"
+        )
 
         self.error_path.write_text(
             json.dumps(

@@ -11,6 +11,7 @@ __pycache__/
 Thumbs.db
 
 # Python test/runtime caches
+.venv/
 .pytest_cache/
 .coverage
 htmlcov/

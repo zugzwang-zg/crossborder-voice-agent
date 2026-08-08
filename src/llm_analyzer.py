@@ -24,6 +24,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from src.review_contract import (
+    ReviewContractError,
+    normalize_reviews,
+    source_record,
+    validate_input_columns,
+)
 from src.schema import (
     API_ANALYSIS_SCHEMA,
     SCHEMA_VERSION,
@@ -450,17 +456,12 @@ def write_json(path: Path, record: dict[str, Any]) -> None:
 
 def load_reviews(input_path: Path, limit: int | None) -> list[dict[str, str]]:
     with input_path.open(encoding="utf-8-sig", newline="") as handle:
-        reviews = list(csv.DictReader(handle))
-    required = {
-        "review_id",
-        "language",
-        "stars",
-        "review_title",
-        "review_body",
-    }
-    missing = required - set(reviews[0] if reviews else [])
-    if missing:
-        raise ValueError(f"Input CSV missing columns: {sorted(missing)}")
+        reader = csv.DictReader(handle)
+        validate_input_columns(reader.fieldnames)
+        try:
+            reviews = normalize_reviews(reader)
+        except ReviewContractError as error:
+            raise ValueError(f"Invalid input review data: {error}") from error
     return reviews[:limit] if limit is not None else reviews
 
 
@@ -584,12 +585,7 @@ def run_pipeline(
                 )
                 record = {
                     "review_id": review_id,
-                    "source": {
-                        "language": review["language"],
-                        "stars": int(float(review["stars"])),
-                        "title": review.get("review_title", ""),
-                        "body": review.get("review_body", ""),
-                    },
+                    "source": source_record(review),
                     "analysis": analysis,
                     "_run": {
                         **result.metadata,
