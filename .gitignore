@@ -32,6 +32,7 @@ data/evaluation/
 data/annotation/*
 !data/annotation/.gitkeep
 data/business_value/
+data/feedback/
 data/sample/mock_*
 data/aggregated/dev_preview/
 data/aggregated/pilot_100_preview/

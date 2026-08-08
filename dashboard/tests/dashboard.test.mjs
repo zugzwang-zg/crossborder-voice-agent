@@ -60,6 +60,18 @@ test("dashboard implements scope and analysis filters plus five views", async ()
   assert.match(page, /不生成虚假的单品洞察/);
   assert.match(page, /分层样本，不代表真实市场占比/);
   assert.match(page, /scope-decision-card/);
+  for (const status of ["new", "needs_validation", "accepted", "rejected", "resolved"]) {
+    assert.match(page, new RegExp(`${status}:`));
+  }
+  assert.match(page, /crossborder-voice\.insight-feedback\.v1/);
+  assert.match(page, /标签错误/);
+  assert.match(page, /证据不足/);
+  assert.match(page, /建议无效/);
+  assert.match(page, /导出反馈/);
+  assert.match(page, /人工反馈独立保存/);
+  assert.match(page, /crossborder-voice\.insight-comparison\.v1/);
+  assert.match(page, /洞察版本对比/);
+  assert.match(page, /新增、消失与支持量变化/);
 });
 
 test("production HTML renders the branded dashboard shell", async () => {

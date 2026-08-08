@@ -16,14 +16,15 @@
 [在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
 [模型评测](reports/evaluation_report.md) ·
 [消费者洞察](reports/consumer_insights.md) ·
-[抽样与范围边界](docs/SAMPLING_AND_SCOPE.md)
+[抽样与范围边界](docs/SAMPLING_AND_SCOPE.md) ·
+[数据与隐私](docs/DATA_AND_PRIVACY.md)
 
 | 已验证能力 | 当前结果 | 复现与口径 |
 |---|---:|---|
 | 正式分析规模 | 1,000 条 | 英语 500 / 西语 500；每个语言 × 星级分层 100 条，[不代表市场占比](docs/SAMPLING_AND_SCOPE.md) |
 | 冻结测试集 | 100 条 | 与提示词开发集分离，[查看评测](reports/evaluation_report.md) |
 | 人工证据语义有效率 | 96% | 每版本抽查 25 条，不等同于全量复核，[查看方法](reports/evaluation_report.md) |
-| 自动化回归 | 40 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
+| 自动化回归 | 44 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
 
 ### 1 分钟本地演示
 

@@ -20,6 +20,12 @@ All notable changes will be documented in this file.
 - Dashboard product/subcategory scope controls, missing-scope guardrail, and
   persistent sampling boundary rail.
 - README first-screen quick start, CI status, reproducible metrics, and data limits.
+- Append-only insight feedback events with status, owner, priority, due date,
+  notes and explicit quality flags, stored separately from model output.
+- Dashboard human-decision ticket, local history and feedback export.
+- Saved insight comparison baselines with added, removed and support-change
+  deltas across filters or analysis versions.
+- Consolidated data/privacy register and public-demo release checklist.
 
 ### Pending maintainer decision
 

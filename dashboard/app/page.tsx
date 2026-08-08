@@ -3,15 +3,20 @@
 import {
   BarChart3,
   BookOpenText,
+  CheckCircle2,
   ChevronRight,
+  Clock3,
   CircleDot,
+  Download,
   FileSearch,
   Filter,
+  Flag,
   Languages,
   Lightbulb,
   Menu,
   MessageSquareQuote,
   RotateCcw,
+  Save,
   Search,
   ShoppingBag,
   Sparkles,
@@ -124,6 +129,31 @@ type Filters = {
   scenario: string;
 };
 
+type InsightStatus = "new" | "needs_validation" | "accepted" | "rejected" | "resolved";
+type InsightPriority = "low" | "medium" | "high" | "urgent";
+type InsightFlag = "label_error" | "insufficient_evidence" | "invalid_recommendation";
+type InsightFeedbackDraft = {
+  status: InsightStatus;
+  priority: InsightPriority;
+  owner: string;
+  dueDate: string;
+  note: string;
+};
+type InsightFeedbackEvent = InsightFeedbackDraft & {
+  eventId: string;
+  insightId: string;
+  eventType: "decision_update" | "quality_flag";
+  createdAt: string;
+  actor: string;
+  flagType?: InsightFlag;
+};
+type InsightSnapshotItem = { title: string; support: number };
+type InsightBaseline = {
+  capturedAt: string;
+  scopeLabel: string;
+  insights: Record<string, InsightSnapshotItem>;
+};
+
 const INITIAL_FILTERS: Filters = {
   product: "all",
   subcategory: "all",
@@ -133,6 +163,34 @@ const INITIAL_FILTERS: Filters = {
   aspect: "all",
   issue: "all",
   scenario: "all",
+};
+
+const FEEDBACK_STORAGE_KEY = "crossborder-voice.insight-feedback.v1";
+const COMPARISON_STORAGE_KEY = "crossborder-voice.insight-comparison.v1";
+const DEFAULT_FEEDBACK_DRAFT: InsightFeedbackDraft = {
+  status: "new",
+  priority: "medium",
+  owner: "",
+  dueDate: "",
+  note: "",
+};
+const STATUS_META: Record<InsightStatus, { label: string; short: string }> = {
+  new: { label: "新建 / New", short: "新建" },
+  needs_validation: { label: "待验证 / Needs validation", short: "待验证" },
+  accepted: { label: "已采纳 / Accepted", short: "已采纳" },
+  rejected: { label: "已驳回 / Rejected", short: "已驳回" },
+  resolved: { label: "已解决 / Resolved", short: "已解决" },
+};
+const PRIORITY_META: Record<InsightPriority, string> = {
+  low: "低",
+  medium: "中",
+  high: "高",
+  urgent: "紧急",
+};
+const FLAG_META: Record<InsightFlag, string> = {
+  label_error: "标签错误",
+  insufficient_evidence: "证据不足",
+  invalid_recommendation: "建议无效",
 };
 
 const PAGE_ITEMS: {
@@ -179,6 +237,27 @@ function pct(value: number, total: number, digits = 1) {
 
 function labelOf(labels: Record<string, string>, code: string) {
   return labels[code] || code.replaceAll("_", " ");
+}
+
+function compareInsightSnapshots(
+  baseline: InsightBaseline | null,
+  current: Record<string, InsightSnapshotItem>,
+) {
+  if (!baseline) return { added: [] as string[], removed: [] as string[], changed: [] as { id: string; title: string; before: number; after: number }[] };
+  const beforeIds = new Set(Object.keys(baseline.insights));
+  const currentIds = new Set(Object.keys(current));
+  const added = [...currentIds].filter((id) => !beforeIds.has(id)).sort();
+  const removed = [...beforeIds].filter((id) => !currentIds.has(id)).sort();
+  const changed = [...currentIds]
+    .filter((id) => beforeIds.has(id) && baseline.insights[id].support !== current[id].support)
+    .map((id) => ({
+      id,
+      title: current[id].title,
+      before: baseline.insights[id].support,
+      after: current[id].support,
+    }))
+    .sort((a, b) => Math.abs(b.after - b.before) - Math.abs(a.after - a.before));
+  return { added, removed, changed };
 }
 
 function selectOptions(labels: Record<string, string>) {
@@ -774,6 +853,107 @@ function InsightsPage({
     .sort((a, b) => b.matchedIds.length - a.matchedIds.length);
   const [selectedId, setSelectedId] = useState<string>("");
   const selected = visibleInsights.find((item) => item.insight.insight_id === selectedId) || visibleInsights[0];
+  const [feedbackEvents, setFeedbackEvents] = useState<InsightFeedbackEvent[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = window.localStorage.getItem(FEEDBACK_STORAGE_KEY);
+      return saved ? JSON.parse(saved) as InsightFeedbackEvent[] : [];
+    } catch {
+      return [];
+    }
+  });
+  const [feedbackDrafts, setFeedbackDrafts] = useState<Record<string, InsightFeedbackDraft>>({});
+  const [comparisonBaseline, setComparisonBaseline] = useState<InsightBaseline | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const saved = window.localStorage.getItem(COMPARISON_STORAGE_KEY);
+      return saved ? JSON.parse(saved) as InsightBaseline : null;
+    } catch {
+      return null;
+    }
+  });
+  const currentInsightSnapshot = Object.fromEntries(visibleInsights.map(({ insight, matchedIds }) => [
+    insight.insight_id,
+    { title: insight.title, support: matchedIds.length },
+  ])) as Record<string, InsightSnapshotItem>;
+  const comparison = compareInsightSnapshots(comparisonBaseline, currentInsightSnapshot);
+  const latestByInsight = useMemo(() => {
+    const result: Record<string, InsightFeedbackEvent> = {};
+    feedbackEvents.forEach((event) => { result[event.insightId] = event; });
+    return result;
+  }, [feedbackEvents]);
+
+  const selectedInsightId = selected?.insight.insight_id || "";
+  const latestFeedback = latestByInsight[selectedInsightId];
+  const feedbackDraft = feedbackDrafts[selectedInsightId] || (latestFeedback ? {
+    status: latestFeedback.status,
+    priority: latestFeedback.priority,
+    owner: latestFeedback.owner,
+    dueDate: latestFeedback.dueDate,
+    note: "",
+  } : DEFAULT_FEEDBACK_DRAFT);
+  const selectedHistory = feedbackEvents
+    .filter((event) => event.insightId === selectedInsightId)
+    .slice()
+    .reverse();
+
+  const updateFeedbackDraft = (patch: Partial<InsightFeedbackDraft>) => {
+    if (!selectedInsightId) return;
+    setFeedbackDrafts((current) => ({
+      ...current,
+      [selectedInsightId]: { ...feedbackDraft, ...patch },
+    }));
+  };
+  const handleAppendFeedback = (eventType: InsightFeedbackEvent["eventType"], flagType?: InsightFlag) => {
+    if (!selectedInsightId) return;
+    const event: InsightFeedbackEvent = {
+      ...feedbackDraft,
+      eventId: globalThis.crypto.randomUUID(),
+      insightId: selectedInsightId,
+      eventType,
+      flagType,
+      createdAt: new Date().toISOString(),
+      actor: "dashboard-reviewer",
+    };
+    const next = [...feedbackEvents, event];
+    setFeedbackEvents(next);
+    setFeedbackDrafts((current) => ({
+      ...current,
+      [selectedInsightId]: { ...feedbackDraft, note: "" },
+    }));
+    try {
+      window.localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // The export action remains available if browser storage is unavailable.
+    }
+  };
+  const exportFeedback = () => {
+    const blob = new Blob([JSON.stringify({
+      schema_version: "1.0",
+      storage_mode: "independent_append_only_feedback",
+      exported_at: new Date().toISOString(),
+      events: feedbackEvents,
+    }, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "crossborder-voice-insight-feedback.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+  const handleCaptureComparisonBaseline = () => {
+    const next: InsightBaseline = {
+      capturedAt: new Date().toISOString(),
+      scopeLabel,
+      insights: currentInsightSnapshot,
+    };
+    setComparisonBaseline(next);
+    try {
+      window.localStorage.setItem(COMPARISON_STORAGE_KEY, JSON.stringify(next));
+    } catch {
+      // Comparison still works for the current session when storage is unavailable.
+    }
+  };
   const issueLeader = countBy(
     records.flatMap((record) => record.issues),
     (issue) => issue.code,
@@ -831,6 +1011,25 @@ function InsightsPage({
         )}
       </article>
 
+      <section className="version-compare" aria-label="洞察版本对比">
+        <header>
+          <div><span>VERSION DELTA</span><strong>洞察版本对比</strong></div>
+          <button onClick={handleCaptureComparisonBaseline}><RotateCcw size={14} />将当前结果设为比较基线</button>
+        </header>
+        {comparisonBaseline ? (
+          <>
+            <div className="version-metrics">
+              <div><span>新增</span><strong>{comparison.added.length}</strong></div>
+              <div><span>消失</span><strong>{comparison.removed.length}</strong></div>
+              <div><span>支持量变化</span><strong>{comparison.changed.length}</strong></div>
+              <p>基线：{comparisonBaseline.scopeLabel} · {new Date(comparisonBaseline.capturedAt).toLocaleString("zh-CN")}</p>
+            </div>
+            {comparison.changed.length > 0 && <div className="version-change-list">{comparison.changed.slice(0, 5).map((item) => <div key={item.id}><strong>{item.title}</strong><span>{item.before} → {item.after}</span><b className={item.after >= item.before ? "up" : "down"}>{item.after - item.before > 0 ? "+" : ""}{item.after - item.before}</b></div>)}</div>}
+            {!comparison.added.length && !comparison.removed.length && !comparison.changed.length && <p className="version-empty">当前结果与保存的基线一致；改变筛选范围或载入新分析版本后可查看差异。</p>}
+          </>
+        ) : <p className="version-empty">尚未保存比较基线。保存当前结果后，后续筛选或新数据版本会显示新增、消失与支持量变化。</p>}
+      </section>
+
       <div className="insight-workbench">
         <aside className="insight-index">
           <div className="insight-index-head">
@@ -846,7 +1045,7 @@ function InsightsPage({
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <strong>{insight.title}</strong>
-                <small>{matchedIds.length} 条当前证据</small>
+                <small>{matchedIds.length} 条当前证据 · {STATUS_META[latestByInsight[insight.insight_id]?.status || "new"].short}</small>
               </div>
               <ChevronRight size={15} />
             </button>
@@ -857,6 +1056,43 @@ function InsightsPage({
           <div className="insight-category">{selected.insight.category_name}</div>
           <h2>{selected.insight.finding || selected.insight.title}</h2>
           <p className="cause-note">{selected.insight.possible_cause}</p>
+
+          <section className="decision-ticket" aria-label="洞察人工反馈工单">
+            <header>
+              <div>
+                <span>HUMAN DECISION TICKET</span>
+                <strong>人工反馈工单</strong>
+              </div>
+              <span className={`workflow-status ${feedbackDraft.status}`}>{STATUS_META[feedbackDraft.status].short}</span>
+            </header>
+            <div className="ticket-fields">
+              <label><span>状态</span><select value={feedbackDraft.status} onChange={(event) => updateFeedbackDraft({ status: event.target.value as InsightStatus })}>{Object.entries(STATUS_META).map(([value, meta]) => <option value={value} key={value}>{meta.label}</option>)}</select></label>
+              <label><span>负责人</span><input value={feedbackDraft.owner} onChange={(event) => updateFeedbackDraft({ owner: event.target.value })} placeholder="姓名或团队" /></label>
+              <label><span>优先级</span><select value={feedbackDraft.priority} onChange={(event) => updateFeedbackDraft({ priority: event.target.value as InsightPriority })}>{Object.entries(PRIORITY_META).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label>
+              <label><span>到期日</span><input type="date" value={feedbackDraft.dueDate} onChange={(event) => updateFeedbackDraft({ dueDate: event.target.value })} /></label>
+            </div>
+            <label className="ticket-note"><span>决策说明</span><textarea value={feedbackDraft.note} onChange={(event) => updateFeedbackDraft({ note: event.target.value })} placeholder="记录采纳、驳回或复核所依据的理由" /></label>
+            <div className="ticket-actions">
+              <button className="ticket-save" onClick={() => handleAppendFeedback("decision_update")}><Save size={15} />保存状态</button>
+              <div className="quality-flags" aria-label="质量反馈">
+                <span><Flag size={14} />标记问题</span>
+                {(Object.keys(FLAG_META) as InsightFlag[]).map((flag) => <button key={flag} onClick={() => handleAppendFeedback("quality_flag", flag)}>{FLAG_META[flag]}</button>)}
+              </div>
+              <button className="ticket-export" onClick={exportFeedback} disabled={!feedbackEvents.length}><Download size={15} />导出反馈</button>
+            </div>
+            <div className="feedback-separation"><CheckCircle2 size={15} /><span>人工反馈独立保存，不会覆盖模型洞察、证据或建议。</span></div>
+            <details className="ticket-history">
+              <summary><Clock3 size={15} />历史记录 · {selectedHistory.length}</summary>
+              {selectedHistory.length ? selectedHistory.map((event) => (
+                <div className="history-event" key={event.eventId}>
+                  <time>{new Date(event.createdAt).toLocaleString("zh-CN")}</time>
+                  <strong>{event.eventType === "quality_flag" && event.flagType ? FLAG_META[event.flagType] : STATUS_META[event.status].short}</strong>
+                  <span>{PRIORITY_META[event.priority]}优先级{event.owner ? ` · ${event.owner}` : " · 未分配"}</span>
+                  {event.note && <p>{event.note}</p>}
+                </div>
+              )) : <p className="history-empty">尚无人工反馈；首次保存后会形成不可覆盖的事件记录。</p>}
+            </details>
+          </section>
 
           <div className="evidence-spine">
             <div className="spine-step">
