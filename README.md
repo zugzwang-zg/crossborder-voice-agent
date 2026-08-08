@@ -24,7 +24,8 @@
 | 正式分析规模 | 1,000 条 | 英语 500 / 西语 500；每个语言 × 星级分层 100 条，[不代表市场占比](docs/SAMPLING_AND_SCOPE.md) |
 | 冻结测试集 | 100 条 | 与提示词开发集分离，[查看评测](reports/evaluation_report.md) |
 | 人工证据语义有效率 | 96% | 每版本抽查 25 条，不等同于全量复核，[查看方法](reports/evaluation_report.md) |
-| 自动化回归 | 44 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
+| 冻结挑战集扩展 | 40 条待双人标注 | 英语 20 / 西班牙语 20，覆盖中性候选、混合候选、长评论、多主题和隐含属性；尚不计入主指标 |
+| 自动化回归 | 48 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
 
 ### 1 分钟本地演示
 
@@ -109,6 +110,8 @@ flowchart LR
 | 人工证据语义有效率 | 88% | **96%** |
 
 人工证据指标来自每个版本 25 条、英西语均衡的语义抽查，不代表对全部证据逐条人工复核。完整指标、误差分析和评测口径见 [evaluation report](reports/evaluation_report.md)。
+
+模型输出的 `confidence` 当前只作为模型自报分数展示，不解释为“预测正确概率”。冻结评测现同时报告情感逐类 Precision / Recall / F1、Macro-F1、混淆矩阵，属性与问题的 Micro / Macro 指标，以及置信度校准误差。另有 40 条挑战输入已冻结，须完成双人独立标注与仲裁后才可进入独立挑战集指标，流程见 [frozen challenge set](docs/FROZEN_CHALLENGE_SET.md)。
 
 ## 洞察示例
 

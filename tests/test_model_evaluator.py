@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from src.model_evaluator import (
+    confidence_calibration_metrics,
     evidence_substring_metrics,
     failure_cases,
     multilabel_metrics,
@@ -90,6 +91,7 @@ class ModelEvaluatorTests(unittest.TestCase):
         metrics = sentiment_metrics(self.gold, self.by_id)
         self.assertEqual(metrics["accuracy"], 0.5)
         self.assertEqual(metrics["macro_f1"], 0.3333)
+        self.assertEqual(metrics["confusion_matrix"]["negative"]["positive"], 1)
 
     def test_multilabel_micro_metrics_count_false_negatives(self) -> None:
         metrics = multilabel_metrics(
@@ -105,6 +107,19 @@ class ModelEvaluatorTests(unittest.TestCase):
         self.assertEqual(metrics["precision"], 1.0)
         self.assertEqual(metrics["recall"], 0.3333)
         self.assertEqual(metrics["f1"], 0.5)
+        self.assertIn("value.price_value", metrics["per_label"])
+        self.assertEqual(metrics["macro_f1"], 0.5)
+
+    def test_confidence_is_reported_as_uncalibrated_self_report(self) -> None:
+        for record in self.records:
+            record["analysis"]["confidence"] = 0.95
+        metrics = confidence_calibration_metrics(self.gold, self.by_id)
+        self.assertEqual(metrics["coverage"], 1.0)
+        self.assertEqual(metrics["expected_calibration_error"], 0.45)
+        self.assertEqual(metrics["status"], "uncalibrated")
+        self.assertEqual(
+            metrics["display_policy"], "treat_as_model_self_report_not_probability"
+        )
 
     def test_evidence_substring_validity_is_measured(self) -> None:
         metrics = evidence_substring_metrics(self.gold, self.by_id)

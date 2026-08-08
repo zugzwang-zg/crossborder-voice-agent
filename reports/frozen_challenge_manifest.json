@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "status": "frozen_awaiting_independent_annotation",
+  "dataset_role": "held_out_challenge_extension_not_in_headline_metrics",
+  "seed": "crossborder-voice-challenge-v1",
+  "selection": {
+    "records": 40,
+    "unique_review_ids": 40,
+    "language_counts": {
+      "en": 20,
+      "es": 20
+    },
+    "category_counts": {
+      "implicit_attribute": 8,
+      "long_review": 8,
+      "mixed_candidate": 8,
+      "multi_topic": 8,
+      "neutral_candidate": 8
+    }
+  },
+  "excluded_existing_gold_records": 100,
+  "excluded_prompt_development_records": 20,
+  "overlap_with_existing_gold": 0,
+  "overlap_with_prompt_development": 0,
+  "target_categories_are_selection_heuristics_not_gold_labels": true,
+  "headline_metrics_included": false,
+  "promotion_gate": "Two independent reviewers must label sentiment, aspects and issues; disagreements must be adjudicated before predictions are generated or metrics are updated.",
+  "sha256": {
+    "frozen_input": "2f61c46dc7800aa380ff8c75d89dac5f27c299a6d7e7a26ba3b642b28120c9b9",
+    "blank_annotation_review": "e62ef52334e6dc1845b05ef5ab3d85fdca76616b24426b396b053360b57b9c66",
+    "existing_gold": "fb1c05e9681eead58d00faeb4ae5ce52af1f3e57db3e94da1ef80ad60db46c75",
+    "development_sample": "13e5a640ef1ff813e2fc654aa67a86673b14940e8b984720cec8cac7892d0614"
+  }
+}

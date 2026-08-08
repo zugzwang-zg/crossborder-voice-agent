@@ -50,7 +50,57 @@
             "recall": 0.9688,
             "f1": 0.9394
           }
-        }
+        },
+        "confusion_matrix": {
+          "negative": {
+            "negative": 28,
+            "mixed": 3,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "mixed": {
+            "negative": 5,
+            "mixed": 28,
+            "neutral": 0,
+            "positive": 3,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "neutral": {
+            "negative": 1,
+            "mixed": 0,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "positive": {
+            "negative": 0,
+            "mixed": 1,
+            "neutral": 0,
+            "positive": 31,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "uncertain": {
+            "negative": 0,
+            "mixed": 0,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          }
+        },
+        "confusion_labels": [
+          "negative",
+          "mixed",
+          "neutral",
+          "positive",
+          "uncertain",
+          "missing"
+        ]
       },
       "aspects": {
         "precision": 0.7222,
@@ -63,7 +113,226 @@
         "false_positives": 65,
         "false_negatives": 98,
         "gold_label_instances": 267,
-        "predicted_label_instances": 234
+        "predicted_label_instances": 234,
+        "macro_f1": 0.601,
+        "per_label": {
+          "fulfillment.delivery": {
+            "support": 9,
+            "precision": 0.7,
+            "recall": 0.7778,
+            "f1": 0.7369
+          },
+          "fulfillment.item_accuracy": {
+            "support": 4,
+            "precision": 0.5,
+            "recall": 0.25,
+            "f1": 0.3333
+          },
+          "fulfillment.return_refund": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "fulfillment.seller_service": {
+            "support": 3,
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571
+          },
+          "listing_trust.authenticity": {
+            "support": 2,
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          },
+          "listing_trust.photo_description_match": {
+            "support": 7,
+            "precision": 1.0,
+            "recall": 0.8571,
+            "f1": 0.9231
+          },
+          "packaging.arrival_condition": {
+            "support": 13,
+            "precision": 1.0,
+            "recall": 0.5385,
+            "f1": 0.7
+          },
+          "packaging.seal_leak_protection": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8
+          },
+          "product.appearance.color_shade": {
+            "support": 9,
+            "precision": 1.0,
+            "recall": 0.8889,
+            "f1": 0.9412
+          },
+          "product.appearance.design_look": {
+            "support": 7,
+            "precision": 1.0,
+            "recall": 0.4286,
+            "f1": 0.6
+          },
+          "product.appearance.finish_shine": {
+            "support": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.efficacy.cleansing": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          },
+          "product.efficacy.general_effect": {
+            "support": 29,
+            "precision": 0.549,
+            "recall": 0.9655,
+            "f1": 0.7
+          },
+          "product.efficacy.hair_styling": {
+            "support": 7,
+            "precision": 0.6667,
+            "recall": 0.5714,
+            "f1": 0.6154
+          },
+          "product.efficacy.skin_texture": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571
+          },
+          "product.efficacy.speed_duration": {
+            "support": 10,
+            "precision": 0.5,
+            "recall": 0.8,
+            "f1": 0.6154
+          },
+          "product.quality.durability_breakage": {
+            "support": 9,
+            "precision": 0.625,
+            "recall": 0.5556,
+            "f1": 0.5883
+          },
+          "product.quality.material_build": {
+            "support": 12,
+            "precision": 1.0,
+            "recall": 0.0833,
+            "f1": 0.1538
+          },
+          "product.quality.mechanical_electrical": {
+            "support": 6,
+            "precision": 0.3333,
+            "recall": 0.1667,
+            "f1": 0.2222
+          },
+          "product.sensory.absorption": {
+            "support": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.sensory.comfort_irritation": {
+            "support": 10,
+            "precision": 0.7778,
+            "recall": 0.7,
+            "f1": 0.7369
+          },
+          "product.sensory.greasiness": {
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8889
+          },
+          "product.sensory.residue_staining": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.sensory.scent": {
+            "support": 19,
+            "precision": 0.9444,
+            "recall": 0.8947,
+            "f1": 0.9189
+          },
+          "product.sensory.stickiness": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.sensory.texture_consistency": {
+            "support": 7,
+            "precision": 0.75,
+            "recall": 0.8571,
+            "f1": 0.8
+          },
+          "product.suitability.body_area_fit": {
+            "support": 6,
+            "precision": 0.3333,
+            "recall": 0.5,
+            "f1": 0.4
+          },
+          "product.suitability.skill_professional_fit": {
+            "support": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.suitability.skin_hair_fit": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.2,
+            "f1": 0.3333
+          },
+          "product.usability.application_control": {
+            "support": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.usability.dispenser": {
+            "support": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.usability.ease_of_use": {
+            "support": 18,
+            "precision": 0.8182,
+            "recall": 0.5,
+            "f1": 0.6207
+          },
+          "product.usability.handling_portability": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571
+          },
+          "product.usability.instructions": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "value.price_value": {
+            "support": 22,
+            "precision": 0.8889,
+            "recall": 0.7273,
+            "f1": 0.8
+          },
+          "value.size_quantity": {
+            "support": 12,
+            "precision": 0.8,
+            "recall": 0.3333,
+            "f1": 0.4706
+          }
+        }
       },
       "issues": {
         "precision": 0.661,
@@ -76,12 +345,166 @@
         "false_positives": 40,
         "false_negatives": 19,
         "gold_label_instances": 97,
-        "predicted_label_instances": 118
+        "predicted_label_instances": 118,
+        "macro_f1": 0.7328,
+        "per_label": {
+          "adverse_reaction": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "color_mismatch": {
+            "support": 2,
+            "precision": 0.6667,
+            "recall": 1.0,
+            "f1": 0.8
+          },
+          "counterfeit_suspected": {
+            "support": 1,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667
+          },
+          "damage_breakage": {
+            "support": 2,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667
+          },
+          "description_photo_mismatch": {
+            "support": 6,
+            "precision": 0.8333,
+            "recall": 0.8333,
+            "f1": 0.8333
+          },
+          "difficult_to_use": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8
+          },
+          "durability_problem": {
+            "support": 10,
+            "precision": 0.8889,
+            "recall": 0.8,
+            "f1": 0.8421
+          },
+          "insufficient_effect": {
+            "support": 9,
+            "precision": 0.3333,
+            "recall": 0.7778,
+            "f1": 0.4666
+          },
+          "late_not_delivered": {
+            "support": 3,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "leakage_spillage": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "mechanical_malfunction": {
+            "support": 1,
+            "precision": 0.3333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          "missing_parts": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "no_effect": {
+            "support": 7,
+            "precision": 0.6667,
+            "recall": 0.5714,
+            "f1": 0.6154
+          },
+          "opened_used_item": {
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.6,
+            "f1": 0.75
+          },
+          "other_explicit_issue": {
+            "support": 3,
+            "precision": 0.1538,
+            "recall": 0.6667,
+            "f1": 0.2499
+          },
+          "price_value_problem": {
+            "support": 9,
+            "precision": 1.0,
+            "recall": 0.8889,
+            "f1": 0.9412
+          },
+          "residue_staining": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "return_refund_problem": {
+            "support": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "scent_problem": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8889
+          },
+          "seller_support_problem": {
+            "support": 2,
+            "precision": 0.6667,
+            "recall": 1.0,
+            "f1": 0.8
+          },
+          "size_quantity_mismatch": {
+            "support": 5,
+            "precision": 0.8,
+            "recall": 0.8,
+            "f1": 0.8
+          },
+          "texture_problem": {
+            "support": 4,
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1": 0.5
+          }
+        }
       },
       "evidence_substring": {
         "validity": 1.0,
         "valid_claims": 1095,
         "total_claims": 1095
+      },
+      "confidence_calibration": {
+        "records_with_confidence": 100,
+        "coverage": 1.0,
+        "mean_confidence": 0.9828,
+        "observed_accuracy": 0.87,
+        "expected_calibration_error": 0.1128,
+        "status": "uncalibrated",
+        "display_policy": "treat_as_model_self_report_not_probability",
+        "bins": [
+          {
+            "lower": 0.85,
+            "upper": 1.0,
+            "records": 100,
+            "mean_confidence": 0.9828,
+            "accuracy": 0.87,
+            "absolute_gap": 0.1128
+          }
+        ]
       },
       "by_language": {
         "en": {
@@ -109,7 +532,57 @@
                 "recall": 1.0,
                 "f1": 0.9697
               }
-            }
+            },
+            "confusion_matrix": {
+              "negative": {
+                "negative": 16,
+                "mixed": 2,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "mixed": {
+                "negative": 2,
+                "mixed": 13,
+                "neutral": 0,
+                "positive": 1,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "neutral": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "positive": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 16,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "uncertain": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              }
+            },
+            "confusion_labels": [
+              "negative",
+              "mixed",
+              "neutral",
+              "positive",
+              "uncertain",
+              "missing"
+            ]
           },
           "aspects": {
             "precision": 0.6967,
@@ -122,7 +595,208 @@
             "false_positives": 37,
             "false_negatives": 51,
             "gold_label_instances": 136,
-            "predicted_label_instances": 122
+            "predicted_label_instances": 122,
+            "macro_f1": 0.5345,
+            "per_label": {
+              "fulfillment.delivery": {
+                "support": 1,
+                "precision": 0.3333,
+                "recall": 1.0,
+                "f1": 0.5
+              },
+              "fulfillment.item_accuracy": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "listing_trust.authenticity": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "listing_trust.photo_description_match": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "packaging.arrival_condition": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.2,
+                "f1": 0.3333
+              },
+              "packaging.seal_leak_protection": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.appearance.color_shade": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "product.appearance.design_look": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "product.appearance.finish_shine": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.cleansing": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.efficacy.general_effect": {
+                "support": 14,
+                "precision": 0.5385,
+                "recall": 1.0,
+                "f1": 0.7
+              },
+              "product.efficacy.hair_styling": {
+                "support": 4,
+                "precision": 0.5,
+                "recall": 0.5,
+                "f1": 0.5
+              },
+              "product.efficacy.skin_texture": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.speed_duration": {
+                "support": 6,
+                "precision": 0.5,
+                "recall": 0.8333,
+                "f1": 0.625
+              },
+              "product.quality.durability_breakage": {
+                "support": 5,
+                "precision": 0.6,
+                "recall": 0.6,
+                "f1": 0.6
+              },
+              "product.quality.material_build": {
+                "support": 9,
+                "precision": 1.0,
+                "recall": 0.1111,
+                "f1": 0.2
+              },
+              "product.quality.mechanical_electrical": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.sensory.absorption": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.sensory.comfort_irritation": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.8571,
+                "f1": 0.9231
+              },
+              "product.sensory.greasiness": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.residue_staining": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.scent": {
+                "support": 12,
+                "precision": 1.0,
+                "recall": 0.9167,
+                "f1": 0.9565
+              },
+              "product.sensory.stickiness": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.texture_consistency": {
+                "support": 6,
+                "precision": 1.0,
+                "recall": 0.8333,
+                "f1": 0.9091
+              },
+              "product.suitability.body_area_fit": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.suitability.skin_hair_fit": {
+                "support": 6,
+                "precision": 1.0,
+                "recall": 0.3333,
+                "f1": 0.5
+              },
+              "product.usability.application_control": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.usability.dispenser": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.usability.ease_of_use": {
+                "support": 12,
+                "precision": 0.8571,
+                "recall": 0.5,
+                "f1": 0.6316
+              },
+              "product.usability.handling_portability": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6667
+              },
+              "product.usability.instructions": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "value.price_value": {
+                "support": 10,
+                "precision": 0.7778,
+                "recall": 0.7,
+                "f1": 0.7369
+              },
+              "value.size_quantity": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.4286,
+                "f1": 0.6
+              }
+            }
           },
           "issues": {
             "precision": 0.6471,
@@ -135,7 +809,143 @@
             "false_positives": 24,
             "false_negatives": 9,
             "gold_label_instances": 53,
-            "predicted_label_instances": 68
+            "predicted_label_instances": 68,
+            "macro_f1": 0.6794,
+            "per_label": {
+              "adverse_reaction": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "color_mismatch": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "counterfeit_suspected": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "damage_breakage": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "description_photo_mismatch": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "difficult_to_use": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.8889
+              },
+              "durability_problem": {
+                "support": 6,
+                "precision": 0.8333,
+                "recall": 0.8333,
+                "f1": 0.8333
+              },
+              "insufficient_effect": {
+                "support": 3,
+                "precision": 0.2308,
+                "recall": 1.0,
+                "f1": 0.375
+              },
+              "leakage_spillage": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "mechanical_malfunction": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "missing_parts": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "no_effect": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.4,
+                "f1": 0.5714
+              },
+              "opened_used_item": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "other_explicit_issue": {
+                "support": 2,
+                "precision": 0.1429,
+                "recall": 0.5,
+                "f1": 0.2223
+              },
+              "price_value_problem": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.8571,
+                "f1": 0.9231
+              },
+              "residue_staining": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "scent_problem": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "size_quantity_mismatch": {
+                "support": 3,
+                "precision": 0.75,
+                "recall": 1.0,
+                "f1": 0.8571
+              },
+              "texture_problem": {
+                "support": 3,
+                "precision": 0.5,
+                "recall": 0.6667,
+                "f1": 0.5714
+              }
+            }
+          },
+          "confidence_calibration": {
+            "records_with_confidence": 50,
+            "coverage": 1.0,
+            "mean_confidence": 0.9826,
+            "observed_accuracy": 0.9,
+            "expected_calibration_error": 0.0826,
+            "status": "uncalibrated",
+            "display_policy": "treat_as_model_self_report_not_probability",
+            "bins": [
+              {
+                "lower": 0.85,
+                "upper": 1.0,
+                "records": 50,
+                "mean_confidence": 0.9826,
+                "accuracy": 0.9,
+                "absolute_gap": 0.0826
+              }
+            ]
           }
         },
         "es": {
@@ -169,7 +979,57 @@
                 "recall": 0.9375,
                 "f1": 0.9091
               }
-            }
+            },
+            "confusion_matrix": {
+              "negative": {
+                "negative": 12,
+                "mixed": 1,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "mixed": {
+                "negative": 3,
+                "mixed": 15,
+                "neutral": 0,
+                "positive": 2,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "neutral": {
+                "negative": 1,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "positive": {
+                "negative": 0,
+                "mixed": 1,
+                "neutral": 0,
+                "positive": 15,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "uncertain": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              }
+            },
+            "confusion_labels": [
+              "negative",
+              "mixed",
+              "neutral",
+              "positive",
+              "uncertain",
+              "missing"
+            ]
           },
           "aspects": {
             "precision": 0.75,
@@ -182,7 +1042,196 @@
             "false_positives": 28,
             "false_negatives": 47,
             "gold_label_instances": 131,
-            "predicted_label_instances": 112
+            "predicted_label_instances": 112,
+            "macro_f1": 0.6134,
+            "per_label": {
+              "fulfillment.delivery": {
+                "support": 8,
+                "precision": 0.8571,
+                "recall": 0.75,
+                "f1": 0.8
+              },
+              "fulfillment.item_accuracy": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.3333,
+                "f1": 0.5
+              },
+              "fulfillment.return_refund": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "fulfillment.seller_service": {
+                "support": 3,
+                "precision": 0.75,
+                "recall": 1.0,
+                "f1": 0.8571
+              },
+              "listing_trust.authenticity": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "listing_trust.photo_description_match": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "packaging.arrival_condition": {
+                "support": 8,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "packaging.seal_leak_protection": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6667
+              },
+              "product.appearance.color_shade": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.appearance.design_look": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "product.appearance.finish_shine": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.cleansing": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.4,
+                "f1": 0.5714
+              },
+              "product.efficacy.general_effect": {
+                "support": 15,
+                "precision": 0.56,
+                "recall": 0.9333,
+                "f1": 0.7
+              },
+              "product.efficacy.hair_styling": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "product.efficacy.skin_texture": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.efficacy.speed_duration": {
+                "support": 4,
+                "precision": 0.5,
+                "recall": 0.75,
+                "f1": 0.6
+              },
+              "product.quality.durability_breakage": {
+                "support": 4,
+                "precision": 0.6667,
+                "recall": 0.5,
+                "f1": 0.5714
+              },
+              "product.quality.material_build": {
+                "support": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.quality.mechanical_electrical": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "product.sensory.comfort_irritation": {
+                "support": 3,
+                "precision": 0.3333,
+                "recall": 0.3333,
+                "f1": 0.3333
+              },
+              "product.sensory.greasiness": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.sensory.scent": {
+                "support": 7,
+                "precision": 0.8571,
+                "recall": 0.8571,
+                "f1": 0.8571
+              },
+              "product.sensory.texture_consistency": {
+                "support": 1,
+                "precision": 0.3333,
+                "recall": 1.0,
+                "f1": 0.5
+              },
+              "product.suitability.body_area_fit": {
+                "support": 5,
+                "precision": 0.6,
+                "recall": 0.6,
+                "f1": 0.6
+              },
+              "product.suitability.skill_professional_fit": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.suitability.skin_hair_fit": {
+                "support": 4,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.usability.ease_of_use": {
+                "support": 6,
+                "precision": 0.75,
+                "recall": 0.5,
+                "f1": 0.6
+              },
+              "product.usability.handling_portability": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.usability.instructions": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "value.price_value": {
+                "support": 12,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "value.size_quantity": {
+                "support": 5,
+                "precision": 0.5,
+                "recall": 0.2,
+                "f1": 0.2857
+              }
+            }
           },
           "issues": {
             "precision": 0.68,
@@ -195,7 +1244,143 @@
             "false_positives": 16,
             "false_negatives": 10,
             "gold_label_instances": 44,
-            "predicted_label_instances": 50
+            "predicted_label_instances": 50,
+            "macro_f1": 0.6555,
+            "per_label": {
+              "color_mismatch": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "counterfeit_suspected": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "damage_breakage": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "description_photo_mismatch": {
+                "support": 3,
+                "precision": 0.6667,
+                "recall": 0.6667,
+                "f1": 0.6667
+              },
+              "difficult_to_use": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "durability_problem": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "insufficient_effect": {
+                "support": 6,
+                "precision": 0.5,
+                "recall": 0.6667,
+                "f1": 0.5714
+              },
+              "late_not_delivered": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "leakage_spillage": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "mechanical_malfunction": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "no_effect": {
+                "support": 2,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "opened_used_item": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "other_explicit_issue": {
+                "support": 1,
+                "precision": 0.1667,
+                "recall": 1.0,
+                "f1": 0.2858
+              },
+              "price_value_problem": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "return_refund_problem": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "scent_problem": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.6,
+                "f1": 0.75
+              },
+              "seller_support_problem": {
+                "support": 2,
+                "precision": 0.6667,
+                "recall": 1.0,
+                "f1": 0.8
+              },
+              "size_quantity_mismatch": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6667
+              },
+              "texture_problem": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "confidence_calibration": {
+            "records_with_confidence": 50,
+            "coverage": 1.0,
+            "mean_confidence": 0.983,
+            "observed_accuracy": 0.84,
+            "expected_calibration_error": 0.143,
+            "status": "uncalibrated",
+            "display_policy": "treat_as_model_self_report_not_probability",
+            "bins": [
+              {
+                "lower": 0.85,
+                "upper": 1.0,
+                "records": 50,
+                "mean_confidence": 0.983,
+                "accuracy": 0.84,
+                "absolute_gap": 0.143
+              }
+            ]
           }
         }
       }
@@ -235,7 +1420,57 @@
             "recall": 0.9688,
             "f1": 0.9539
           }
-        }
+        },
+        "confusion_matrix": {
+          "negative": {
+            "negative": 28,
+            "mixed": 3,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "mixed": {
+            "negative": 4,
+            "mixed": 30,
+            "neutral": 0,
+            "positive": 2,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "neutral": {
+            "negative": 1,
+            "mixed": 0,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "positive": {
+            "negative": 0,
+            "mixed": 1,
+            "neutral": 0,
+            "positive": 31,
+            "uncertain": 0,
+            "missing": 0
+          },
+          "uncertain": {
+            "negative": 0,
+            "mixed": 0,
+            "neutral": 0,
+            "positive": 0,
+            "uncertain": 0,
+            "missing": 0
+          }
+        },
+        "confusion_labels": [
+          "negative",
+          "mixed",
+          "neutral",
+          "positive",
+          "uncertain",
+          "missing"
+        ]
       },
       "aspects": {
         "precision": 0.8318,
@@ -248,7 +1483,220 @@
         "false_positives": 36,
         "false_negatives": 89,
         "gold_label_instances": 267,
-        "predicted_label_instances": 214
+        "predicted_label_instances": 214,
+        "macro_f1": 0.6514,
+        "per_label": {
+          "fulfillment.delivery": {
+            "support": 9,
+            "precision": 0.8889,
+            "recall": 0.8889,
+            "f1": 0.8889
+          },
+          "fulfillment.item_accuracy": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4
+          },
+          "fulfillment.return_refund": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "fulfillment.seller_service": {
+            "support": 3,
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1": 0.8571
+          },
+          "listing_trust.authenticity": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "listing_trust.photo_description_match": {
+            "support": 7,
+            "precision": 1.0,
+            "recall": 0.8571,
+            "f1": 0.9231
+          },
+          "packaging.arrival_condition": {
+            "support": 13,
+            "precision": 0.8333,
+            "recall": 0.7692,
+            "f1": 0.8
+          },
+          "packaging.seal_leak_protection": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.1667,
+            "f1": 0.2858
+          },
+          "product.appearance.color_shade": {
+            "support": 9,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8
+          },
+          "product.appearance.design_look": {
+            "support": 7,
+            "precision": 0.7143,
+            "recall": 0.7143,
+            "f1": 0.7143
+          },
+          "product.appearance.finish_shine": {
+            "support": 3,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.efficacy.cleansing": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.6667,
+            "f1": 0.8
+          },
+          "product.efficacy.general_effect": {
+            "support": 29,
+            "precision": 0.6923,
+            "recall": 0.931,
+            "f1": 0.7941
+          },
+          "product.efficacy.hair_styling": {
+            "support": 7,
+            "precision": 0.6667,
+            "recall": 0.2857,
+            "f1": 0.4
+          },
+          "product.efficacy.skin_texture": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571
+          },
+          "product.efficacy.speed_duration": {
+            "support": 10,
+            "precision": 0.5833,
+            "recall": 0.7,
+            "f1": 0.6363
+          },
+          "product.quality.durability_breakage": {
+            "support": 9,
+            "precision": 0.875,
+            "recall": 0.7778,
+            "f1": 0.8235
+          },
+          "product.quality.material_build": {
+            "support": 12,
+            "precision": 1.0,
+            "recall": 0.0833,
+            "f1": 0.1538
+          },
+          "product.quality.mechanical_electrical": {
+            "support": 6,
+            "precision": 0.75,
+            "recall": 0.5,
+            "f1": 0.6
+          },
+          "product.sensory.comfort_irritation": {
+            "support": 10,
+            "precision": 0.875,
+            "recall": 0.7,
+            "f1": 0.7778
+          },
+          "product.sensory.greasiness": {
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.8,
+            "f1": 0.8889
+          },
+          "product.sensory.residue_staining": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.sensory.scent": {
+            "support": 19,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.sensory.stickiness": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.sensory.texture_consistency": {
+            "support": 7,
+            "precision": 0.7778,
+            "recall": 1.0,
+            "f1": 0.875
+          },
+          "product.suitability.body_area_fit": {
+            "support": 6,
+            "precision": 0.5,
+            "recall": 0.1667,
+            "f1": 0.25
+          },
+          "product.suitability.skill_professional_fit": {
+            "support": 1,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.suitability.skin_hair_fit": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.3,
+            "f1": 0.4615
+          },
+          "product.usability.application_control": {
+            "support": 2,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.usability.dispenser": {
+            "support": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "product.usability.ease_of_use": {
+            "support": 18,
+            "precision": 0.8182,
+            "recall": 0.5,
+            "f1": 0.6207
+          },
+          "product.usability.handling_portability": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "product.usability.instructions": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          },
+          "value.price_value": {
+            "support": 22,
+            "precision": 0.9,
+            "recall": 0.8182,
+            "f1": 0.8572
+          },
+          "value.size_quantity": {
+            "support": 12,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          }
+        }
       },
       "issues": {
         "precision": 0.7778,
@@ -261,12 +1709,174 @@
         "false_positives": 20,
         "false_negatives": 27,
         "gold_label_instances": 97,
-        "predicted_label_instances": 90
+        "predicted_label_instances": 90,
+        "macro_f1": 0.7308,
+        "per_label": {
+          "adverse_reaction": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "color_mismatch": {
+            "support": 2,
+            "precision": 0.6667,
+            "recall": 1.0,
+            "f1": 0.8
+          },
+          "counterfeit_suspected": {
+            "support": 1,
+            "precision": 0.3333,
+            "recall": 1.0,
+            "f1": 0.5
+          },
+          "damage_breakage": {
+            "support": 2,
+            "precision": 0.6667,
+            "recall": 1.0,
+            "f1": 0.8
+          },
+          "description_photo_mismatch": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.8333,
+            "f1": 0.9091
+          },
+          "difficult_to_use": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          },
+          "durability_problem": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.7,
+            "f1": 0.8235
+          },
+          "insufficient_effect": {
+            "support": 9,
+            "precision": 0.5385,
+            "recall": 0.7778,
+            "f1": 0.6364
+          },
+          "late_not_delivered": {
+            "support": 3,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "leakage_spillage": {
+            "support": 6,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "mechanical_malfunction": {
+            "support": 1,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6667
+          },
+          "missing_parts": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "no_effect": {
+            "support": 7,
+            "precision": 1.0,
+            "recall": 0.5714,
+            "f1": 0.7272
+          },
+          "opened_used_item": {
+            "support": 5,
+            "precision": 1.0,
+            "recall": 0.6,
+            "f1": 0.75
+          },
+          "other_explicit_issue": {
+            "support": 3,
+            "precision": 0.1429,
+            "recall": 0.3333,
+            "f1": 0.2
+          },
+          "price_value_problem": {
+            "support": 9,
+            "precision": 1.0,
+            "recall": 0.7778,
+            "f1": 0.875
+          },
+          "residue_staining": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "return_refund_problem": {
+            "support": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "scent_problem": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.7,
+            "f1": 0.8235
+          },
+          "seller_support_problem": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "size_quantity_mismatch": {
+            "support": 5,
+            "precision": 0.6667,
+            "recall": 0.4,
+            "f1": 0.5
+          },
+          "texture_problem": {
+            "support": 4,
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4
+          }
+        }
       },
       "evidence_substring": {
         "validity": 1.0,
         "valid_claims": 852,
         "total_claims": 852
+      },
+      "confidence_calibration": {
+        "records_with_confidence": 100,
+        "coverage": 1.0,
+        "mean_confidence": 0.9809,
+        "observed_accuracy": 0.89,
+        "expected_calibration_error": 0.0957,
+        "status": "uncalibrated",
+        "display_policy": "treat_as_model_self_report_not_probability",
+        "bins": [
+          {
+            "lower": 0.7,
+            "upper": 0.85,
+            "records": 1,
+            "mean_confidence": 0.76,
+            "accuracy": 1.0,
+            "absolute_gap": 0.24
+          },
+          {
+            "lower": 0.85,
+            "upper": 1.0,
+            "records": 99,
+            "mean_confidence": 0.9831,
+            "accuracy": 0.8889,
+            "absolute_gap": 0.0942
+          }
+        ]
       },
       "by_language": {
         "en": {
@@ -294,7 +1904,57 @@
                 "recall": 1.0,
                 "f1": 0.9697
               }
-            }
+            },
+            "confusion_matrix": {
+              "negative": {
+                "negative": 16,
+                "mixed": 2,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "mixed": {
+                "negative": 1,
+                "mixed": 14,
+                "neutral": 0,
+                "positive": 1,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "neutral": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "positive": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 16,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "uncertain": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              }
+            },
+            "confusion_labels": [
+              "negative",
+              "mixed",
+              "neutral",
+              "positive",
+              "uncertain",
+              "missing"
+            ]
           },
           "aspects": {
             "precision": 0.7876,
@@ -307,7 +1967,202 @@
             "false_positives": 24,
             "false_negatives": 47,
             "gold_label_instances": 136,
-            "predicted_label_instances": 113
+            "predicted_label_instances": 113,
+            "macro_f1": 0.6131,
+            "per_label": {
+              "fulfillment.delivery": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "fulfillment.item_accuracy": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "listing_trust.authenticity": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "listing_trust.photo_description_match": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "packaging.arrival_condition": {
+                "support": 5,
+                "precision": 0.5,
+                "recall": 0.4,
+                "f1": 0.4444
+              },
+              "packaging.seal_leak_protection": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.appearance.color_shade": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "product.appearance.design_look": {
+                "support": 4,
+                "precision": 0.6,
+                "recall": 0.75,
+                "f1": 0.6667
+              },
+              "product.appearance.finish_shine": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.cleansing": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.efficacy.general_effect": {
+                "support": 14,
+                "precision": 0.65,
+                "recall": 0.9286,
+                "f1": 0.7647
+              },
+              "product.efficacy.hair_styling": {
+                "support": 4,
+                "precision": 0.5,
+                "recall": 0.25,
+                "f1": 0.3333
+              },
+              "product.efficacy.skin_texture": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.speed_duration": {
+                "support": 6,
+                "precision": 0.5,
+                "recall": 0.6667,
+                "f1": 0.5714
+              },
+              "product.quality.durability_breakage": {
+                "support": 5,
+                "precision": 0.8,
+                "recall": 0.8,
+                "f1": 0.8
+              },
+              "product.quality.material_build": {
+                "support": 9,
+                "precision": 1.0,
+                "recall": 0.1111,
+                "f1": 0.2
+              },
+              "product.quality.mechanical_electrical": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.sensory.comfort_irritation": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.7143,
+                "f1": 0.8333
+              },
+              "product.sensory.greasiness": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "product.sensory.residue_staining": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.scent": {
+                "support": 12,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.stickiness": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.texture_consistency": {
+                "support": 6,
+                "precision": 0.8571,
+                "recall": 1.0,
+                "f1": 0.9231
+              },
+              "product.suitability.body_area_fit": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.suitability.skin_hair_fit": {
+                "support": 6,
+                "precision": 1.0,
+                "recall": 0.3333,
+                "f1": 0.5
+              },
+              "product.usability.application_control": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.usability.dispenser": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.usability.ease_of_use": {
+                "support": 12,
+                "precision": 1.0,
+                "recall": 0.5833,
+                "f1": 0.7368
+              },
+              "product.usability.handling_portability": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.usability.instructions": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "value.price_value": {
+                "support": 10,
+                "precision": 0.7778,
+                "recall": 0.7,
+                "f1": 0.7369
+              },
+              "value.size_quantity": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.5714,
+                "f1": 0.7272
+              }
+            }
           },
           "issues": {
             "precision": 0.7059,
@@ -320,7 +2175,143 @@
             "false_positives": 15,
             "false_negatives": 17,
             "gold_label_instances": 53,
-            "predicted_label_instances": 51
+            "predicted_label_instances": 51,
+            "macro_f1": 0.6444,
+            "per_label": {
+              "adverse_reaction": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "color_mismatch": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "counterfeit_suspected": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "damage_breakage": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "description_photo_mismatch": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "difficult_to_use": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.6,
+                "f1": 0.75
+              },
+              "durability_problem": {
+                "support": 6,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "insufficient_effect": {
+                "support": 3,
+                "precision": 0.3333,
+                "recall": 1.0,
+                "f1": 0.5
+              },
+              "leakage_spillage": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "mechanical_malfunction": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "missing_parts": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "no_effect": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.4,
+                "f1": 0.5714
+              },
+              "opened_used_item": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "other_explicit_issue": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "price_value_problem": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 0.7143,
+                "f1": 0.8333
+              },
+              "residue_staining": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "scent_problem": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.8,
+                "f1": 0.8889
+              },
+              "size_quantity_mismatch": {
+                "support": 3,
+                "precision": 0.5,
+                "recall": 0.3333,
+                "f1": 0.4
+              },
+              "texture_problem": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.3333,
+                "f1": 0.5
+              }
+            }
+          },
+          "confidence_calibration": {
+            "records_with_confidence": 50,
+            "coverage": 1.0,
+            "mean_confidence": 0.9826,
+            "observed_accuracy": 0.92,
+            "expected_calibration_error": 0.0626,
+            "status": "uncalibrated",
+            "display_policy": "treat_as_model_self_report_not_probability",
+            "bins": [
+              {
+                "lower": 0.85,
+                "upper": 1.0,
+                "records": 50,
+                "mean_confidence": 0.9826,
+                "accuracy": 0.92,
+                "absolute_gap": 0.0626
+              }
+            ]
           }
         },
         "es": {
@@ -354,7 +2345,57 @@
                 "recall": 0.9375,
                 "f1": 0.9375
               }
-            }
+            },
+            "confusion_matrix": {
+              "negative": {
+                "negative": 12,
+                "mixed": 1,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "mixed": {
+                "negative": 3,
+                "mixed": 16,
+                "neutral": 0,
+                "positive": 1,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "neutral": {
+                "negative": 1,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "positive": {
+                "negative": 0,
+                "mixed": 1,
+                "neutral": 0,
+                "positive": 15,
+                "uncertain": 0,
+                "missing": 0
+              },
+              "uncertain": {
+                "negative": 0,
+                "mixed": 0,
+                "neutral": 0,
+                "positive": 0,
+                "uncertain": 0,
+                "missing": 0
+              }
+            },
+            "confusion_labels": [
+              "negative",
+              "mixed",
+              "neutral",
+              "positive",
+              "uncertain",
+              "missing"
+            ]
           },
           "aspects": {
             "precision": 0.8812,
@@ -367,7 +2408,196 @@
             "false_positives": 12,
             "false_negatives": 42,
             "gold_label_instances": 131,
-            "predicted_label_instances": 101
+            "predicted_label_instances": 101,
+            "macro_f1": 0.6493,
+            "per_label": {
+              "fulfillment.delivery": {
+                "support": 8,
+                "precision": 1.0,
+                "recall": 0.875,
+                "f1": 0.9333
+              },
+              "fulfillment.item_accuracy": {
+                "support": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "fulfillment.return_refund": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "fulfillment.seller_service": {
+                "support": 3,
+                "precision": 0.75,
+                "recall": 1.0,
+                "f1": 0.8571
+              },
+              "listing_trust.authenticity": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "listing_trust.photo_description_match": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "packaging.arrival_condition": {
+                "support": 8,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "packaging.seal_leak_protection": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "product.appearance.color_shade": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.6,
+                "f1": 0.75
+              },
+              "product.appearance.design_look": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "product.appearance.finish_shine": {
+                "support": 2,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.efficacy.cleansing": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.6,
+                "f1": 0.75
+              },
+              "product.efficacy.general_effect": {
+                "support": 15,
+                "precision": 0.7368,
+                "recall": 0.9333,
+                "f1": 0.8235
+              },
+              "product.efficacy.hair_styling": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.3333,
+                "f1": 0.5
+              },
+              "product.efficacy.skin_texture": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.efficacy.speed_duration": {
+                "support": 4,
+                "precision": 0.75,
+                "recall": 0.75,
+                "f1": 0.75
+              },
+              "product.quality.durability_breakage": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "product.quality.material_build": {
+                "support": 3,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.quality.mechanical_electrical": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "product.sensory.comfort_irritation": {
+                "support": 3,
+                "precision": 0.6667,
+                "recall": 0.6667,
+                "f1": 0.6667
+              },
+              "product.sensory.greasiness": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.scent": {
+                "support": 7,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.sensory.texture_consistency": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "product.suitability.body_area_fit": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.2,
+                "f1": 0.3333
+              },
+              "product.suitability.skill_professional_fit": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "product.suitability.skin_hair_fit": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.25,
+                "f1": 0.4
+              },
+              "product.usability.ease_of_use": {
+                "support": 6,
+                "precision": 0.5,
+                "recall": 0.3333,
+                "f1": 0.4
+              },
+              "product.usability.handling_portability": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "product.usability.instructions": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "value.price_value": {
+                "support": 12,
+                "precision": 1.0,
+                "recall": 0.9167,
+                "f1": 0.9565
+              },
+              "value.size_quantity": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.4,
+                "f1": 0.5714
+              }
+            }
           },
           "issues": {
             "precision": 0.8718,
@@ -380,7 +2610,151 @@
             "false_positives": 5,
             "false_negatives": 10,
             "gold_label_instances": 44,
-            "predicted_label_instances": 39
+            "predicted_label_instances": 39,
+            "macro_f1": 0.7227,
+            "per_label": {
+              "color_mismatch": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "counterfeit_suspected": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "damage_breakage": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "description_photo_mismatch": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "difficult_to_use": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "durability_problem": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "insufficient_effect": {
+                "support": 6,
+                "precision": 1.0,
+                "recall": 0.6667,
+                "f1": 0.8
+              },
+              "late_not_delivered": {
+                "support": 3,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "leakage_spillage": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "mechanical_malfunction": {
+                "support": 1,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "no_effect": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "opened_used_item": {
+                "support": 4,
+                "precision": 1.0,
+                "recall": 0.75,
+                "f1": 0.8571
+              },
+              "other_explicit_issue": {
+                "support": 1,
+                "precision": 0.5,
+                "recall": 1.0,
+                "f1": 0.6667
+              },
+              "price_value_problem": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "return_refund_problem": {
+                "support": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              },
+              "scent_problem": {
+                "support": 5,
+                "precision": 1.0,
+                "recall": 0.6,
+                "f1": 0.75
+              },
+              "seller_support_problem": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              },
+              "size_quantity_mismatch": {
+                "support": 2,
+                "precision": 1.0,
+                "recall": 0.5,
+                "f1": 0.6667
+              },
+              "texture_problem": {
+                "support": 1,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0
+              }
+            }
+          },
+          "confidence_calibration": {
+            "records_with_confidence": 50,
+            "coverage": 1.0,
+            "mean_confidence": 0.9792,
+            "observed_accuracy": 0.86,
+            "expected_calibration_error": 0.1288,
+            "status": "uncalibrated",
+            "display_policy": "treat_as_model_self_report_not_probability",
+            "bins": [
+              {
+                "lower": 0.7,
+                "upper": 0.85,
+                "records": 1,
+                "mean_confidence": 0.76,
+                "accuracy": 1.0,
+                "absolute_gap": 0.24
+              },
+              {
+                "lower": 0.85,
+                "upper": 1.0,
+                "records": 49,
+                "mean_confidence": 0.9837,
+                "accuracy": 0.8571,
+                "absolute_gap": 0.1265
+              }
+            ]
           }
         }
       }

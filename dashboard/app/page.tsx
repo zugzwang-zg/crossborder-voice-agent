@@ -390,9 +390,9 @@ function OverviewPage({
           <small>基于文本判断</small>
         </div>
         <div>
-          <span>平均置信度</span>
+          <span>模型自报分数</span>
           <strong>{(avgConfidence * 100).toFixed(1)}%</strong>
-          <small>模型字段均值</small>
+          <small>未校准，不是正确概率</small>
         </div>
       </div>
 
@@ -1100,7 +1100,7 @@ function InsightsPage({
               <div>
                 <small>统计证据</small>
                 <strong>{selected.matchedIds.length} 条当前筛选评论</strong>
-                <p>全量支持 {selected.insight.data_evidence.support_reviews} 条；平均模型置信度 {(selected.insight.data_evidence.mean_model_confidence * 100).toFixed(1)}%。</p>
+                <p>全量支持 {selected.insight.data_evidence.support_reviews} 条；模型自报分数均值 {(selected.insight.data_evidence.mean_model_confidence * 100).toFixed(1)}%（未校准，不是正确概率）。</p>
               </div>
             </div>
             <div className="spine-step">
@@ -1216,7 +1216,7 @@ function ReviewDrawer({
                 <span>{active.language.toUpperCase()}</span>
                 <StarLine stars={active.stars} />
                 <span>{labelOf(labels.sentiments, active.sentiment)}</span>
-                <span>置信度 {(active.confidence * 100).toFixed(0)}%</span>
+                <span>模型自报 {(active.confidence * 100).toFixed(0)}% · 未校准</span>
               </div>
               <h2>{active.title || "无标题评论"}</h2>
               <blockquote>{active.body}</blockquote>

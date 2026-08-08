@@ -14,6 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.model_evaluator import (
+    SENTIMENT_LABELS,
     failure_cases,
     manual_business_rows,
     manual_evidence_rows,
@@ -186,6 +187,18 @@ def markdown_report(report: dict[str, Any]) -> str:
             f"{report['targets']['aspect_f1']['status']} |"
         ),
         (
+            f"| 属性 Macro-F1 | {baseline['aspects']['macro_f1']:.1%} | "
+            f"{improved['aspects']['macro_f1']:.1%} | — | — |"
+        ),
+        (
+            f"| 痛点 Micro-F1 | {baseline['issues']['f1']:.1%} | "
+            f"{improved['issues']['f1']:.1%} | — | — |"
+        ),
+        (
+            f"| 痛点 Macro-F1 | {baseline['issues']['macro_f1']:.1%} | "
+            f"{improved['issues']['macro_f1']:.1%} | — | — |"
+        ),
+        (
             f"| 痛点完全匹配率 | "
             f"{baseline['issues']['record_exact_match_accuracy']:.1%} | "
             f"{improved['issues']['record_exact_match_accuracy']:.1%} | — | — |"
@@ -196,14 +209,64 @@ def markdown_report(report: dict[str, Any]) -> str:
             f"{improved['evidence_substring']['validity']:.1%} | — | — |"
         ),
         "",
-        "说明：属性指标采用多标签微平均；痛点完全匹配率以人工金标问题集合为准；"
+        "说明：属性与痛点同时报告多标签 micro/macro 指标；痛点完全匹配率以人工金标问题集合为准；"
         "原文子串有效率只证明引用来自评论，语义是否真正支持标签另由人工抽查。",
+        "",
+        "## 情感分类明细与混淆矩阵",
+        "",
+        "### Improved 每类指标",
+        "",
+        "| 情感类别 | Support | Precision | Recall | F1 |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for label, item in improved["sentiment"]["per_class"].items():
+        lines.append(
+            f"| {label} | {item['support']} | {item['precision']:.1%} | "
+            f"{item['recall']:.1%} | {item['f1']:.1%} |"
+        )
+    confusion_labels = improved["sentiment"]["confusion_labels"]
+    lines.extend([
+        "",
+        "### Improved 混淆矩阵",
+        "",
+        "行是人工金标，列是模型预测。",
+        "",
+        "| Gold \\ Pred | " + " | ".join(confusion_labels) + " |",
+        "|---|" + "---:|" * len(confusion_labels),
+    ])
+    for label in SENTIMENT_LABELS:
+        row = improved["sentiment"]["confusion_matrix"][label]
+        lines.append("| " + label + " | " + " | ".join(str(row[item]) for item in confusion_labels) + " |")
+    lines.extend([
+        "",
+        "## 置信度校准审计",
+        "",
+        "模型 `confidence` 是模型自报分数，不是经过统计校准的正确概率。",
+        "",
+        "| 版本 | 覆盖率 | 平均自报分数 | 实际情感准确率 | ECE | 状态 |",
+        "|---|---:|---:|---:|---:|---|",
+        (
+            f"| Baseline | {baseline['confidence_calibration']['coverage']:.1%} | "
+            f"{baseline['confidence_calibration']['mean_confidence']:.1%} | "
+            f"{baseline['confidence_calibration']['observed_accuracy']:.1%} | "
+            f"{baseline['confidence_calibration']['expected_calibration_error']:.1%} | "
+            f"{baseline['confidence_calibration']['status']} |"
+        ),
+        (
+            f"| Improved | {improved['confidence_calibration']['coverage']:.1%} | "
+            f"{improved['confidence_calibration']['mean_confidence']:.1%} | "
+            f"{improved['confidence_calibration']['observed_accuracy']:.1%} | "
+            f"{improved['confidence_calibration']['expected_calibration_error']:.1%} | "
+            f"{improved['confidence_calibration']['status']} |"
+        ),
+        "",
+        "Dashboard 因此统一标记“模型自报分数（未校准）”，不得将其解释为可靠概率。",
         "",
         "## 多语言表现",
         "",
         "| 版本 | 语言 | 情感Accuracy | 情感Macro-F1 | 属性Precision | 属性Recall | 属性F1 |",
         "|---|---|---:|---:|---:|---:|---:|",
-    ]
+    ])
     for version_name, metrics in (
         ("Baseline", baseline),
         ("Improved", improved),

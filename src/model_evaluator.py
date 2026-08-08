@@ -50,6 +50,10 @@ def sentiment_metrics(
     total = len(gold_rows)
     correct = 0
     per_class: dict[str, dict[str, float | int]] = {}
+    confusion: dict[str, dict[str, int]] = {
+        label: {predicted: 0 for predicted in [*SENTIMENT_LABELS, "missing"]}
+        for label in SENTIMENT_LABELS
+    }
     for label in SENTIMENT_LABELS:
         gold_support = sum(row["gold_sentiment"] == label for row in gold_rows)
         if gold_support == 0:
@@ -84,6 +88,8 @@ def sentiment_metrics(
             .get("sentiment")
         )
         correct += predicted == row["gold_sentiment"]
+        predicted_label = str(predicted) if predicted in SENTIMENT_LABELS else "missing"
+        confusion[row["gold_sentiment"]][predicted_label] += 1
     macro_f1 = (
         round(
             sum(float(item["f1"]) for item in per_class.values())
@@ -99,6 +105,8 @@ def sentiment_metrics(
         "correct": correct,
         "total": total,
         "per_class": per_class,
+        "confusion_matrix": confusion,
+        "confusion_labels": [*SENTIMENT_LABELS, "missing"],
     }
 
 
@@ -112,6 +120,7 @@ def multilabel_metrics(
 ) -> dict[str, Any]:
     tp = fp = fn = exact = 0
     gold_instances = predicted_instances = 0
+    label_counts: dict[str, Counter[str]] = {}
     for row in gold_rows:
         gold = split_labels(row.get(gold_field))
         predicted_items = (
@@ -124,6 +133,14 @@ def multilabel_metrics(
             for item in predicted_items
             if isinstance(item, dict) and item.get(label_key)
         }
+        for label in gold | predicted:
+            counts = label_counts.setdefault(label, Counter())
+            if label in gold and label in predicted:
+                counts["tp"] += 1
+            elif label in predicted:
+                counts["fp"] += 1
+            else:
+                counts["fn"] += 1
         tp += len(gold & predicted)
         fp += len(predicted - gold)
         fn += len(gold - predicted)
@@ -132,6 +149,23 @@ def multilabel_metrics(
         predicted_instances += len(predicted)
     precision = safe_div(tp, tp + fp)
     recall = safe_div(tp, tp + fn)
+    per_label: dict[str, dict[str, float | int]] = {}
+    for label, counts in sorted(label_counts.items()):
+        label_precision = safe_div(counts["tp"], counts["tp"] + counts["fp"])
+        label_recall = safe_div(counts["tp"], counts["tp"] + counts["fn"])
+        per_label[label] = {
+            "support": counts["tp"] + counts["fn"],
+            "precision": label_precision,
+            "recall": label_recall,
+            "f1": safe_div(
+                2 * label_precision * label_recall,
+                label_precision + label_recall,
+            ),
+        }
+    macro_f1 = safe_div(
+        sum(float(item["f1"]) for item in per_label.values()),
+        len(per_label),
+    )
     return {
         "precision": precision,
         "recall": recall,
@@ -144,6 +178,60 @@ def multilabel_metrics(
         "false_negatives": fn,
         "gold_label_instances": gold_instances,
         "predicted_label_instances": predicted_instances,
+        "macro_f1": macro_f1,
+        "per_label": per_label,
+    }
+
+
+def confidence_calibration_metrics(
+    gold_rows: list[dict[str, str]],
+    predictions: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """Audit whether model self-reported confidence tracks sentiment accuracy."""
+    boundaries = [(0.0, 0.5), (0.5, 0.7), (0.7, 0.85), (0.85, 1.000001)]
+    observations: list[tuple[float, bool]] = []
+    for row in gold_rows:
+        analysis = predictions.get(row["review_id"], {}).get("analysis", {})
+        confidence = analysis.get("confidence")
+        if not isinstance(confidence, (int, float)) or isinstance(confidence, bool):
+            continue
+        bounded = max(0.0, min(1.0, float(confidence)))
+        observations.append((bounded, analysis.get("sentiment") == row["gold_sentiment"]))
+    bins: list[dict[str, Any]] = []
+    weighted_error = 0.0
+    for lower, upper in boundaries:
+        values = [item for item in observations if lower <= item[0] < upper]
+        if not values:
+            continue
+        mean_confidence = sum(item[0] for item in values) / len(values)
+        accuracy = sum(item[1] for item in values) / len(values)
+        gap = abs(mean_confidence - accuracy)
+        weighted_error += gap * len(values)
+        bins.append({
+            "lower": lower,
+            "upper": min(upper, 1.0),
+            "records": len(values),
+            "mean_confidence": round(mean_confidence, 4),
+            "accuracy": round(accuracy, 4),
+            "absolute_gap": round(gap, 4),
+        })
+    count = len(observations)
+    ece = round(weighted_error / count, 4) if count else None
+    return {
+        "records_with_confidence": count,
+        "coverage": safe_div(count, len(gold_rows)),
+        "mean_confidence": (
+            round(sum(item[0] for item in observations) / count, 4) if count else None
+        ),
+        "observed_accuracy": (
+            round(sum(item[1] for item in observations) / count, 4) if count else None
+        ),
+        "expected_calibration_error": ece,
+        "status": (
+            "not_available" if ece is None else "uncalibrated" if ece > 0.05 else "provisionally_aligned"
+        ),
+        "display_policy": "treat_as_model_self_report_not_probability",
+        "bins": bins,
     }
 
 
@@ -226,6 +314,7 @@ def version_metrics(
                 prediction_field="issue_types",
                 label_key="issue",
             ),
+            "confidence_calibration": confidence_calibration_metrics(subset, predictions),
         }
     unique_predictions = len(predictions)
     return {
@@ -253,6 +342,7 @@ def version_metrics(
         "evidence_substring": evidence_substring_metrics(
             gold_rows, predictions
         ),
+        "confidence_calibration": confidence_calibration_metrics(gold_rows, predictions),
         "by_language": languages,
     }
 

@@ -72,6 +72,7 @@ test("dashboard implements scope and analysis filters plus five views", async ()
   assert.match(page, /crossborder-voice\.insight-comparison\.v1/);
   assert.match(page, /洞察版本对比/);
   assert.match(page, /新增、消失与支持量变化/);
+  assert.match(page, /未校准，不是正确概率/);
 });
 
 test("production HTML renders the branded dashboard shell", async () => {

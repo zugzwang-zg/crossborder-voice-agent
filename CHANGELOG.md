@@ -26,6 +26,13 @@ All notable changes will be documented in this file.
 - Saved insight comparison baselines with added, removed and support-change
   deltas across filters or analysis versions.
 - Consolidated data/privacy register and public-demo release checklist.
+- Frozen 40-review bilingual challenge input spanning neutral/mixed candidates,
+  long reviews, multi-topic reviews and implicit attributes, with zero overlap
+  against the original gold set and prompt-development sample.
+- Per-class sentiment metrics and confusion matrix, multilabel micro/macro
+  scores, and confidence-calibration reporting with an uncalibrated UI policy.
+- End-to-end regression from source contract through evaluation, traceable
+  insight aggregation, dashboard compaction and append-only reviewer feedback.
 
 ### Pending maintainer decision
 
