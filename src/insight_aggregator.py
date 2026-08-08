@@ -163,8 +163,9 @@ def select_scope(
             "value": None,
             "input_records": len(records),
             "selected_records": len(records),
-            "known_scope_records": len(records),
-            "unknown_scope_records": 0,
+            "known_scope_records": None,
+            "unknown_scope_records": None,
+            "scope_metadata_status": "not_applicable_for_global_scope",
         }
     if scope_field not in VALID_SCOPE_FIELDS:
         raise ValueError(
@@ -648,19 +649,28 @@ def _candidate(
         return None
     if category == "product_improvement":
         title = f"优先改善{name}相关痛点"
-        product_action = f"围绕“{name}”排查高频失败路径并做针对性改进。"
+        product_action = (
+            f"按评论证据拆分“{name}”的规格、使用与履约失败路径，"
+            "将支持量最高的一项建立修复工单。"
+        )
         marketing_action = "改进完成并验证前，不将该项作为强承诺卖点。"
         content_topic = f"制作“{name}常见问题与正确使用方式”内容。"
     elif category == "listing_optimization":
         title = f"在详情页前置说明{name}"
-        product_action = "核对实物、规格和页面承诺是否一致。"
-        marketing_action = f"在标题、图片或要点中明确“{name}”的适用边界。"
+        product_action = "逐项核对实物、规格与页面承诺，并记录不一致字段。"
+        marketing_action = (
+            f"把已验证的“{name}”边界写入首屏图片或前两条卖点。"
+        )
         content_topic = f"制作“购买前如何判断{name}”说明内容。"
     elif category == "advertising_selling_point":
         title = f"验证后强化{name}卖点"
-        product_action = f"持续监测“{name}”在不同批次和人群中的稳定性。"
-        marketing_action = f"在证据稳定后，将“{name}”转化为具体、可验证卖点。"
-        content_topic = f"围绕“{name}”制作真实使用案例。"
+        product_action = (
+            f"建立“{name}”批次抽查表，记录稳定性与异常反馈后再决定是否放大卖点。"
+        )
+        marketing_action = (
+            f"从引用评论提炼一条可核验的“{name}”表达，并先做小流量素材测试。"
+        )
+        content_topic = f"使用可追溯评论制作“{name}”案例，并标注适用条件。"
     elif category == "customer_service_faq":
         title = f"建立{name}客服FAQ"
         product_action = "将高频咨询和失败原因反馈给产品与运营团队。"
@@ -668,8 +678,8 @@ def _candidate(
         content_topic = f"制作“{name}处理步骤”FAQ内容。"
     else:
         title = f"围绕{name}建设内容专题"
-        product_action = "通过进一步用户研究验证不同场景的真实需求。"
-        marketing_action = f"按语言和场景测试“{name}”内容表达。"
+        product_action = "把当前信号加入访谈提纲，用目标用户样本验证需求。"
+        marketing_action = f"分别为英语与西语样本制作“{name}”素材并记录测试结果。"
         content_topic = f"制作“{name}场景指南与案例”系列。"
     return {
         "insight_id": f"{family}:{code}",
@@ -847,6 +857,18 @@ def aggregate_records(
         max_insights=max_insights,
     )
     for insight in insights:
+        action_fields = {
+            "product_improvement": ("product", "product_recommendation"),
+            "listing_optimization": ("listing", "marketing_recommendation"),
+            "advertising_selling_point": (
+                "advertising",
+                "marketing_recommendation",
+            ),
+            "content_topic": ("content", "content_topic"),
+            "customer_service_faq": ("faq", "content_topic"),
+        }
+        action_type, action_field = action_fields[insight["category"]]
+        support_count = insight["data_evidence"]["support_reviews"]
         insight["analysis_scope"] = {
             "field": scope["field"],
             "value": scope["value"],
@@ -860,6 +882,34 @@ def aggregate_records(
             ],
             "warning": sampling["warning"],
         }
+        insight.update(
+            {
+                "scope": {
+                    "type": scope["type"],
+                    "field": scope["field"],
+                    "value": scope["value"],
+                },
+                "finding": insight["title"],
+                "support_count": support_count,
+                "support_rate": (
+                    round(support_count / len(scoped_records), 4)
+                    if scoped_records
+                    else 0
+                ),
+                "representative_review_ids": insight["data_evidence"][
+                    "source_review_ids"
+                ],
+                "confidence_or_evidence_grade": insight[
+                    "sample_size_and_confidence"
+                ]["grade"],
+                "recommended_action": insight[action_field],
+                "action_type": action_type,
+                "limitations": [
+                    sampling["note"],
+                    "Review associations indicate a direction; they do not prove causality.",
+                ],
+            }
+        )
     tables = {
         "aspect_by_language": aspect_rows(groups, language_totals),
         "low_star_pain_points": bucket_rows(

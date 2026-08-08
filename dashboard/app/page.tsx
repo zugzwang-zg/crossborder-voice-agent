@@ -29,6 +29,9 @@ type Aspect = {
 };
 type Review = {
   id: string;
+  productId: string;
+  productTitle: string;
+  productSubcategory: string;
   language: "en" | "es";
   stars: number;
   title: string;
@@ -73,6 +76,12 @@ type Insight = {
     evidence_quotes: number;
     grade: string;
   };
+  finding?: string;
+  support_count?: number;
+  support_rate?: number;
+  recommended_action?: string;
+  action_type?: string;
+  limitations?: string[];
 };
 type Labels = {
   aspects: Record<string, string>;
@@ -93,6 +102,11 @@ type DashboardData = {
     schemaVersion: string;
     mode?: "demo";
     fullDatasetRecords?: number;
+    sampling?: {
+      note: string;
+      small_sample_threshold: number;
+      population_prevalence_supported: boolean;
+    };
   };
   labels: Labels;
   records: Review[];
@@ -100,6 +114,8 @@ type DashboardData = {
 };
 type PageKey = "overview" | "pain" | "motivation" | "language" | "insights";
 type Filters = {
+  product: string;
+  subcategory: string;
   language: string;
   stars: string;
   sentiment: string;
@@ -109,6 +125,8 @@ type Filters = {
 };
 
 const INITIAL_FILTERS: Filters = {
+  product: "all",
+  subcategory: "all",
   language: "all",
   stars: "all",
   sentiment: "all",
@@ -734,10 +752,16 @@ function LanguagePage({
 function InsightsPage({
   records,
   insights,
+  labels,
+  scopeLabel,
+  productScopeSelected,
   onOpen,
 }: {
   records: Review[];
   insights: Insight[];
+  labels: Labels;
+  scopeLabel: string;
+  productScopeSelected: boolean;
   onOpen: (review: Review) => void;
 }) {
   const recordMap = useMemo(() => new Map(records.map((record) => [record.id, record])), [records]);
@@ -750,6 +774,16 @@ function InsightsPage({
     .sort((a, b) => b.matchedIds.length - a.matchedIds.length);
   const [selectedId, setSelectedId] = useState<string>("");
   const selected = visibleInsights.find((item) => item.insight.insight_id === selectedId) || visibleInsights[0];
+  const issueLeader = countBy(
+    records.flatMap((record) => record.issues),
+    (issue) => issue.code,
+  )[0];
+  const scopedAction = issueLeader
+    ? records
+        .filter((record) => record.issues.some((issue) => issue.code === issueLeader[0]))
+        .flatMap((record) => record.actions)
+        .find((action) => action.audience === "product")?.action
+    : undefined;
 
   if (!records.length || !selected) return <EmptyState />;
   const representative = selected.insight.representative_quotes
@@ -761,14 +795,41 @@ function InsightsPage({
       <div className="page-kicker">EVIDENCE BRIEF / 洞察简报</div>
       <div className="headline-block insight-headline">
         <div>
-          <h1>15 条业务洞察，每一条都能回到评论证据</h1>
-          <p>点击左侧洞察，右侧依次展示统计支撑、消费者原话和可执行建议；筛选器会同步收缩证据范围。</p>
+          <h1>{scopeLabel}的证据、判断与下一步动作</h1>
+          <p>洞察始终显示分析范围、当前支持量与原文证据；商品筛选只在来源字段已知时开放。</p>
         </div>
         <div className="trace-status">
           <Sparkles size={18} />
           <div><strong>TRACE PASS</strong><span>0 条失联证据</span></div>
         </div>
       </div>
+
+      <article className={`scope-decision-card ${productScopeSelected ? "scoped" : "boundary"}`}>
+        <div className="scope-decision-label">
+          <span>DECISION SCOPE</span>
+          <strong>{scopeLabel}</strong>
+        </div>
+        {issueLeader ? (
+          <>
+            <div>
+              <small>当前首要问题信号</small>
+              <strong>{labelOf(labels.issues, issueLeader[0])}</strong>
+              <span>{issueLeader[1]} / {records.length} 条当前评论提及</span>
+            </div>
+            <div>
+              <small>下一步</small>
+              <strong>{productScopeSelected ? "建立范围内修复工单" : "验证商品范围后再立项"}</strong>
+              <span>{scopedAction || `复核这 ${issueLeader[1]} 条原文，确认失败路径与责任环节。`}</span>
+            </div>
+          </>
+        ) : (
+          <div>
+            <small>当前范围</small>
+            <strong>尚无稳定问题信号</strong>
+            <span>放宽筛选条件，或补充带商品标识的评论后再判断。</span>
+          </div>
+        )}
+      </article>
 
       <div className="insight-workbench">
         <aside className="insight-index">
@@ -794,7 +855,7 @@ function InsightsPage({
 
         <article className="insight-detail">
           <div className="insight-category">{selected.insight.category_name}</div>
-          <h2>{selected.insight.title}</h2>
+          <h2>{selected.insight.finding || selected.insight.title}</h2>
           <p className="cause-note">{selected.insight.possible_cause}</p>
 
           <div className="evidence-spine">
@@ -1007,6 +1068,8 @@ export default function Home() {
   const filtered = useMemo(() => {
     if (!data) return [];
     return data.records.filter((review) => {
+      if (filters.product !== "all" && review.productId !== filters.product) return false;
+      if (filters.subcategory !== "all" && review.productSubcategory !== filters.subcategory) return false;
       if (filters.language !== "all" && review.language !== filters.language) return false;
       if (filters.stars !== "all" && review.stars !== Number(filters.stars)) return false;
       if (filters.sentiment !== "all" && review.sentiment !== filters.sentiment) return false;
@@ -1017,7 +1080,37 @@ export default function Home() {
     });
   }, [data, filters]);
 
+  const productOptions = useMemo(() => {
+    if (!data) return [];
+    const options = new Map<string, string>();
+    data.records.forEach((record) => {
+      if (record.productId && record.productId !== "unknown") {
+        options.set(
+          record.productId,
+          record.productTitle !== "unknown" ? record.productTitle : record.productId,
+        );
+      }
+    });
+    return [...options.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  }, [data]);
+  const subcategoryOptions = useMemo(() => {
+    if (!data) return [];
+    return [...new Set(
+      data.records
+        .map((record) => record.productSubcategory)
+        .filter((value) => value && value !== "unknown"),
+    )].sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
   const activeFilters = Object.values(filters).filter((value) => value !== "all").length;
+  const productScopeSelected = filters.product !== "all" || filters.subcategory !== "all";
+  const scopeLabel = filters.product !== "all"
+    ? productOptions.find(([id]) => id === filters.product)?.[1] || filters.product
+    : filters.subcategory !== "all"
+      ? `${filters.subcategory} 子品类`
+      : productOptions.length || subcategoryOptions.length
+        ? "全部已知商品"
+        : "全局语料演示";
   const openReview = (review: Review) => {
     setSelectedReview(review);
     setDrawerOpen(true);
@@ -1041,7 +1134,7 @@ export default function Home() {
     if (page === "pain") return <PainPage records={filtered} labels={data.labels} onOpen={openReview} />;
     if (page === "motivation") return <MotivationPage records={filtered} labels={data.labels} insights={data.insights} onOpen={openReview} />;
     if (page === "language") return <LanguagePage records={filtered} labels={data.labels} onOpen={openReview} />;
-    return <InsightsPage records={filtered} insights={data.insights} onOpen={openReview} />;
+    return <InsightsPage records={filtered} insights={data.insights} labels={data.labels} scopeLabel={scopeLabel} productScopeSelected={productScopeSelected} onOpen={openReview} />;
   };
 
   return (
@@ -1162,6 +1255,47 @@ export default function Home() {
             </button>
           </div>
         </header>
+
+        <section className={`scope-rail ${productOptions.length || subcategoryOptions.length ? "scope-ready" : "scope-missing"}`} aria-label="商品分析范围">
+          <div className="scope-rail-title">
+            <ShoppingBag size={17} />
+            <div><span>SCOPE / 分析范围</span><strong>{scopeLabel}</strong></div>
+          </div>
+          <label>
+            <span>商品</span>
+            <select
+              value={filters.product}
+              disabled={!productOptions.length}
+              onChange={(event) => setFilters({ ...filters, product: event.target.value })}
+            >
+              <option value="all">全部已知商品</option>
+              {productOptions.map(([id, title]) => <option key={id} value={id}>{title}</option>)}
+            </select>
+          </label>
+          <label>
+            <span>子品类</span>
+            <select
+              value={filters.subcategory}
+              disabled={!subcategoryOptions.length}
+              onChange={(event) => setFilters({ ...filters, subcategory: event.target.value })}
+            >
+              <option value="all">全部已知子品类</option>
+              {subcategoryOptions.map((value) => <option key={value} value={value}>{value}</option>)}
+            </select>
+          </label>
+          <div className="scope-boundary">
+            <strong>{productOptions.length || subcategoryOptions.length ? `${filtered.length} 条范围内评论` : "商品字段缺失"}</strong>
+            <span>
+              {productOptions.length || subcategoryOptions.length
+                ? "筛选仅使用来源字段，不从评论文本推断商品。"
+                : "当前数据只能做全局语料方法演示，不生成虚假的单品洞察。"}
+            </span>
+          </div>
+          <div className={`sample-boundary ${filtered.length < 30 ? "warning" : ""}`}>
+            <strong>{filtered.length < 30 ? "低样本" : "描述性样本"}</strong>
+            <span>{filtered.length} 条 · 分层样本，不代表真实市场占比</span>
+          </div>
+        </section>
 
         <div className="mobile-filter-summary">
           <span>当前样本 <strong>{filtered.length}</strong> 条</span>

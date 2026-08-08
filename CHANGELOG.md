@@ -15,6 +15,11 @@ All notable changes will be documented in this file.
 - Sampling metadata, explicit unweighted prevalence boundary, stratum counts,
   and configurable small-sample warnings on reports, insights, and tables.
 - GitHub Actions checks for the Python aggregation suite and Dashboard lint/tests.
+- Canonical actionable-insight fields for scope, support rate, evidence IDs,
+  action type, recommended action, and limitations.
+- Dashboard product/subcategory scope controls, missing-scope guardrail, and
+  persistent sampling boundary rail.
+- README first-screen quick start, CI status, reproducible metrics, and data limits.
 
 ### Pending maintainer decision
 

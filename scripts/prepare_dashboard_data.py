@@ -31,6 +31,11 @@ def compact_record(record: dict) -> dict:
     analysis = record["analysis"]
     return {
         "id": record["review_id"],
+        "productId": str(source.get("product_id") or "unknown"),
+        "productTitle": str(source.get("product_title") or "unknown"),
+        "productSubcategory": str(
+            source.get("product_subcategory") or "unknown"
+        ),
         "language": source["language"],
         "stars": source["stars"],
         "title": source.get("title", ""),
@@ -125,6 +130,8 @@ def main() -> int:
             "traceability": insight_report["traceability"],
             "promptVersion": "v9_consistency_guard",
             "schemaVersion": "1.7.0",
+            "scope": insight_report.get("scope"),
+            "sampling": insight_report.get("sampling"),
         },
         "labels": labels,
         "records": compact,

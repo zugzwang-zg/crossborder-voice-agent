@@ -45,9 +45,9 @@ test(
   },
 );
 
-test("dashboard implements all six required filters and five analysis views", async () => {
+test("dashboard implements scope and analysis filters plus five views", async () => {
   const page = await readFile(new URL("app/page.tsx", root), "utf8");
-  for (const filter of ["language", "stars", "sentiment", "aspect", "issue", "scenario"]) {
+  for (const filter of ["product", "subcategory", "language", "stars", "sentiment", "aspect", "issue", "scenario"]) {
     assert.match(page, new RegExp(`filters\\.${filter}`));
   }
   for (const view of ["overview", "pain", "motivation", "language", "insights"]) {
@@ -57,6 +57,9 @@ test("dashboard implements all six required filters and five analysis views", as
   assert.match(page, /data_evidence\.source_review_ids/);
   assert.match(page, /评论证据库/);
   assert.match(page, /dashboard-data\.demo\.json/);
+  assert.match(page, /不生成虚假的单品洞察/);
+  assert.match(page, /分层样本，不代表真实市场占比/);
+  assert.match(page, /scope-decision-card/);
 });
 
 test("production HTML renders the branded dashboard shell", async () => {

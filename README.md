@@ -1,21 +1,47 @@
 # CrossBorder Voice
 
-**A traceable bilingual review-insight agent for cross-border beauty operations**
+[![CI](https://github.com/zugzwang-zg/crossborder-voice-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/zugzwang-zg/crossborder-voice-agent/actions/workflows/ci.yml)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-1d5960)](https://www.python.org/)
+[![Offline demo](https://img.shields.io/badge/demo-offline%20safe-e2663b)](dashboard/README.md)
 
-CrossBorder Voice 将 Amazon 英语与西班牙语美妆评论转换为可筛选、可复核的产品与内容运营洞察。系统覆盖确定性抽样、语言学标签体系、LLM 结构化分析、冻结测试集评测、证据聚合与交互式看板。
+**把英语与西班牙语评论转换为有范围、有分母、能回到原文的运营决策。**
+
+面向跨境电商产品、内容与客服运营人员。CrossBorder Voice 将评论整理为可筛选的痛点、卖点和行动建议；当商品字段缺失时，它会明确停留在语料方法演示，不把语言或文本猜成商品、国家或市场事实。
 
 ![CrossBorder Voice dashboard](dashboard/public/social-preview.png)
 
-> **数据规模：** 1,000 条评论（英语 500 / 西班牙语 500；1—5 星各 200 条）
->
-> **评测设置：** 100 条独立人工金标测试集，未参与提示词开发
->
-> **适用边界：** 数据来自 2015—2019 年，用于方法验证，不代表当前市场趋势
+**30 秒体验：** [打开在线 Dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site)，进入“AI 洞察报告”，选择一条洞察并打开右侧评论证据。
 
 [技术演示文稿](assets/CrossBorder_Voice_Project_Presentation.pptx) ·
 [在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
 [模型评测](reports/evaluation_report.md) ·
-[消费者洞察](reports/consumer_insights.md)
+[消费者洞察](reports/consumer_insights.md) ·
+[抽样与范围边界](docs/SAMPLING_AND_SCOPE.md)
+
+| 已验证能力 | 当前结果 | 复现与口径 |
+|---|---:|---|
+| 正式分析规模 | 1,000 条 | 英语 500 / 西语 500；每个语言 × 星级分层 100 条，[不代表市场占比](docs/SAMPLING_AND_SCOPE.md) |
+| 冻结测试集 | 100 条 | 与提示词开发集分离，[查看评测](reports/evaluation_report.md) |
+| 人工证据语义有效率 | 96% | 每版本抽查 25 条，不等同于全量复核，[查看方法](reports/evaluation_report.md) |
+| 自动化回归 | 40 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
+
+### 1 分钟本地演示
+
+无需 API Key，公开仓库会回退到 10 条安全样本：
+
+```powershell
+cd dashboard
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+打开 `http://localhost:3000`。如需验证完整核心链路，运行：
+
+```powershell
+python -m unittest discover -s tests -q
+```
+
+> 数据来自 2015—2019 年，只用于方法验证；当前正式语料缺少商品标识，因此不能提供单品决策或当前市场趋势。
 
 ## 问题与目标
 

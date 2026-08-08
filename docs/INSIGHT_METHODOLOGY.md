@@ -37,4 +37,27 @@ Run it with:
 python scripts/aggregate_insights.py
 ```
 
+## Actionable insight contract
+
+Each generated insight retains the legacy report fields and also exposes a
+stable decision contract:
+
+```text
+insight_id
+scope
+finding
+support_count
+support_rate
+representative_review_ids
+confidence_or_evidence_grade
+recommended_action
+action_type
+limitations
+```
+
+`support_rate` always uses the selected scope's unique review records as its
+denominator. `action_type` is limited to product, listing, advertising, content,
+or FAQ work. Recommendations identify a concrete next step; the limitations
+continue to state that review associations do not prove causality.
+
 The public repository contains aggregate tables and a small demo sample. Full review-level outputs remain local under the rules in [PUBLIC_DATA_POLICY.md](../data/PUBLIC_DATA_POLICY.md).

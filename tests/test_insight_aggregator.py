@@ -160,6 +160,11 @@ class AggregatorTests(unittest.TestCase):
             report["sampling"]["population_prevalence_supported"]
         )
         self.assertIn("exploratory", report["sampling"]["warning"])
+        self.assertIsNone(report["scope"]["known_scope_records"])
+        self.assertEqual(
+            report["scope"]["scope_metadata_status"],
+            "not_applicable_for_global_scope",
+        )
 
     def test_product_scope_excludes_other_products_and_annotates_tables(self) -> None:
         records = [
@@ -212,6 +217,17 @@ class AggregatorTests(unittest.TestCase):
         self.assertEqual(pain["scope_value"], "P1")
         self.assertTrue(pain["small_sample_warning"])
         self.assertEqual(report["insights"][0]["analysis_scope"]["value"], "P1")
+        insight = report["insights"][0]
+        self.assertEqual(insight["scope"]["value"], "P1")
+        self.assertEqual(insight["support_count"], 2)
+        self.assertEqual(insight["support_rate"], 1.0)
+        self.assertEqual(insight["action_type"], "product")
+        self.assertTrue(insight["recommended_action"])
+        self.assertEqual(
+            insight["representative_review_ids"],
+            insight["data_evidence"]["source_review_ids"],
+        )
+        self.assertTrue(insight["limitations"])
 
     def test_unknown_scope_cannot_be_presented_as_product_analysis(self) -> None:
         with self.assertRaisesRegex(ValueError, "known source value"):
