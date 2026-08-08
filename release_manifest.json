@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "target_version": "v0.2.0",
+  "candidate_version": "v0.2.0-rc.1",
+  "release_created": false,
+  "release_status": "blocked_pending_maintainer_decisions",
+  "required_human_decisions": [
+    "select_and_add_repository_license",
+    "review_local_release_diff_before_tag_or_push"
+  ],
+  "pending_evaluation": [
+    "frozen_40_review_challenge_set_requires_two_independent_annotations"
+  ],
+  "validation_commands": [
+    "python -m unittest discover -s tests -q",
+    "cd dashboard && pnpm lint",
+    "cd dashboard && pnpm test"
+  ]
+}

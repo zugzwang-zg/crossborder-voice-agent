@@ -36,6 +36,7 @@ def compact_record(record: dict) -> dict:
         "productSubcategory": str(
             source.get("product_subcategory") or "unknown"
         ),
+        "reviewDate": str(source.get("review_date") or "unknown"),
         "language": source["language"],
         "stars": source["stars"],
         "title": source.get("title", ""),

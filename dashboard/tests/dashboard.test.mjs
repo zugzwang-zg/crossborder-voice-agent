@@ -54,6 +54,14 @@ test("dashboard implements scope and analysis filters plus five views", async ()
     assert.match(page, new RegExp(`key: "${view}"`));
   }
   assert.match(page, /ReviewDrawer/);
+  assert.match(page, /advanced-filters/);
+  assert.match(page, /active-filter-rail/);
+  assert.match(page, /const pageSize = 30/);
+  assert.match(page, /stars_desc/);
+  assert.match(page, /date_desc/);
+  assert.match(page, /review-source-text/);
+  assert.match(page, /HighlightText/);
+  assert.match(page, /loadAttempt/);
   assert.match(page, /data_evidence\.source_review_ids/);
   assert.match(page, /评论证据库/);
   assert.match(page, /dashboard-data\.demo\.json/);

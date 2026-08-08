@@ -4,6 +4,8 @@
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-1d5960)](https://www.python.org/)
 [![Offline demo](https://img.shields.io/badge/demo-offline%20safe-e2663b)](dashboard/README.md)
 
+[Architecture](docs/ARCHITECTURE.md) · [Five-minute demo](docs/DEMO_SCRIPT.md) · [v0.2.0 readiness](docs/RELEASE_READINESS.md)
+
 **把英语与西班牙语评论转换为有范围、有分母、能回到原文的运营决策。**
 
 面向跨境电商产品、内容与客服运营人员。CrossBorder Voice 将评论整理为可筛选的痛点、卖点和行动建议；当商品字段缺失时，它会明确停留在语料方法演示，不把语言或文本猜成商品、国家或市场事实。
@@ -25,7 +27,7 @@
 | 冻结测试集 | 100 条 | 与提示词开发集分离，[查看评测](reports/evaluation_report.md) |
 | 人工证据语义有效率 | 96% | 每版本抽查 25 条，不等同于全量复核，[查看方法](reports/evaluation_report.md) |
 | 冻结挑战集扩展 | 40 条待双人标注 | 英语 20 / 西班牙语 20，覆盖中性候选、混合候选、长评论、多主题和隐含属性；尚不计入主指标 |
-| 自动化回归 | 48 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
+| 自动化回归 | 49 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
 
 ### 1 分钟本地演示
 

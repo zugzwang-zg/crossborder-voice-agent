@@ -4,6 +4,7 @@ import {
   BarChart3,
   BookOpenText,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   Clock3,
   CircleDot,
@@ -19,6 +20,7 @@ import {
   Save,
   Search,
   ShoppingBag,
+  SlidersHorizontal,
   Sparkles,
   Star,
   X,
@@ -37,6 +39,7 @@ type Review = {
   productId: string;
   productTitle: string;
   productSubcategory: string;
+  reviewDate?: string;
   language: "en" | "es";
   stars: number;
   title: string;
@@ -118,6 +121,7 @@ type DashboardData = {
   insights: Insight[];
 };
 type PageKey = "overview" | "pain" | "motivation" | "language" | "insights";
+type ReviewSort = "relevance" | "stars_desc" | "stars_asc" | "intensity" | "date_desc";
 type Filters = {
   product: string;
   subcategory: string;
@@ -325,13 +329,28 @@ function DistributionRow({
   );
 }
 
-function EmptyState() {
+function EmptyState({ onReset }: { onReset?: () => void }) {
   return (
     <div className="empty-state">
       <FileSearch size={28} />
       <strong>当前筛选组合没有匹配评论</strong>
       <span>请放宽一个筛选条件后再查看。</span>
+      {onReset && <button onClick={onReset}>清空筛选并恢复全部评论</button>}
     </div>
+  );
+}
+
+function HighlightText({ text, needles }: { text: string; needles: string[] }) {
+  const usable = [...new Set(needles.map((item) => item.trim()).filter(Boolean))]
+    .sort((a, b) => b.length - a.length)
+    .slice(0, 14);
+  if (!usable.length) return text;
+  const escaped = usable.map((item) => item.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const pattern = new RegExp(`(${escaped.join("|")})`, "gi");
+  return text.split(pattern).map((part, index) =>
+    usable.some((item) => item.toLocaleLowerCase() === part.toLocaleLowerCase())
+      ? <mark key={`${part}-${index}`}>{part}</mark>
+      : part,
   );
 }
 
@@ -1161,18 +1180,52 @@ function ReviewDrawer({
   onClose: () => void;
 }) {
   const [query, setQuery] = useState("");
-  const list = useMemo(() => {
+  const [sort, setSort] = useState<ReviewSort>("relevance");
+  const [pageIndex, setPageIndex] = useState(0);
+  const pageSize = 30;
+  const hasReviewDates = records.some((review) => Boolean(review.reviewDate && review.reviewDate !== "unknown"));
+  const ranked = useMemo(() => {
     const normalized = query.trim().toLowerCase();
+    const relevance = (review: Review) => {
+      if (!normalized) return review.intensity;
+      const title = review.title.toLowerCase();
+      const body = review.body.toLowerCase();
+      if (review.id.toLowerCase() === normalized) return 1000;
+      return (title.includes(normalized) ? 100 : 0)
+        + (body.includes(normalized) ? 20 : 0)
+        + (review.id.toLowerCase().includes(normalized) ? 10 : 0)
+        + review.intensity;
+    };
     return records
       .filter((review) =>
         !normalized
           ? true
           : `${review.id} ${review.title} ${review.body}`.toLowerCase().includes(normalized),
       )
-      .slice(0, 80);
-  }, [query, records]);
+      .sort((a, b) => {
+        if (sort === "stars_desc") return b.stars - a.stars || b.intensity - a.intensity;
+        if (sort === "stars_asc") return a.stars - b.stars || b.intensity - a.intensity;
+        if (sort === "intensity") return b.intensity - a.intensity || a.id.localeCompare(b.id);
+        if (sort === "date_desc") return String(b.reviewDate || "").localeCompare(String(a.reviewDate || ""));
+        return relevance(b) - relevance(a) || a.id.localeCompare(b.id);
+      });
+  }, [query, records, sort]);
+  const pageCount = Math.max(1, Math.ceil(ranked.length / pageSize));
+  const safePageIndex = Math.min(pageIndex, pageCount - 1);
+  const list = ranked.slice(safePageIndex * pageSize, (safePageIndex + 1) * pageSize);
 
-  const active = selected || list[0] || null;
+  const selectedMatchesQuery = selected
+    ? ranked.some((review) => review.id === selected.id)
+    : false;
+  const active = (selectedMatchesQuery ? selected : null) || list[0] || null;
+  const highlightNeedles = active ? [
+    query,
+    ...active.aspects.flatMap((item) => item.evidence),
+    ...active.issues.map((item) => item.evidence),
+    ...active.motivations.map((item) => item.evidence),
+    ...active.scenarios.map((item) => item.evidence),
+  ] : [];
+  const jumpToSource = () => document.getElementById("review-source-text")?.scrollIntoView({ behavior: "smooth", block: "center" });
   return (
     <div className="drawer-layer" role="dialog" aria-modal="true" aria-label="评论证据库">
       <button className="drawer-backdrop" onClick={onClose} aria-label="关闭评论证据库" />
@@ -1187,29 +1240,55 @@ function ReviewDrawer({
           </button>
         </header>
         <div className="drawer-search">
-          <Search size={16} />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="搜索评论 ID 或原文"
-            aria-label="搜索评论"
-          />
-          <span>{records.length} 条</span>
+          <label className="drawer-query">
+            <Search size={16} />
+            <input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setPageIndex(0);
+              }}
+              placeholder="搜索评论 ID 或原文"
+              aria-label="搜索评论"
+            />
+          </label>
+          <label className="drawer-sort">
+            <span>排序</span>
+            <select value={sort} onChange={(event) => {
+              setSort(event.target.value as ReviewSort);
+              setPageIndex(0);
+            }} aria-label="评论排序">
+              <option value="relevance">相关性</option>
+              <option value="stars_desc">星级：高到低</option>
+              <option value="stars_asc">星级：低到高</option>
+              <option value="intensity">情绪强度</option>
+              <option value="date_desc" disabled={!hasReviewDates}>时间（当前数据缺失）</option>
+            </select>
+          </label>
+          <span>{ranked.length} / {records.length} 条</span>
         </div>
         <div className="drawer-body">
-          <nav className="review-list" aria-label="评论列表">
-            {list.map((review) => (
-              <button
-                key={review.id}
-                className={active?.id === review.id ? "active" : ""}
-                onClick={() => onSelect(review)}
-              >
-                <span>{review.language.toUpperCase()} · {review.id}</span>
-                <strong>{review.title || review.body.slice(0, 46)}</strong>
-                <small>{review.body.slice(0, 100)}</small>
-              </button>
-            ))}
-          </nav>
+          <div className="review-list-shell">
+            <nav className="review-list" aria-label="评论列表">
+              {list.map((review) => (
+                <button
+                  key={review.id}
+                  className={active?.id === review.id ? "active" : ""}
+                  onClick={() => onSelect(review)}
+                >
+                  <span>{review.language.toUpperCase()} · {review.id}</span>
+                  <strong>{review.title || review.body.slice(0, 46)}</strong>
+                  <small>{review.body.slice(0, 100)}</small>
+                </button>
+              ))}
+              {!list.length && <div className="drawer-empty"><strong>没有匹配评论</strong><button onClick={() => { setQuery(""); setPageIndex(0); }}>清空搜索</button></div>}
+            </nav>
+            <div className="review-pagination">
+              <button disabled={safePageIndex === 0} onClick={() => setPageIndex(safePageIndex - 1)} aria-label="上一页"><ChevronLeft size={15} /></button>
+              <span>{safePageIndex + 1} / {pageCount}</span>
+              <button disabled={safePageIndex + 1 >= pageCount} onClick={() => setPageIndex(safePageIndex + 1)} aria-label="下一页"><ChevronRight size={15} /></button>
+            </div>
+          </div>
           {active ? (
             <article className="review-detail">
               <div className="review-meta">
@@ -1219,7 +1298,7 @@ function ReviewDrawer({
                 <span>模型自报 {(active.confidence * 100).toFixed(0)}% · 未校准</span>
               </div>
               <h2>{active.title || "无标题评论"}</h2>
-              <blockquote>{active.body}</blockquote>
+              <blockquote id="review-source-text"><HighlightText text={active.body} needles={highlightNeedles} /></blockquote>
               <div className="annotation-section">
                 <span className="annotation-label">属性与观点证据</span>
                 {active.aspects.length ? active.aspects.map((aspect, index) => (
@@ -1229,7 +1308,7 @@ function ReviewDrawer({
                       <span className={`polarity ${aspect.polarity}`}>{polarityLabel[aspect.polarity]}</span>
                     </div>
                     <p>{aspect.opinion}</p>
-                    {aspect.evidence.map((evidence) => <q key={evidence}>{evidence}</q>)}
+                    {aspect.evidence.map((evidence) => <button className="evidence-jump" onClick={jumpToSource} key={evidence}><q>{evidence}</q><span>定位原文</span></button>)}
                   </div>
                 )) : <p className="panel-note">未识别明确产品属性。</p>}
               </div>
@@ -1239,7 +1318,7 @@ function ReviewDrawer({
                   {active.issues.length ? active.issues.map((item, index) => (
                     <div className="code-chip" key={`${item.code}-${index}`}>
                       <strong>{labelOf(labels.issues, item.code)}</strong>
-                      <q>{item.evidence}</q>
+                      <button className="evidence-jump" onClick={jumpToSource}><q>{item.evidence}</q><span>定位原文</span></button>
                     </div>
                   )) : <small>无明确问题标签</small>}
                 </div>
@@ -1249,12 +1328,12 @@ function ReviewDrawer({
                     <>
                       {active.motivations.map((item, index) => (
                         <div className="code-chip" key={`m-${item.code}-${index}`}>
-                          <strong>{labelOf(labels.motivations, item.code)}</strong><q>{item.evidence}</q>
+                          <strong>{labelOf(labels.motivations, item.code)}</strong><button className="evidence-jump" onClick={jumpToSource}><q>{item.evidence}</q><span>定位原文</span></button>
                         </div>
                       ))}
                       {active.scenarios.map((item, index) => (
                         <div className="code-chip" key={`s-${item.code}-${index}`}>
-                          <strong>{labelOf(labels.scenarios, item.code)}</strong><q>{item.evidence}</q>
+                          <strong>{labelOf(labels.scenarios, item.code)}</strong><button className="evidence-jump" onClick={jumpToSource}><q>{item.evidence}</q><span>定位原文</span></button>
                         </div>
                       ))}
                     </>
@@ -1284,14 +1363,16 @@ export default function Home() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   useEffect(() => {
     const loadDashboardData = async () => {
+      setError("");
       for (const candidate of [
         "/data/dashboard-data.json",
         "/data/dashboard-data.demo.json",
       ]) {
-        const response = await fetch(candidate);
+        const response = await fetch(candidate, { cache: "no-store" });
         if (response.ok) return response.json();
       }
       throw new Error("正式数据包与演示数据包均不可用");
@@ -1299,7 +1380,7 @@ export default function Home() {
     loadDashboardData()
       .then(setData)
       .catch((reason) => setError(String(reason)));
-  }, []);
+  }, [loadAttempt]);
 
   const filtered = useMemo(() => {
     if (!data) return [];
@@ -1351,9 +1432,34 @@ export default function Home() {
     setSelectedReview(review);
     setDrawerOpen(true);
   };
+  const activeFilterChips = data ? (Object.entries(filters) as [keyof Filters, string][])
+    .filter(([, value]) => value !== "all")
+    .map(([key, value]) => {
+      const names: Record<keyof Filters, string> = {
+        product: "商品",
+        subcategory: "子品类",
+        language: "语言",
+        stars: "星级",
+        sentiment: "情绪",
+        aspect: "属性",
+        issue: "痛点",
+        scenario: "场景",
+      };
+      const values: Partial<Record<keyof Filters, string>> = {
+        product: productOptions.find(([id]) => id === value)?.[1] || value,
+        subcategory: value,
+        language: value === "en" ? "English" : value === "es" ? "Español" : value,
+        stars: `${value} 星`,
+        sentiment: labelOf(data.labels.sentiments, value),
+        aspect: labelOf(data.labels.aspects, value),
+        issue: labelOf(data.labels.issues, value),
+        scenario: labelOf(data.labels.scenarios, value),
+      };
+      return { key, label: names[key], value: values[key] || value };
+    }) : [];
 
   if (error) {
-    return <main className="loading-screen"><strong>数据加载失败</strong><span>{error}</span></main>;
+    return <main className="loading-screen"><strong>数据加载失败</strong><span>{error}</span><button onClick={() => { setData(null); setLoadAttempt((value) => value + 1); }}>重新加载数据</button></main>;
   }
   if (!data) {
     return (
@@ -1366,6 +1472,7 @@ export default function Home() {
   }
 
   const renderPage = () => {
+    if (!filtered.length) return <EmptyState onReset={() => setFilters(INITIAL_FILTERS)} />;
     if (page === "overview") return <OverviewPage records={filtered} labels={data.labels} onOpen={openReview} />;
     if (page === "pain") return <PainPage records={filtered} labels={data.labels} onOpen={openReview} />;
     if (page === "motivation") return <MotivationPage records={filtered} labels={data.labels} insights={data.insights} onOpen={openReview} />;
@@ -1433,7 +1540,7 @@ export default function Home() {
             <span>全局筛选</span>
             {activeFilters > 0 && <b>{activeFilters}</b>}
           </div>
-          <div className="filters">
+          <div className="filters common-filters">
             <label>
               <span>语言</span>
               <select value={filters.language} onChange={(e) => setFilters({ ...filters, language: e.target.value })}>
@@ -1456,28 +1563,33 @@ export default function Home() {
                 {selectOptions(data.labels.sentiments).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
               </select>
             </label>
-            <label>
-              <span>产品属性</span>
-              <select value={filters.aspect} onChange={(e) => setFilters({ ...filters, aspect: e.target.value })}>
-                <option value="all">全部属性</option>
-                {selectOptions(data.labels.aspects).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
-              </select>
-            </label>
-            <label>
-              <span>痛点</span>
-              <select value={filters.issue} onChange={(e) => setFilters({ ...filters, issue: e.target.value })}>
-                <option value="all">全部痛点</option>
-                {selectOptions(data.labels.issues).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
-              </select>
-            </label>
-            <label>
-              <span>使用场景</span>
-              <select value={filters.scenario} onChange={(e) => setFilters({ ...filters, scenario: e.target.value })}>
-                <option value="all">全部场景</option>
-                {selectOptions(data.labels.scenarios).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
-              </select>
-            </label>
           </div>
+          <details className="advanced-filters">
+            <summary><SlidersHorizontal size={15} /><span>高级筛选</span><b>{[filters.aspect, filters.issue, filters.scenario].filter((value) => value !== "all").length}</b></summary>
+            <div>
+              <label>
+                <span>产品属性</span>
+                <select value={filters.aspect} onChange={(e) => setFilters({ ...filters, aspect: e.target.value })}>
+                  <option value="all">全部属性</option>
+                  {selectOptions(data.labels.aspects).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>痛点</span>
+                <select value={filters.issue} onChange={(e) => setFilters({ ...filters, issue: e.target.value })}>
+                  <option value="all">全部痛点</option>
+                  {selectOptions(data.labels.issues).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>使用场景</span>
+                <select value={filters.scenario} onChange={(e) => setFilters({ ...filters, scenario: e.target.value })}>
+                  <option value="all">全部场景</option>
+                  {selectOptions(data.labels.scenarios).map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+                </select>
+              </label>
+            </div>
+          </details>
           <div className="topbar-actions">
             {activeFilters > 0 && (
               <button className="reset-button" onClick={() => setFilters(INITIAL_FILTERS)}>
@@ -1491,6 +1603,12 @@ export default function Home() {
             </button>
           </div>
         </header>
+
+        {activeFilterChips.length > 0 && <section className="active-filter-rail" aria-label="当前筛选条件">
+          <span>当前检索</span>
+          <div>{activeFilterChips.map((chip) => <button key={chip.key} onClick={() => setFilters((current) => ({ ...current, [chip.key]: "all" }))}><small>{chip.label}</small>{chip.value}<X size={12} /></button>)}</div>
+          <button className="clear-filter-rail" onClick={() => setFilters(INITIAL_FILTERS)}><RotateCcw size={13} />全部重置</button>
+        </section>}
 
         <section className={`scope-rail ${productOptions.length || subcategoryOptions.length ? "scope-ready" : "scope-missing"}`} aria-label="商品分析范围">
           <div className="scope-rail-title">

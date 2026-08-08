@@ -33,6 +33,11 @@ All notable changes will be documented in this file.
   scores, and confidence-calibration reporting with an uncalibrated UI policy.
 - End-to-end regression from source contract through evaluation, traceable
   insight aggregation, dashboard compaction and append-only reviewer feedback.
+- Common/advanced filter hierarchy, removable active-filter chips and resettable
+  empty/error states in the analyst dashboard.
+- Paginated evidence retrieval with relevance, star and intensity sorting,
+  source highlighting and explicit unavailable-date behavior.
+- v0.2.0 release-candidate architecture, demo and readiness documentation.
 
 ### Pending maintainer decision
 

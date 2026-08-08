@@ -18,6 +18,7 @@ class DashboardDataTests(unittest.TestCase):
                     "product_id": "P-001",
                     "product_title": "Daily Serum",
                     "product_subcategory": "serum",
+                    "review_date": "2026-08-08",
                 },
                 "analysis": {
                     "sentiment": "positive",
@@ -35,6 +36,7 @@ class DashboardDataTests(unittest.TestCase):
         self.assertEqual(compact["productId"], "P-001")
         self.assertEqual(compact["productTitle"], "Daily Serum")
         self.assertEqual(compact["productSubcategory"], "serum")
+        self.assertEqual(compact["reviewDate"], "2026-08-08")
 
     def test_compact_record_marks_missing_scope_as_unknown(self) -> None:
         compact = compact_record(
@@ -61,6 +63,7 @@ class DashboardDataTests(unittest.TestCase):
         )
         self.assertEqual(compact["productId"], "unknown")
         self.assertEqual(compact["productSubcategory"], "unknown")
+        self.assertEqual(compact["reviewDate"], "unknown")
 
 
 if __name__ == "__main__":
