@@ -19,6 +19,8 @@ def record(
     polarity: str,
     evidence: str,
     issue: str | None = None,
+    product_id: str = "unknown",
+    product_subcategory: str = "unknown",
 ) -> dict:
     return {
         "review_id": review_id,
@@ -27,6 +29,8 @@ def record(
             "stars": stars,
             "title": "",
             "body": evidence,
+            "product_id": product_id,
+            "product_subcategory": product_subcategory,
         },
         "analysis": {
             "confidence": 0.95,
@@ -150,6 +154,73 @@ class AggregatorTests(unittest.TestCase):
             report["summary"]["insight_readiness"],
             "insufficient_data",
         )
+        self.assertTrue(report["sampling"]["is_small_sample"])
+        self.assertFalse(report["sampling"]["is_weighted"])
+        self.assertFalse(
+            report["sampling"]["population_prevalence_supported"]
+        )
+        self.assertIn("exploratory", report["sampling"]["warning"])
+
+    def test_product_scope_excludes_other_products_and_annotates_tables(self) -> None:
+        records = [
+            record(
+                "p1_en",
+                language="en",
+                stars=1,
+                aspect="product.usability.ease_of_use",
+                polarity="negative",
+                evidence="Hard to use",
+                issue="difficult_to_use",
+                product_id="P1",
+                product_subcategory="serum",
+            ),
+            record(
+                "p1_es",
+                language="es",
+                stars=2,
+                aspect="product.usability.ease_of_use",
+                polarity="negative",
+                evidence="Difícil de usar",
+                issue="difficult_to_use",
+                product_id="P1",
+                product_subcategory="serum",
+            ),
+            record(
+                "p2_en",
+                language="en",
+                stars=1,
+                aspect="product.sensory.scent",
+                polarity="negative",
+                evidence="Bad smell",
+                issue="scent_problem",
+                product_id="P2",
+                product_subcategory="cleanser",
+            ),
+        ]
+        report = aggregate_records(
+            records,
+            min_support=2,
+            scope_field="product_id",
+            scope_value="P1",
+        )
+        self.assertEqual(report["summary"]["records"], 2)
+        self.assertEqual(report["scope"]["value"], "P1")
+        self.assertEqual(report["scope"]["selected_records"], 2)
+        pain = report["tables"]["low_star_pain_points"][0]
+        self.assertEqual(pain["issue_code"], "difficult_to_use")
+        self.assertEqual(pain["sample_size"], 2)
+        self.assertEqual(pain["scope_value"], "P1")
+        self.assertTrue(pain["small_sample_warning"])
+        self.assertEqual(report["insights"][0]["analysis_scope"]["value"], "P1")
+
+    def test_unknown_scope_cannot_be_presented_as_product_analysis(self) -> None:
+        with self.assertRaisesRegex(ValueError, "known source value"):
+            aggregate_records(
+                self.records,
+                min_support=2,
+                scope_field="product_id",
+                scope_value="unknown",
+            )
 
     def test_traceability_validator_rejects_changed_quote(self) -> None:
         report = aggregate_records(

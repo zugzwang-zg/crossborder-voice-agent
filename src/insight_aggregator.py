@@ -139,6 +139,128 @@ CATEGORY_NAMES = {
     "customer_service_faq": "客服FAQ",
 }
 
+VALID_SCOPE_FIELDS = {"product_id", "product_subcategory"}
+UNKNOWN_SCOPE_VALUES = {"", "unknown", "null", "none"}
+DEFAULT_SMALL_SAMPLE_THRESHOLD = 30
+
+
+def _normalized_scope_value(value: Any) -> str:
+    return "" if value is None else str(value).strip()
+
+
+def select_scope(
+    records: list[dict[str, Any]],
+    *,
+    scope_field: str | None,
+    scope_value: str | None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Select a product scope without inferring missing metadata."""
+
+    if scope_field is None and scope_value is None:
+        return list(records), {
+            "type": "global",
+            "field": None,
+            "value": None,
+            "input_records": len(records),
+            "selected_records": len(records),
+            "known_scope_records": len(records),
+            "unknown_scope_records": 0,
+        }
+    if scope_field not in VALID_SCOPE_FIELDS:
+        raise ValueError(
+            f"scope_field must be one of {sorted(VALID_SCOPE_FIELDS)}"
+        )
+    normalized_value = _normalized_scope_value(scope_value)
+    if normalized_value.casefold() in UNKNOWN_SCOPE_VALUES:
+        raise ValueError(
+            "scope_value must be a known source value, not an unknown marker"
+        )
+
+    known_records: list[dict[str, Any]] = []
+    unknown_count = 0
+    selected: list[dict[str, Any]] = []
+    for record in records:
+        value = _normalized_scope_value(record.get("source", {}).get(scope_field))
+        if value.casefold() in UNKNOWN_SCOPE_VALUES:
+            unknown_count += 1
+            continue
+        known_records.append(record)
+        if value == normalized_value:
+            selected.append(record)
+    if not selected:
+        raise ValueError(
+            f"No records match {scope_field}={normalized_value!r}"
+        )
+    return selected, {
+        "type": "product_scope",
+        "field": scope_field,
+        "value": normalized_value,
+        "input_records": len(records),
+        "selected_records": len(selected),
+        "known_scope_records": len(known_records),
+        "unknown_scope_records": unknown_count,
+    }
+
+
+def sampling_metadata(
+    records: list[dict[str, Any]],
+    *,
+    strategy: str,
+    small_sample_threshold: int,
+) -> dict[str, Any]:
+    """Describe the denominator and external-validity boundary."""
+
+    if small_sample_threshold < 1:
+        raise ValueError("small_sample_threshold must be at least 1")
+    strata = Counter(
+        f"{record['source']['language']}:{int(record['source']['stars'])}"
+        for record in records
+    )
+    is_small = len(records) < small_sample_threshold
+    if strategy == "language_star_stratified":
+        note = (
+            "Language × star strata were sampled deliberately. Percentages are "
+            "descriptive for the selected sample and do not estimate natural "
+            "market prevalence."
+        )
+    else:
+        note = (
+            "Sampling weights are unavailable. Percentages are descriptive for "
+            "the selected sample and do not estimate market prevalence."
+        )
+    return {
+        "strategy": strategy,
+        "sample_size": len(records),
+        "denominator": "selected unique review records",
+        "is_weighted": False,
+        "population_prevalence_supported": False,
+        "small_sample_threshold": small_sample_threshold,
+        "is_small_sample": is_small,
+        "warning": (
+            f"Only {len(records)} records remain; interpret rankings and rates "
+            "as exploratory."
+            if is_small
+            else None
+        ),
+        "strata_counts": dict(sorted(strata.items())),
+        "note": note,
+    }
+
+
+def _annotate_table_rows(
+    tables: dict[str, list[dict[str, Any]]],
+    *,
+    scope: dict[str, Any],
+    sampling: dict[str, Any],
+) -> None:
+    for rows in tables.values():
+        for row in rows:
+            row["scope_field"] = scope["field"]
+            row["scope_value"] = scope["value"]
+            row["sample_size"] = sampling["sample_size"]
+            row["is_weighted"] = sampling["is_weighted"]
+            row["small_sample_warning"] = sampling["warning"]
+
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
@@ -697,22 +819,82 @@ def aggregate_records(
     min_support: int,
     max_insights: int = 15,
     required_records: int = 1000,
+    sampling_strategy: str = "language_star_stratified",
+    small_sample_threshold: int = DEFAULT_SMALL_SAMPLE_THRESHOLD,
+    scope_field: str | None = None,
+    scope_value: str | None = None,
 ) -> dict[str, Any]:
+    scoped_records, scope = select_scope(
+        records,
+        scope_field=scope_field,
+        scope_value=scope_value,
+    )
+    sampling = sampling_metadata(
+        scoped_records,
+        strategy=sampling_strategy,
+        small_sample_threshold=small_sample_threshold,
+    )
     language_totals = Counter(
-        record["source"]["language"] for record in records
+        record["source"]["language"] for record in scoped_records
     )
     star_totals = Counter(
-        int(record["source"]["stars"]) for record in records
+        int(record["source"]["stars"]) for record in scoped_records
     )
-    groups = build_groups(records)
+    groups = build_groups(scoped_records)
     insights = generate_insights(
         groups,
         min_support=min_support,
         max_insights=max_insights,
     )
+    for insight in insights:
+        insight["analysis_scope"] = {
+            "field": scope["field"],
+            "value": scope["value"],
+            "selected_records": scope["selected_records"],
+        }
+        insight["sampling_boundary"] = {
+            "sample_size": sampling["sample_size"],
+            "is_weighted": sampling["is_weighted"],
+            "population_prevalence_supported": sampling[
+                "population_prevalence_supported"
+            ],
+            "warning": sampling["warning"],
+        }
+    tables = {
+        "aspect_by_language": aspect_rows(groups, language_totals),
+        "low_star_pain_points": bucket_rows(
+            groups["low_star_issues"],
+            ISSUE_NAMES,
+            code_field="issue_code",
+        ),
+        "high_star_purchase_drivers": bucket_rows(
+            groups["high_star_motivations"],
+            MOTIVATION_NAMES,
+            code_field="motivation_code",
+        ),
+        "usage_scenarios": bucket_rows(
+            groups["scenarios"],
+            SCENARIO_NAMES,
+            code_field="scenario_code",
+        ),
+        "expectation_gaps": bucket_rows(
+            groups["expectation_gaps"],
+            GAP_NAMES,
+            code_field="gap_code",
+        ),
+        "speech_acts": bucket_rows(
+            groups["speech_acts"],
+            SPEECH_NAMES,
+            code_field="speech_act_code",
+        ),
+        "language_focus_comparison": language_comparison_rows(
+            groups, language_totals
+        ),
+    }
+    _annotate_table_rows(tables, scope=scope, sampling=sampling)
     return {
         "summary": {
-            "records": len(records),
+            "records": len(scoped_records),
             "language_counts": dict(sorted(language_totals.items())),
             "star_counts": {
                 str(star): star_totals[star] for star in range(1, 6)
@@ -722,42 +904,14 @@ def aggregate_records(
             "insights_generated": len(insights),
             "insight_readiness": (
                 "ready"
-                if len(records) >= required_records
+                if len(scoped_records) >= required_records
                 and 10 <= len(insights) <= 15
                 else "insufficient_data"
             ),
         },
-        "tables": {
-            "aspect_by_language": aspect_rows(groups, language_totals),
-            "low_star_pain_points": bucket_rows(
-                groups["low_star_issues"],
-                ISSUE_NAMES,
-                code_field="issue_code",
-            ),
-            "high_star_purchase_drivers": bucket_rows(
-                groups["high_star_motivations"],
-                MOTIVATION_NAMES,
-                code_field="motivation_code",
-            ),
-            "usage_scenarios": bucket_rows(
-                groups["scenarios"],
-                SCENARIO_NAMES,
-                code_field="scenario_code",
-            ),
-            "expectation_gaps": bucket_rows(
-                groups["expectation_gaps"],
-                GAP_NAMES,
-                code_field="gap_code",
-            ),
-            "speech_acts": bucket_rows(
-                groups["speech_acts"],
-                SPEECH_NAMES,
-                code_field="speech_act_code",
-            ),
-            "language_focus_comparison": language_comparison_rows(
-                groups, language_totals
-            ),
-        },
+        "scope": scope,
+        "sampling": sampling,
+        "tables": tables,
         "insights": insights,
     }
 
@@ -820,8 +974,12 @@ def markdown_report(report: dict[str, Any], *, title: str) -> str:
         f"- 正式分析要求记录数：{summary['required_records']}",
         f"- 生成洞察：{summary['insights_generated']}",
         f"- 正式洞察就绪状态：`{summary['insight_readiness']}`",
+        f"- 分析范围：{report['scope']}",
+        f"- 抽样口径：{report['sampling']['note']}",
         "",
     ]
+    if report["sampling"]["warning"]:
+        lines.extend([f"> {report['sampling']['warning']}", ""])
     if summary["insight_readiness"] != "ready":
         lines.extend(
             [
@@ -895,6 +1053,8 @@ __all__ = [
     "aggregate_records",
     "load_jsonl",
     "markdown_report",
+    "sampling_metadata",
     "save_report_bundle",
+    "select_scope",
     "validate_report_traceability",
 ]

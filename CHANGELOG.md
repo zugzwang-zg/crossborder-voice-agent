@@ -11,6 +11,10 @@ All notable changes will be documented in this file.
 - Traceable source metadata in each analysis JSONL record.
 - Contract tests and Phase 1 baseline report.
 - Contribution and security guidance.
+- Product and subcategory scope selection in the aggregation layer.
+- Sampling metadata, explicit unweighted prevalence boundary, stratum counts,
+  and configurable small-sample warnings on reports, insights, and tables.
+- GitHub Actions checks for the Python aggregation suite and Dashboard lint/tests.
 
 ### Pending maintainer decision
 

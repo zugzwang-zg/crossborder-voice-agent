@@ -46,10 +46,23 @@ def main() -> int:
     parser.add_argument("--min-support", type=int, default=5)
     parser.add_argument("--max-insights", type=int, default=15)
     parser.add_argument(
+        "--sampling-strategy",
+        choices=["language_star_stratified", "unweighted_unknown"],
+        default="language_star_stratified",
+    )
+    parser.add_argument("--small-sample-threshold", type=int, default=30)
+    parser.add_argument(
+        "--scope-field",
+        choices=["product_id", "product_subcategory"],
+    )
+    parser.add_argument("--scope-value")
+    parser.add_argument(
         "--title",
         default="跨境电商英西双语消费者洞察",
     )
     args = parser.parse_args()
+    if bool(args.scope_field) != bool(args.scope_value):
+        parser.error("--scope-field and --scope-value must be provided together")
 
     records = load_jsonl(args.input)
     failures: list[dict[str, str]] = []
@@ -94,6 +107,10 @@ def main() -> int:
         records,
         min_support=args.min_support,
         max_insights=args.max_insights,
+        sampling_strategy=args.sampling_strategy,
+        small_sample_threshold=args.small_sample_threshold,
+        scope_field=args.scope_field,
+        scope_value=args.scope_value,
     )
     traceability_failures = validate_report_traceability(report, records)
     if traceability_failures:
