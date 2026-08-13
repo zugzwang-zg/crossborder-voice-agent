@@ -2,6 +2,20 @@
 
 All notable changes will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Portfolio-focused Chinese and English landing pages, a current product brief,
+  solution-landscape comparison, product decision log and project retrospective.
+
+### Changed
+
+- Reframed the repository overview around target users, product choices,
+  operating actions, verified outcomes and claim boundaries.
+- Replaced the stale top-level project brief and corrected the documented
+  automated regression count to 118 Python tests plus 4 Dashboard tests.
+
 ## [0.2.0] - 2026-08-13
 
 ### Added

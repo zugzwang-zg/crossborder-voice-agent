@@ -1,105 +1,98 @@
 # CrossBorder Voice
 
+[中文](README.md) · [English](README.en.md)
+
 [![CI](https://github.com/zugzwang-zg/crossborder-voice-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/zugzwang-zg/crossborder-voice-agent/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/badge/release-v0.2.0-e2663b)](https://github.com/zugzwang-zg/crossborder-voice-agent/tree/v0.2.0)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-1d5960)](https://www.python.org/)
-[![Offline demo](https://img.shields.io/badge/demo-offline%20safe-e2663b)](dashboard/README.md)
+[![License](https://img.shields.io/badge/license-Apache--2.0-567c73)](LICENSE)
 
-[Architecture](docs/ARCHITECTURE.md) · [Five-minute demo](docs/DEMO_SCRIPT.md) · [v0.2.0 release notes](docs/RELEASE_NOTES_v0.2.0.md) · [release readiness](docs/RELEASE_READINESS.md)
+**把英语与西班牙语评论转换为有范围、有分母、能回到原文的跨境运营决策。**
 
-**把英语与西班牙语评论转换为有范围、有分母、能回到原文的运营决策。**
+CrossBorder Voice 是一个面向跨境电商产品、内容与客服运营的双语消费者洞察原型。它不止判断正负面，而是把评论整理为可筛选的痛点、卖点和行动候选，并保留支持量、样本范围与原文证据，方便运营人员复核后再决策。
 
-面向跨境电商产品、内容与客服运营人员。CrossBorder Voice 将评论整理为可筛选的痛点、卖点和行动建议；当商品字段缺失时，它会明确停留在语料方法演示，不把语言或文本猜成商品、国家或市场事实。
+[在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
+[产品简报](docs/PRODUCT_BRIEF.md) ·
+[运营洞察报告](reports/consumer_insights.md) ·
+[产品决策日志](docs/PRODUCT_DECISIONS.md) ·
+[五分钟演示](docs/DEMO_SCRIPT.md) ·
+[v0.2.0 发布说明](docs/RELEASE_NOTES_v0.2.0.md)
 
 ![CrossBorder Voice dashboard](dashboard/public/social-preview.png)
 
-**30 秒体验：** [打开在线 Dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site)，进入“AI 洞察报告”，选择一条洞察并打开右侧评论证据。
+## 给招聘方的 60 秒导览
 
-[技术演示文稿](assets/CrossBorder_Voice_Project_Presentation.pptx) ·
-[在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
-[模型评测](reports/evaluation_report.md) ·
-[消费者洞察](reports/consumer_insights.md) ·
-[抽样与范围边界](docs/SAMPLING_AND_SCOPE.md) ·
-[数据与隐私](docs/DATA_AND_PRIVACY.md)
+| 面试官关心的问题 | 本项目的回答 |
+|---|---|
+| 解决什么问题？ | 星级统计无法直接回答“产品应改什么、页面应解释什么、证据在哪里”；系统把分散评论转成可复核的运营洞察。 |
+| 谁会使用？ | 跨境电商产品运营、内容运营和客服运营；在上新复盘、详情页优化、FAQ 分流和本地化研究中使用。 |
+| 产品如何工作？ | 双语分层抽样 → 语言学标签 → LLM 结构化分析 → Schema/证据校验 → 洞察聚合 → 人工复核看板。 |
+| 我的贡献是什么？ | 个人项目；负责问题定义、范围与优先级、标签体系、评测口径、运营动作路由、验收和发布。Codex 与多个模型用于实现和独立 AI 预评审，所有结论仍由维护者验收。 |
+| 最终交付了什么？ | 可运行 Dashboard、15 条可追溯洞察、冻结评测、可复现流水线、产品与方法文档，以及公开/私有数据边界。 |
 
-| 已验证能力 | 当前结果 | 复现与口径 |
+> 这是方法验证型作品，不是生产系统。数据来自 2015—2019 年，正式语料缺少商品标识；因此项目不声称代表当前市场趋势，也不输出单品级经营结论。
+
+## 产品思维如何落到实现
+
+- **先定义决策，再选择模型：** 从“详情页、产品、履约、客服、内容”五类运营动作反推标签与输出结构，而不是从通用情感分析开始堆功能。
+- **把不确定性做成产品能力：** 每条洞察展示分母、支持量、语言分布、限制和原文证据；数据不支持时明确停止推断。
+- **用评测推动迭代：** 在同一冻结测试集上比较 Baseline v1 与 Improved v9，并记录 Precision/Recall 的取舍，而不是只展示效果最好的案例。
+- **保留人工决策权：** 模型给出行动候选，运营人员负责确认负责人、优先级和执行状态；反馈日志不覆盖原始模型输出。
+
+完整案例材料：
+
+- [产品简报 / PRD-lite](docs/PRODUCT_BRIEF.md)：用户、JTBD、范围、验收标准与成功指标；
+- [方案对比](docs/SOLUTION_LANDSCAPE.md)：人工表格、通用 LLM、VOC 平台与本方案的取舍；
+- [产品决策日志](docs/PRODUCT_DECISIONS.md)：关键方案、放弃项、风险与结果；
+- [运营洞察报告](reports/consumer_insights.md)：15 条证据绑定的行动候选；
+- [项目复盘](docs/RETROSPECTIVE.md)：已验证结果、失败与下一阶段计划；
+- [技术演示文稿](assets/CrossBorder_Voice_Project_Presentation.pptx)：完整项目讲解材料。
+
+## 已验证结果
+
+| 能力 | 当前结果 | 口径与证据 |
 |---|---:|---|
-| 正式分析规模 | 1,000 条 | 英语 500 / 西语 500；每个语言 × 星级分层 100 条，[不代表市场占比](docs/SAMPLING_AND_SCOPE.md) |
+| 正式分析规模 | 1,000 条 | 英语 500 / 西语 500；每个“语言 × 星级”分层 100 条，[不代表市场占比](docs/SAMPLING_AND_SCOPE.md) |
+| 可追溯运营洞察 | 15 条 | 每条保留支持记录、分母、语言分布、限制和代表性证据 |
 | 冻结测试集 | 100 条 | 与提示词开发集分离，[查看评测](reports/evaluation_report.md) |
-| 人工证据语义有效率 | 96% | 每版本抽查 25 条，不等同于全量复核，[查看方法](reports/evaluation_report.md) |
-| 冻结挑战集扩展 | 40 条待双人标注 | 英语 20 / 西班牙语 20，覆盖中性候选、混合候选、长评论、多主题和隐含属性；尚不计入主指标 |
-| 自动化回归 | 49 项 Python + 4 项 Dashboard | `python -m unittest discover -s tests -q`；`cd dashboard; pnpm test` |
+| 情感 Accuracy | 87% → **89%** | Baseline v1 与 Improved v9 使用相同模型、相同测试集 |
+| 属性 Precision | 72.22% → **83.18%** | 更严格的标签边界提高 Precision，同时保留 Recall 限制 |
+| 人工证据语义有效率 | 88% → **96%** | 每版本抽查 25 条，不等同于全量人工复核 |
+| v0.2.0 AI 预评审 | 15 / 15 pass | 多角色独立 AI 预评审；不能替代独立人类标注，[查看公开证明](reports/ai_review_attestation.json) |
+| 自动化回归 | 118 Python + 4 Dashboard | 核心链路、发布清单、审计与 UI 行为测试 |
 
-### 1 分钟本地演示
+## 30 秒在线体验
 
-无需 API Key，公开仓库会回退到 10 条安全样本：
+打开[公开 Dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site)：
 
-```powershell
-cd dashboard
-pnpm install --frozen-lockfile
-pnpm dev
-```
+1. 在总览页按语言、星级和情感缩小范围；
+2. 进入“AI 洞察报告”，选择一条行动候选；
+3. 打开右侧证据，核对支持评论、原文片段和适用限制。
 
-打开 `http://localhost:3000`。如需验证完整核心链路，运行：
+网页默认使用 10 条安全演示样本，不调用付费模型 API。完整演示路径见[五分钟演示脚本](docs/DEMO_SCRIPT.md)。
 
-```powershell
-python -m unittest discover -s tests -q
-```
-
-> 数据来自 2015—2019 年，只用于方法验证；当前正式语料缺少商品标识，因此不能提供单品决策或当前市场趋势。
-
-## 问题与目标
-
-星级统计只能说明总体满意度，无法直接回答“产品应改什么、页面应解释什么、结论的证据在哪里”。CrossBorder Voice 将分散的消费者声音整理为结构化证据，帮助运营人员完成筛选、比较与复核，而不替代人的最终判断。
-
-系统重点回答：
-
-- 低星评论中的产品、包装与履约问题是什么；
-- 高星评论中的购买动机和可验证卖点是什么；
-- 英语与西班牙语样本在关注点和表达方式上有何差异；
-- 星级与文本情感何时不一致；
-- 每条聚合洞察由哪些评论和原文片段支持。
-
-## 方法
+## 从评论到运营动作
 
 ```mermaid
 flowchart LR
-    A["MARC 双语评论"] --> B["确定性分层抽样与清洗"]
-    B --> C["语言学标签体系"]
-    C --> D["LLM 结构化分析"]
-    D --> E["Schema 与证据校验"]
-    E --> F["聚合统计与证据追溯"]
-    F --> G["冻结测试集评测"]
-    F --> H["交互式洞察看板"]
+    A["MARC 双语评论"] --> B["确定性分层抽样"]
+    B --> C["结构化标签与原文证据"]
+    C --> D["Schema 与业务规则校验"]
+    D --> E["聚合洞察与范围说明"]
+    E --> F["产品 / 页面 / 履约 / 客服 / 内容"]
+    F --> G["人工确认负责人、优先级与状态"]
 ```
 
-核心约束：
+代表性发现（仅描述当前分层样本）：
 
-- 严格 JSON Schema：不合规输出不进入聚合；
-- 最小充分证据：标签必须绑定评论原文片段；
-- 自动重试与断点续跑：网络中断后可补跑缺失记录；
-- 标签规范化：拦截不支持的标签、逻辑冲突和越界建议；
-- 洞察可追溯：保留支持量、语言分布、评论 ID 和代表性证据。
+- “效果不足”由 72 条低星记录支持；行动候选是降低详情页绝对化承诺，并补充适用条件和预期周期；
+- “延迟或未送达”由 38 条低星记录支持；行动候选是将履约问题与产品问题分流，并建立客服 FAQ；
+- 高星评论中，“特定人群需求”有 26 条支持，“送礼”有 20 条支持，“复购”有 15 条支持；
+- 西语样本的配送提及率为 14%，英语样本为 6%；该差异不被解释为国家或文化因果。
 
-详细设计见 [AI pipeline](docs/AI_PIPELINE.md)、[insight methodology](docs/INSIGHT_METHODOLOGY.md) 与 [annotation guideline](annotation_guideline.md)。
+完整证据、分母与限制见[消费者洞察报告](reports/consumer_insights.md)和[行动路由规则](docs/OPERATIONAL_ACTION_ROUTING.md)。
 
-## 标签体系
-
-系统同时描述“说了什么、如何评价、为什么购买、在什么语境下表达”：
-
-| 维度 | 作用 | 示例 |
-|---|---|---|
-| 整体情感与强度 | 区分 positive / negative / neutral / mixed / uncertain | 五星但尚未使用可标为 uncertain |
-| 产品属性 | 识别评价对象 | 效果、气味、质地、易用性、耐用性 |
-| 具体问题 | 将属性评价细化为可处理问题 | 效果不足、难以使用、延迟未送达 |
-| 购买动机 | 识别购买与复购驱动 | 特定需求、送礼、价格、推荐 |
-| 使用场景与状态 | 控制推断边界 | 日常护理、旅行、尚未使用 |
-| 预期落差 | 判断实际体验与预期的差异 | 描述承诺与实际效果不一致 |
-| 言语行为 | 捕捉语用功能 | 推荐、警告、抱怨、请求、建议 |
-| 原文证据 | 支持人工复核 | 对应标签的最小原文片段 |
-
-## 评测结果
-
-100 条独立人工标注评论组成冻结测试集（英语 50 / 西班牙语 50）。Baseline v1 与 Improved v9 使用相同模型和相同测试集。
+## 评测与边界
 
 | 指标 | Baseline v1 | Improved v9 |
 |---|---:|---:|
@@ -111,55 +104,29 @@ flowchart LR
 | 具体问题 F1 | 72.56% | **74.86%** |
 | 人工证据语义有效率 | 88% | **96%** |
 
-人工证据指标来自每个版本 25 条、英西语均衡的语义抽查，不代表对全部证据逐条人工复核。完整指标、误差分析和评测口径见 [evaluation report](reports/evaluation_report.md)。
+模型输出的 `confidence` 只作为模型自报分数，不解释为正确概率。另有 40 条挑战输入已冻结，只有在双人独立标注与仲裁完成后才会计入独立挑战集指标。完整口径见[模型评测](reports/evaluation_report.md)与[冻结挑战集说明](docs/FROZEN_CHALLENGE_SET.md)。
 
-模型输出的 `confidence` 当前只作为模型自报分数展示，不解释为“预测正确概率”。冻结评测现同时报告情感逐类 Precision / Recall / F1、Macro-F1、混淆矩阵，属性与问题的 Micro / Macro 指标，以及置信度校准误差。另有 40 条挑战输入已冻结，须完成双人独立标注与仲裁后才可进入独立挑战集指标，流程见 [frozen challenge set](docs/FROZEN_CHALLENGE_SET.md)。
+## 一分钟本地演示
 
-## 洞察示例
-
-正式分析生成 15 条可追溯洞察：
-
-- “效果不足”有 72 条低星支持评论；详情页应降低绝对化承诺，并补充适用条件与预期周期；
-- “延迟或未送达”有 38 条低星支持评论；履约问题应与产品问题分流，并建立客服 FAQ；
-- 高星评论中，“特定人群需求”有 26 条支持，“送礼”有 20 条支持，“复购”有 15 条支持；
-- 西班牙语样本中的配送提及率为 14%，英语样本为 6%；该差异只描述当前分层样本，不作文化因果解释。
-
-完整洞察见 [consumer insights](reports/consumer_insights.md)。
-
-## 仓库结构
-
-```text
-crossborder-voice/
-├── config/          # 流水线与评测配置
-├── data/
-│   ├── sample/      # 可公开的最小演示样本
-│   └── aggregated/  # 不含完整评论原文的汇总表
-├── prompts/         # v1—v9 提示词迭代
-├── src/             # Schema、LLM 分析、聚合与评测
-├── scripts/         # 数据准备、评测与演示数据生成
-├── notebooks/       # 清洗、EDA 与评测复现入口
-├── tests/           # Python 测试
-├── dashboard/       # Next.js / React 洞察看板
-├── reports/         # 洞察、评测与误差分析
-└── assets/          # 技术演示文稿、讲解指南与截图
-```
-
-完整原始语料、金标数据、模型逐条输出、API 日志和人工复核工作簿不进入公开仓库。详见 [public data policy](data/PUBLIC_DATA_POLICY.md)。
-
-## 本地运行
-
-### Python 核心链路
-
-要求 Python 3.11+。
+要求 Node.js 22.13+ 与 pnpm。无需 API Key：
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-python -m unittest discover -s tests -q
+cd dashboard
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-不调用付费 API 的离线烟雾测试：
+打开 `http://localhost:3000`。运行完整离线回归：
+
+```powershell
+python -m pip install -r requirements.txt
+python -m unittest discover -s tests -q
+cd dashboard
+pnpm lint
+pnpm test
+```
+
+如需运行不调用付费 API 的核心烟雾测试：
 
 ```powershell
 python -m src.llm_analyzer `
@@ -171,46 +138,34 @@ python -m src.llm_analyzer `
   --no-resume
 ```
 
-使用 OpenAI-compatible API 时，请参考 [API configuration](docs/API_CONFIGURATION.md)。不要提交密钥或本地 `.env`。
+使用 OpenAI-compatible API 时见 [API 配置](docs/API_CONFIGURATION.md)。不要提交密钥、本地 `.env`、完整原始语料、模型逐条输出或人工复核工作簿。
 
-聚合已验证的正式结果：
+## 仓库导航
 
-```powershell
-python scripts/aggregate_insights.py
+```text
+crossborder-voice/
+├── config/          # 流水线、评测与 AI 预评审配置
+├── data/sample/     # 可公开的最小演示样本
+├── prompts/         # v1—v9 提示词迭代
+├── src/             # Schema、分析、聚合与评测
+├── scripts/         # 数据准备、评测与演示数据生成
+├── tests/           # Python 回归测试
+├── dashboard/       # Next.js / React 交互看板
+├── reports/         # 评测、误差分析与消费者洞察
+├── docs/            # 产品、方法、隐私、发布与复盘文档
+└── assets/          # 演示文稿与界面截图
 ```
 
-### 交互式看板
+## 已知限制与下一步
 
-无需安装或配置 API key，可直接打开[公开演示网页](https://crossborder-voice-86182.reidmozzie.chatgpt.site)。网页默认使用 10 条安全演示样本，不会调用付费模型 API。
-
-要求 Node.js 22.13+ 与 pnpm。
-
-```powershell
-cd dashboard
-pnpm install
-pnpm lint
-pnpm test
-pnpm dev
-```
-
-公开仓库默认加载 10 条安全演示样本；本地存在完整数据包时可加载 1,000 条正式分析结果。
-
-## 已知限制
-
-- `neutral` 金标仅 1 条，情感 Macro-F1 受小类样本量影响；
+- `neutral` 金标只有 1 条，情感 Macro-F1 受小类样本量影响；
 - 多主题长评论与隐含属性仍可能漏召回；
-- 更保守的标签边界提高了 Precision，但属性 Recall 仍有改进空间；
-- 时间节省率、实际中转服务成本和人工/AI 洞察覆盖率尚未完成同批对照实验；
-- 业务建议必须结合当前产品、站点和市场数据二次验证。
+- 尚未完成同批人工分析与 AI 辅助分析的耗时/覆盖率对照，因此不声称节省了具体百分比；
+- 下一阶段需要接入带商品、站点和时间字段的近期数据，再验证单品决策与趋势价值；
+- 冻结挑战集仍需两名独立人工标注者完成标注和仲裁。
 
-## 技术栈
+## 技术栈与许可
 
-Python · JSON Schema · OpenAI-compatible Responses API · Prompt Engineering · Human Evaluation · Next.js · React · TypeScript · Data Visualization
+Python · JSON Schema · OpenAI-compatible Responses API · Prompt Engineering · Evaluation · Next.js · React · TypeScript · Data Visualization
 
-## 许可证
-
-本项目采用 [Apache License 2.0](LICENSE)。再分发时请同时保留许可证、版权与归属声明；修改后的文件应清楚标明改动。第三方依赖、MARC 数据边界、字体、媒体和模型服务见[第三方资产清单](docs/THIRD_PARTY_ASSETS.md)。
-
-## AI 预评审
-
-个人维护者可使用[多模型 AI 预评审工作流](docs/AI_REVIEW_WORKFLOW.md)冻结 15 条正式候选洞察，执行机械、语义、风险独立审查和分歧仲裁。结果必须标注为 AI 预评审，不能冒充独立人类标注。冻结输入和外部模型任务包只保存在 `.private`。
+本项目采用 [Apache License 2.0](LICENSE)。数据、依赖、字体、媒体与模型服务边界见[第三方资产清单](docs/THIRD_PARTY_ASSETS.md)和[数据与隐私说明](docs/DATA_AND_PRIVACY.md)。

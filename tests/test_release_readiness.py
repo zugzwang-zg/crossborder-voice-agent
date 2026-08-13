@@ -12,6 +12,17 @@ ROOT = Path(__file__).resolve().parents[1]
 class ReleaseReadinessTests(unittest.TestCase):
     def test_release_candidate_has_completed_release_gate(self) -> None:
         manifest = json.loads((ROOT / "release_manifest.json").read_text(encoding="utf-8"))
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme_en = (ROOT / "README.en.md").read_text(encoding="utf-8")
+        self.assertIn("118 Python + 4 Dashboard", readme)
+        self.assertIn("118 Python + 4 dashboard tests", readme_en)
+        for portfolio_document in (
+            "docs/PRODUCT_BRIEF.md",
+            "docs/SOLUTION_LANDSCAPE.md",
+            "docs/PRODUCT_DECISIONS.md",
+            "docs/RETROSPECTIVE.md",
+        ):
+            self.assertTrue((ROOT / portfolio_document).is_file(), portfolio_document)
         self.assertEqual(manifest["target_version"], "v0.2.0")
         self.assertEqual(manifest["candidate_version"], "v0.2.0-rc.1")
         self.assertTrue(manifest["release_created"])
