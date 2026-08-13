@@ -9,6 +9,10 @@ The aggregation layer consumes only schema-valid, evidence-checked review analys
 - Language and star-rating breakdowns are retained.
 - Product, packaging and fulfillment issues remain separate.
 - Cross-language differences are descriptive and are not treated as cultural causes.
+- A narrow deterministic conflict guard excludes scent labels whose evidence
+  contains only explicit taste/flavor terms and no scent/odor term. This guard
+  catches obvious label-evidence contradictions; it does not replace semantic
+  review of less explicit cases.
 
 ## Insight requirements
 
@@ -22,6 +26,26 @@ Every published insight includes:
 - product, marketing or content actions that remain linked to evidence.
 
 Recommendations are hypotheses for validation, not proof of causality.
+
+### Deterministic evidence-support grade
+
+`support_volume_tier` is the canonical deterministic support-volume tier.
+The legacy `confidence_or_evidence_grade` field serializes the same value as
+`high_support_volume`, `medium_support_volume`, or
+`exploratory_support_volume`; it is not model confidence, calibrated
+correctness probability, evidence quality, or market prevalence. Every frozen
+aggregation audit includes the configured `min_support` and the calculated
+thresholds so the tier is independently reproducible. For the configured
+`min_support` threshold:
+
+- `high`: support count is at least `max(20, min_support × 4)`;
+- `medium`: support count is at least `max(8, min_support × 2)`;
+- `exploratory`: support count meets publication requirements but neither
+  higher threshold.
+
+Every published candidate must also retain at least two representative quotes.
+The quote requirement and schema validation are separate gates and do not raise
+the support-volume grade.
 
 ## Outputs
 
@@ -49,6 +73,7 @@ finding
 support_count
 support_rate
 representative_review_ids
+support_volume_tier
 confidence_or_evidence_grade
 recommended_action
 action_type

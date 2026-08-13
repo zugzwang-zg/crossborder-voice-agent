@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "candidate_version": "v0.2.0-rc.1",
+  "freeze_date": "2026-08-10",
+  "data_classification": "internal",
+  "sources": {
+    "release_manifest": "release_manifest.json",
+    "candidate_insights": "reports/consumer_insights.json",
+    "review_analyses": "data/processed/review_analysis_v11.jsonl",
+    "methodology": "docs/INSIGHT_METHODOLOGY.md",
+    "operations_methodology": "docs/OPERATIONAL_ACTION_ROUTING.md",
+    "data_boundary": "data/PUBLIC_DATA_POLICY.md"
+  },
+  "expected_item_count": 15,
+  "external_transfer_authorized": false
+}

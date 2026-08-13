@@ -1,7 +1,7 @@
 ﻿aspect_code,aspect_name,language,support_reviews,share_of_language_reviews,positive_mentions,negative_mentions,mixed_mentions,neutral_mentions,positive_rate,negative_rate,mixed_rate,neutral_rate,mean_confidence,scope_field,scope_value,sample_size,is_weighted,small_sample_warning
 product.efficacy.general_effect,总体效果,en,159,0.318,92,59,5,3,0.5786,0.3711,0.0314,0.0189,0.9752,,,1000,False,
 value.price_value,价格性价比,en,72,0.144,42,25,2,3,0.5833,0.3472,0.0278,0.0417,0.9779,,,1000,False,
-product.sensory.scent,气味,en,66,0.132,37,26,2,1,0.5606,0.3939,0.0303,0.0152,0.9763,,,1000,False,
+product.sensory.scent,气味,en,64,0.128,36,25,2,1,0.5625,0.3906,0.0312,0.0156,0.9761,,,1000,False,
 product.usability.ease_of_use,易用性,en,57,0.114,26,29,0,2,0.4561,0.5088,0.0,0.0351,0.9796,,,1000,False,
 product.sensory.texture_consistency,产品质地,en,44,0.088,15,27,1,1,0.3409,0.6136,0.0227,0.0227,0.9788,,,1000,False,
 product.quality.durability_breakage,耐用破损,en,43,0.086,2,41,0,0,0.0465,0.9535,0.0,0.0,0.9779,,,1000,False,
@@ -38,7 +38,7 @@ product.suitability.skill_professional_fit,技能专业适配,en,3,0.006,0,2,0,1
 packaging.seal_leak_protection,密封防漏,en,2,0.004,0,2,0,0,0.0,1.0,0.0,0.0,0.986,,,1000,False,
 product.efficacy.general_effect,总体效果,es,166,0.332,85,71,9,1,0.512,0.4277,0.0542,0.006,0.9752,,,1000,False,
 value.price_value,价格性价比,es,79,0.158,53,22,2,2,0.6709,0.2785,0.0253,0.0253,0.9779,,,1000,False,
-product.sensory.scent,气味,es,75,0.15,40,29,5,1,0.5333,0.3867,0.0667,0.0133,0.9763,,,1000,False,
+product.sensory.scent,气味,es,75,0.15,40,29,5,1,0.5333,0.3867,0.0667,0.0133,0.9761,,,1000,False,
 fulfillment.delivery,配送,es,70,0.14,37,33,0,0,0.5286,0.4714,0.0,0.0,0.9829,,,1000,False,
 product.usability.ease_of_use,易用性,es,44,0.088,19,25,0,0,0.4318,0.5682,0.0,0.0,0.9796,,,1000,False,
 product.efficacy.speed_duration,起效与持久,es,40,0.08,17,22,1,0,0.425,0.55,0.025,0.0,0.9791,,,1000,False,

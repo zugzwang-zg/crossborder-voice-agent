@@ -4,7 +4,7 @@
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-1d5960)](https://www.python.org/)
 [![Offline demo](https://img.shields.io/badge/demo-offline%20safe-e2663b)](dashboard/README.md)
 
-[Architecture](docs/ARCHITECTURE.md) · [Five-minute demo](docs/DEMO_SCRIPT.md) · [v0.2.0 readiness](docs/RELEASE_READINESS.md)
+[Architecture](docs/ARCHITECTURE.md) · [Five-minute demo](docs/DEMO_SCRIPT.md) · [v0.2.0 release notes](docs/RELEASE_NOTES_v0.2.0.md) · [release readiness](docs/RELEASE_READINESS.md)
 
 **把英语与西班牙语评论转换为有范围、有分母、能回到原文的运营决策。**
 
@@ -206,3 +206,11 @@ pnpm dev
 ## 技术栈
 
 Python · JSON Schema · OpenAI-compatible Responses API · Prompt Engineering · Human Evaluation · Next.js · React · TypeScript · Data Visualization
+
+## 许可证
+
+本项目采用 [Apache License 2.0](LICENSE)。再分发时请同时保留许可证、版权与归属声明；修改后的文件应清楚标明改动。第三方依赖、MARC 数据边界、字体、媒体和模型服务见[第三方资产清单](docs/THIRD_PARTY_ASSETS.md)。
+
+## AI 预评审
+
+个人维护者可使用[多模型 AI 预评审工作流](docs/AI_REVIEW_WORKFLOW.md)冻结 15 条正式候选洞察，执行机械、语义、风险独立审查和分歧仲裁。结果必须标注为 AI 预评审，不能冒充独立人类标注。冻结输入和外部模型任务包只保存在 `.private`。

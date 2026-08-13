@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "project": "crossborder-voice",
+  "candidate_version": "v0.2.0-rc.1",
+  "claim_scope": "multi_model_ai_pre_review_only_not_human_evaluation",
+  "maintainer_signoff": {
+    "status": "accepted",
+    "accepted_at": "2026-08-13",
+    "scope": "remediation_4_formal_ai_review_and_recorded_scope_correction"
+  },
+  "frozen_candidate": {
+    "item_count": 15,
+    "input_sha256": "6a14a10c77856e6878365449d7ed12421a43b3a326cc11d0a58040c0f803f7bc",
+    "input_file_sha256": "7723d8987f5566c6d0708da4ddcd30c0c3cc166e6ae4c038e0afc423953ef4f0"
+  },
+  "external_review": {
+    "model_label": "deepseek-v4-pro",
+    "identity_status": "maintainer_configured_unverified",
+    "result_count": 15,
+    "decisions": {
+      "pass": 15,
+      "revise": 0,
+      "block": 0
+    },
+    "result_file_sha256": "9021684475ced7202c23e0c0534c63412edc92dcb77d2b2bb038c92367bf0f22",
+    "results_sha256": "7c3e6a2495064081fee7ba1f3e155d3063e4c003a2cc72f40a228c379641e6fe"
+  },
+  "formal_audit": {
+    "run_id": "20260813T075034450135Z-6a14a10c7785",
+    "status": "completed",
+    "models": {
+      "mechanical_screen": "gpt-5.4-2026-03-05",
+      "semantic_review": "gpt-5.6-terra",
+      "risk_review": "gpt-5.6-sol",
+      "adjudication": "gpt-5.6-sol"
+    },
+    "completed_items": 15,
+    "failed_items": 0,
+    "adjudication_pending_items": 0,
+    "decisions": {
+      "pass": 15,
+      "revise": 0,
+      "block": 0
+    },
+    "changed_items": 4,
+    "new_primary_stage_results": 12,
+    "new_necessary_adjudications": 4,
+    "carried_hash_compatible_primary_reviews": 33,
+    "carried_exact_context_prior_adjudications": 7,
+    "usage": {
+      "api_calls": 23,
+      "tokens": 238479,
+      "cost_usd": "1.4106930",
+      "unverified_calls": 1
+    },
+    "private_run_manifest_sha256": "ffe730cc55bf93f047ebac66168424a8a50c31f39baf33fbe19e642f4845d79e",
+    "private_summary_sha256": "6493a1a36d0829e5779311d422b223f736a3e3a0c1dc19e562bef8d87dea64d6"
+  },
+  "scope_correction": {
+    "reason": "automatic adjudication initially included unchanged candidates",
+    "process_stopped_when_detected": true,
+    "persisted_out_of_scope_adjudications": 3,
+    "interrupted_unverified_reservations": 1,
+    "out_of_scope_results_excluded_from_final_summary": true,
+    "accepted_new_runtime_results_limited_to_changed_items": true,
+    "private_scope_correction_manifest_sha256": "09317cb5aeb20bfdde70d94773e91d324093d622189ca259ef45c08ed3af80c9"
+  },
+  "privacy_and_evidence_boundary": {
+    "raw_inputs_and_model_outputs_published": false,
+    "private_evidence_availability": "maintainer_local_only_not_distributed",
+    "api_provider_identity_is_not_cryptographically_proven": true,
+    "human_evaluation_claim_allowed": false
+  }
+}

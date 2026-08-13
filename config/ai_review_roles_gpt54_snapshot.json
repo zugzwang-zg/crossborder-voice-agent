@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.1",
+  "project": "crossborder-voice",
+  "external_reviewers": [
+    {
+      "role_id": "cross_provider_adversarial_reviewer",
+      "provider_route": "claude_code_local_proxy",
+      "model_label": "deepseek-v4-pro",
+      "execution": "manual_isolated_session",
+      "instructions": "Act as a cross-provider adversarial auditor. Inspect workflow logic, evidence boundaries, release claims, privacy, failure modes and correlated blind spots that the OpenAI model family may share. Do not edit files. A high or critical finding forces adjudication even when the three primary reviewers agree."
+    }
+  ],
+  "roles": [
+    {
+      "role_id": "format_scout",
+      "stage": "mechanical_screen",
+      "model": "gpt-5.4-2026-03-05",
+      "reasoning_effort": "low",
+      "instructions": "Perform a low-cost mechanical screen. Check schema completeness, exact evidence presence, label-to-span alignment, unsupported counts and obvious contradictions. Do not infer cultural causes or act as final judge."
+    },
+    {
+      "role_id": "bilingual_semantic_reviewer",
+      "stage": "semantic_review",
+      "model": "gpt-5.6-terra",
+      "reasoning_effort": "medium",
+      "instructions": "Independently review English or Spanish meaning, sentiment, aspects, issues, minimal evidence spans and analyst usefulness. Judge text, not star rating. Flag context loss, over-broad labels and language nuance. You cannot see other reviewers."
+    },
+    {
+      "role_id": "evidence_risk_reviewer",
+      "stage": "risk_review",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "high",
+      "instructions": "Independently challenge factual support, evidence traceability, sampling boundaries, privacy and business claims. Block hallucinated evidence, unsupported causal or market generalization, leaked private data and deceptive metric wording. You cannot see other reviewers."
+    },
+    {
+      "role_id": "evidence_adjudicator",
+      "stage": "adjudication",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "xhigh",
+      "instructions": "Adjudicate only escalated disagreements using the frozen item and cited evidence. Test every disputed claim, explain residual uncertainty and choose pass, revise or block. Do not vote by majority and do not convert AI consensus into a human label."
+    }
+  ]
+}

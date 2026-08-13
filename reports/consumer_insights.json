@@ -98,17 +98,17 @@
         "aspect_code": "product.sensory.scent",
         "aspect_name": "气味",
         "language": "en",
-        "support_reviews": 66,
-        "share_of_language_reviews": 0.132,
-        "positive_mentions": 37,
-        "negative_mentions": 26,
+        "support_reviews": 64,
+        "share_of_language_reviews": 0.128,
+        "positive_mentions": 36,
+        "negative_mentions": 25,
         "mixed_mentions": 2,
         "neutral_mentions": 1,
-        "positive_rate": 0.5606,
-        "negative_rate": 0.3939,
-        "mixed_rate": 0.0303,
-        "neutral_rate": 0.0152,
-        "mean_confidence": 0.9763,
+        "positive_rate": 0.5625,
+        "negative_rate": 0.3906,
+        "mixed_rate": 0.0312,
+        "neutral_rate": 0.0156,
+        "mean_confidence": 0.9761,
         "scope_field": null,
         "scope_value": null,
         "sample_size": 1000,
@@ -885,7 +885,7 @@
         "negative_rate": 0.3867,
         "mixed_rate": 0.0667,
         "neutral_rate": 0.0133,
-        "mean_confidence": 0.9763,
+        "mean_confidence": 0.9761,
         "scope_field": null,
         "scope_value": null,
         "sample_size": 1000,
@@ -2828,6 +2828,21 @@
         "small_sample_warning": null
       },
       {
+        "aspect_code": "product.sensory.scent",
+        "aspect_name": "气味",
+        "en_support": 64,
+        "es_support": 75,
+        "en_rate": 0.128,
+        "es_rate": 0.15,
+        "absolute_rate_gap": 0.022,
+        "higher_attention_language": "es",
+        "scope_field": null,
+        "scope_value": null,
+        "sample_size": 1000,
+        "is_weighted": false,
+        "small_sample_warning": null
+      },
+      {
         "aspect_code": "product.sensory.greasiness",
         "aspect_name": "油腻感",
         "en_support": 7,
@@ -2866,21 +2881,6 @@
         "es_rate": 0.016,
         "absolute_rate_gap": 0.018,
         "higher_attention_language": "en",
-        "scope_field": null,
-        "scope_value": null,
-        "sample_size": 1000,
-        "is_weighted": false,
-        "small_sample_warning": null
-      },
-      {
-        "aspect_code": "product.sensory.scent",
-        "aspect_name": "气味",
-        "en_support": 66,
-        "es_support": 75,
-        "en_rate": 0.132,
-        "es_rate": 0.15,
-        "absolute_rate_gap": 0.018,
-        "higher_attention_language": "es",
         "scope_field": null,
         "scope_value": null,
         "sample_size": 1000,
@@ -3314,7 +3314,7 @@
       "insight_id": "negative_aspects:product.efficacy.general_effect",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善总体效果相关痛点",
+      "title": "调查“总体效果”下的异质结果信号",
       "affected_audience": {
         "languages": {
           "en": 64,
@@ -3330,7 +3330,6 @@
       },
       "data_evidence": {
         "support_reviews": 144,
-        "mean_model_confidence": 0.9769,
         "source_review_ids": [
           "en_0010279",
           "en_0023033",
@@ -3498,15 +3497,22 @@
           "quote": "didn't notice a single change in my scar"
         }
       ],
-      "possible_cause": "评论集中提及“总体效果”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“总体效果”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有144条评论被归入“总体效果”，但其中结果类型与使用情境并不相同；该汇总只表示异质信号，不能证明单一原因。",
+      "product_recommendation": "先按评论明确提及的结果类型与使用情境拆分支持评论；各子类达到证据要求后分别建立调查工单，验证后再决定是否建立修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“总体效果常见问题与正确使用方式”内容。",
+      "content_topic": "完成结果类型分层与产品事实核验后，再决定是否制作对应的具体问题说明；不把异质评论合并为单一效果结论。",
       "sample_size_and_confidence": {
         "support_reviews": 144,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -3518,12 +3524,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 144,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.144
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善总体效果相关痛点",
+      "finding": "调查“总体效果”下的异质结果信号",
       "support_count": 144,
       "support_rate": 0.144,
       "representative_review_ids": [
@@ -3672,8 +3685,8 @@
         "es_0987614",
         "es_0992473"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“总体效果”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "先按评论明确提及的结果类型与使用情境拆分支持评论；各子类达到证据要求后分别建立调查工单，验证后再决定是否建立修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -3700,7 +3713,6 @@
       },
       "data_evidence": {
         "support_reviews": 80,
-        "mean_model_confidence": 0.9734,
         "source_review_ids": [
           "en_0023033",
           "en_0086659",
@@ -3804,15 +3816,22 @@
           "quote": "NO HE VISTO UN RESULTADO COMO PARA SEGUIR CON EL PRODUCTO"
         }
       ],
-      "possible_cause": "评论集中提及“效果落差”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "possible_cause": "所选分层样本中有评论提及“效果落差”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
       "product_recommendation": "逐项核对实物、规格与页面承诺，并记录不一致字段。",
-      "marketing_recommendation": "把已验证的“效果落差”边界写入首屏图片或前两条卖点。",
-      "content_topic": "制作“购买前如何判断效果落差”说明内容。",
+      "marketing_recommendation": "核验后，把评论中反复出现的“效果落差”边界写入首屏图片或前两条卖点。",
+      "content_topic": "梳理“效果落差”对应的预期结果、使用条件、时间范围与页面表述；核验后再制作购买前说明内容。",
       "sample_size_and_confidence": {
         "support_reviews": 80,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -3823,6 +3842,13 @@
         "is_weighted": false,
         "population_prevalence_supported": false,
         "warning": null
+      },
+      "support_rate_audit": {
+        "numerator": 80,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.08
       },
       "scope": {
         "type": "global",
@@ -3914,8 +3940,8 @@
         "es_0941032",
         "es_0968575"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "把已验证的“效果落差”边界写入首屏图片或前两条卖点。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "核验后，把评论中反复出现的“效果落差”边界写入首屏图片或前两条卖点。",
       "action_type": "listing",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -3926,7 +3952,7 @@
       "insight_id": "positive_aspects:product.efficacy.general_effect",
       "category": "advertising_selling_point",
       "category_name": "广告卖点",
-      "title": "验证后强化总体效果卖点",
+      "title": "验证“有效或有帮助”的个体体验表达",
       "affected_audience": {
         "languages": {
           "en": 92,
@@ -3942,7 +3968,6 @@
       },
       "data_evidence": {
         "support_reviews": 177,
-        "mean_model_confidence": 0.9761,
         "source_review_ids": [
           "en_0000309",
           "en_0013032",
@@ -4125,10 +4150,10 @@
       },
       "representative_quotes": [
         {
-          "review_id": "en_0027942",
+          "review_id": "en_0028305",
           "language": "en",
           "stars": 3,
-          "quote": "I loved the actual hair ties"
+          "quote": "it really does help"
         },
         {
           "review_id": "es_0028828",
@@ -4137,21 +4162,28 @@
           "quote": "Cumple con su función"
         },
         {
-          "review_id": "en_0028305",
+          "review_id": "en_0071406",
           "language": "en",
           "stars": 3,
-          "quote": "it really does help"
+          "quote": "Working well"
         }
       ],
-      "possible_cause": "评论集中提及“总体效果”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "建立“总体效果”批次抽查表，记录稳定性与异常反馈后再决定是否放大卖点。",
-      "marketing_recommendation": "从引用评论提炼一条可核验的“总体效果”表达，并先做小流量素材测试。",
-      "content_topic": "使用可追溯评论制作“总体效果”案例，并标注适用条件。",
+      "possible_cause": "所选分层样本中有177条评论正向提及总体效果；现有评论数据不能确定评价形成的原因或证明因果。",
+      "product_recommendation": "对评论中明确提及有效、有帮助或能发挥作用的个体体验做批次抽查，记录稳定性与异常反馈后再决定是否用于传播。",
+      "marketing_recommendation": "仅从引用评论提炼“有效或有帮助”的个体体验表达，并先做小流量素材测试；不扩展为总体效果承诺。",
+      "content_topic": "使用可追溯评论制作“有效或有帮助的个体体验”案例，不添加原评论未提及的适用条件。",
       "sample_size_and_confidence": {
         "support_reviews": 177,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -4163,12 +4195,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 177,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.177
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "验证后强化总体效果卖点",
+      "finding": "验证“有效或有帮助”的个体体验表达",
       "support_count": 177,
       "support_rate": 0.177,
       "representative_review_ids": [
@@ -4350,8 +4389,8 @@
         "es_0974997",
         "es_0983471"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "从引用评论提炼一条可核验的“总体效果”表达，并先做小流量素材测试。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "仅从引用评论提炼“有效或有帮助”的个体体验表达，并先做小流量素材测试；不扩展为总体效果承诺。",
       "action_type": "advertising",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -4362,7 +4401,7 @@
       "insight_id": "speech_acts:repurchase_intent",
       "category": "content_topic",
       "category_name": "内容选题",
-      "title": "围绕复购意图建设内容专题",
+      "title": "围绕复购行为与意向建设内容专题",
       "affected_audience": {
         "languages": {
           "en": 23,
@@ -4378,7 +4417,6 @@
       },
       "data_evidence": {
         "support_reviews": 46,
-        "mean_model_confidence": 0.9857,
         "source_review_ids": [
           "en_0046271",
           "en_0047851",
@@ -4448,15 +4486,22 @@
           "quote": "Will buy again."
         }
       ],
-      "possible_cause": "评论集中提及“复购意图”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "把当前信号加入访谈提纲，用目标用户样本验证需求。",
-      "marketing_recommendation": "分别为英语与西语样本制作“复购意图”素材并记录测试结果。",
-      "content_topic": "制作“复购意图场景指南与案例”系列。",
+      "possible_cause": "评论中的复购表述可能反映产品体验、价格或品类偏好与再次购买意愿之间的关联；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "把历史评论中的复购表述加入访谈提纲，用目标用户样本验证需求。",
+      "marketing_recommendation": "分别为英语与西语样本制作“复购行为与意向”素材并记录测试结果。",
+      "content_topic": "制作“复购行为与意向场景指南与案例”系列。",
       "sample_size_and_confidence": {
         "support_reviews": 46,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -4468,12 +4513,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 46,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.046
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "围绕复购意图建设内容专题",
+      "finding": "围绕复购行为与意向建设内容专题",
       "support_count": 46,
       "support_rate": 0.046,
       "representative_review_ids": [
@@ -4524,8 +4576,8 @@
         "es_0971729",
         "es_0974918"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "制作“复购意图场景指南与案例”系列。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "制作“复购行为与意向场景指南与案例”系列。",
       "action_type": "content",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -4552,7 +4604,6 @@
       },
       "data_evidence": {
         "support_reviews": 38,
-        "mean_model_confidence": 0.9913,
         "source_review_ids": [
           "en_0025136",
           "en_0066487",
@@ -4614,15 +4665,22 @@
           "quote": "I NEVER RECEIVED THIS PRODUCT"
         }
       ],
-      "possible_cause": "评论集中提及“延迟或未送达”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "将高频咨询和失败原因反馈给产品与运营团队。",
-      "marketing_recommendation": "在购买前提示适用条件、处理方式和服务边界。",
+      "possible_cause": "评论中的延迟或未送达可能与库存、仓储、承运、跟踪信息或履约协同有关；评论数据不能定位具体责任环节，也不能证明因果。",
+      "product_recommendation": "将延迟或未送达相关评论反馈给客服与履约运营团队，并将潜在原因明确标为待验证假设。",
+      "marketing_recommendation": "说明延迟或未送达的响应步骤和升级渠道；更广泛的购买条件与服务边界仅作为待验证假设。",
       "content_topic": "制作“延迟或未送达处理步骤”FAQ内容。",
       "sample_size_and_confidence": {
         "support_reviews": 38,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -4633,6 +4691,13 @@
         "is_weighted": false,
         "population_prevalence_supported": false,
         "warning": null
+      },
+      "support_rate_audit": {
+        "numerator": 38,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.038
       },
       "scope": {
         "type": "global",
@@ -4682,7 +4747,7 @@
         "es_0852234",
         "es_0980676"
       ],
-      "confidence_or_evidence_grade": "high",
+      "confidence_or_evidence_grade": "high_support_volume",
       "recommended_action": "制作“延迟或未送达处理步骤”FAQ内容。",
       "action_type": "faq",
       "limitations": [
@@ -4710,7 +4775,6 @@
       },
       "data_evidence": {
         "support_reviews": 95,
-        "mean_model_confidence": 0.9782,
         "source_review_ids": [
           "en_0018827",
           "en_0029842",
@@ -4829,15 +4893,22 @@
           "quote": "great for the price"
         }
       ],
-      "possible_cause": "评论集中提及“价格性价比”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "建立“价格性价比”批次抽查表，记录稳定性与异常反馈后再决定是否放大卖点。",
-      "marketing_recommendation": "从引用评论提炼一条可核验的“价格性价比”表达，并先做小流量素材测试。",
-      "content_topic": "使用可追溯评论制作“价格性价比”案例，并标注适用条件。",
+      "possible_cause": "所选分层样本中有评论提及“价格性价比”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "广告测试前，先书面核验当前在售产品及版本、当前价格与拟声明的适用条件；历史评论仅作为方向性证据。",
+      "marketing_recommendation": "先完成当前在售产品及版本、当前价格与适用条件核验，并将相关评论明确标注为2015—2019年历史证据；核验后的小流量测试仅衡量创意表现，不验证声明真实性。",
+      "content_topic": "仅在当前产品与价格核验完成后，使用可追溯的历史评论制作价格性价比案例，并保留原评论中的限定条件。",
       "sample_size_and_confidence": {
         "support_reviews": 95,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -4848,6 +4919,13 @@
         "is_weighted": false,
         "population_prevalence_supported": false,
         "warning": null
+      },
+      "support_rate_audit": {
+        "numerator": 95,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.095
       },
       "scope": {
         "type": "global",
@@ -4954,8 +5032,8 @@
         "es_0962316",
         "es_0968575"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "从引用评论提炼一条可核验的“价格性价比”表达，并先做小流量素材测试。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "先完成当前在售产品及版本、当前价格与适用条件核验，并将相关评论明确标注为2015—2019年历史证据；核验后的小流量测试仅衡量创意表现，不验证声明真实性。",
       "action_type": "advertising",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -4969,23 +5047,21 @@
       "title": "验证后强化气味卖点",
       "affected_audience": {
         "languages": {
-          "en": 37,
+          "en": 36,
           "es": 40
         },
         "star_distribution": {
           "1": 4,
           "2": 5,
           "3": 12,
-          "4": 31,
+          "4": 30,
           "5": 25
         }
       },
       "data_evidence": {
-        "support_reviews": 77,
-        "mean_model_confidence": 0.9749,
+        "support_reviews": 76,
         "source_review_ids": [
           "en_0006958",
-          "en_0045389",
           "en_0091084",
           "en_0095819",
           "en_0146413",
@@ -5071,27 +5147,34 @@
           "quote": "smells extremely good"
         },
         {
-          "review_id": "es_0034129",
+          "review_id": "es_0013574",
           "language": "es",
-          "stars": 3,
-          "quote": "su aroma"
+          "stars": 4,
+          "quote": "Este bálsamo tiene un olor increíble"
         },
         {
-          "review_id": "en_0045389",
+          "review_id": "en_0091084",
           "language": "en",
           "stars": 4,
-          "quote": "The taste is really delicious"
+          "quote": "Smells good."
         }
       ],
-      "possible_cause": "评论集中提及“气味”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "possible_cause": "所选分层样本中有76条评论正向提及气味；这些关联仅支持进一步验证，不能确定评价形成的原因。",
       "product_recommendation": "建立“气味”批次抽查表，记录稳定性与异常反馈后再决定是否放大卖点。",
       "marketing_recommendation": "从引用评论提炼一条可核验的“气味”表达，并先做小流量素材测试。",
       "content_topic": "使用可追溯评论制作“气味”案例，并标注适用条件。",
       "sample_size_and_confidence": {
-        "support_reviews": 77,
+        "support_reviews": 76,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -5103,17 +5186,23 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 76,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.076
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
       "finding": "验证后强化气味卖点",
-      "support_count": 77,
-      "support_rate": 0.077,
+      "support_count": 76,
+      "support_rate": 0.076,
       "representative_review_ids": [
         "en_0006958",
-        "en_0045389",
         "en_0091084",
         "en_0095819",
         "en_0146413",
@@ -5190,7 +5279,7 @@
         "es_0941032",
         "es_0959113"
       ],
-      "confidence_or_evidence_grade": "high",
+      "confidence_or_evidence_grade": "high_support_volume",
       "recommended_action": "从引用评论提炼一条可核验的“气味”表达，并先做小流量素材测试。",
       "action_type": "advertising",
       "limitations": [
@@ -5202,7 +5291,7 @@
       "insight_id": "low_star_issues:insufficient_effect",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善效果不足相关痛点",
+      "title": "改善效果不足相关痛点",
       "affected_audience": {
         "languages": {
           "en": 29,
@@ -5218,7 +5307,6 @@
       },
       "data_evidence": {
         "support_reviews": 72,
-        "mean_model_confidence": 0.9789,
         "source_review_ids": [
           "en_0055671",
           "en_0106295",
@@ -5296,16 +5384,16 @@
       },
       "representative_quotes": [
         {
-          "review_id": "en_0055671",
-          "language": "en",
-          "stars": 1,
-          "quote": "These do not stay in place."
-        },
-        {
           "review_id": "es_0043367",
           "language": "es",
           "stars": 1,
           "quote": "no me deja el contorno de ojos hidratado"
+        },
+        {
+          "review_id": "en_0146413",
+          "language": "en",
+          "stars": 1,
+          "quote": "does not supply any moisture"
         },
         {
           "review_id": "es_0047850",
@@ -5314,15 +5402,22 @@
           "quote": "no cubren nada"
         }
       ],
-      "possible_cause": "评论集中提及“效果不足”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“效果不足”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有评论提及“效果不足”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "基于支持评论梳理“效果不足”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“效果不足常见问题与正确使用方式”内容。",
+      "content_topic": "制作“效果不足问题与排查说明”内容，仅采用已验证的产品信息。",
       "sample_size_and_confidence": {
         "support_reviews": 72,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -5334,12 +5429,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 72,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.072
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善效果不足相关痛点",
+      "finding": "改善效果不足相关痛点",
       "support_count": 72,
       "support_rate": 0.072,
       "representative_review_ids": [
@@ -5416,8 +5518,8 @@
         "es_0932487",
         "es_0966187"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“效果不足”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "基于支持评论梳理“效果不足”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -5428,7 +5530,7 @@
       "insight_id": "negative_aspects:product.quality.durability_breakage",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善耐用破损相关痛点",
+      "title": "改善耐用破损相关痛点",
       "affected_audience": {
         "languages": {
           "en": 41,
@@ -5444,7 +5546,6 @@
       },
       "data_evidence": {
         "support_reviews": 69,
-        "mean_model_confidence": 0.9777,
         "source_review_ids": [
           "en_0010370",
           "en_0027942",
@@ -5519,10 +5620,10 @@
       },
       "representative_quotes": [
         {
-          "review_id": "en_0010370",
+          "review_id": "en_0077195",
           "language": "en",
           "stars": 1,
-          "quote": "Cheaply made"
+          "quote": "The strap broke first month I purchased."
         },
         {
           "review_id": "es_0003172",
@@ -5531,21 +5632,28 @@
           "quote": "Se rompió en menos de una semana"
         },
         {
-          "review_id": "en_0077195",
+          "review_id": "en_0033882",
           "language": "en",
-          "stars": 1,
-          "quote": "The strap broke first month I purchased."
+          "stars": 2,
+          "quote": "Doesn't last long"
         }
       ],
-      "possible_cause": "评论集中提及“耐用破损”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“耐用破损”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有评论提及“耐用破损”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "基于支持评论梳理“耐用破损”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“耐用破损常见问题与正确使用方式”内容。",
+      "content_topic": "先验证具体失效模式、涉及部件与产品事实；确认存在可说明的信息缺口后，再制作对应内容。",
       "sample_size_and_confidence": {
         "support_reviews": 69,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -5557,12 +5665,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 69,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.069
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善耐用破损相关痛点",
+      "finding": "改善耐用破损相关痛点",
       "support_count": 69,
       "support_rate": 0.069,
       "representative_review_ids": [
@@ -5636,8 +5751,8 @@
         "es_0971729",
         "es_0992473"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“耐用破损”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "基于支持评论梳理“耐用破损”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -5648,23 +5763,22 @@
       "insight_id": "negative_aspects:product.sensory.scent",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善气味相关痛点",
+      "title": "改善气味相关痛点",
       "affected_audience": {
         "languages": {
           "es": 34,
-          "en": 28
+          "en": 27
         },
         "star_distribution": {
           "1": 12,
           "2": 22,
-          "3": 17,
+          "3": 16,
           "4": 11,
           "5": 0
         }
       },
       "data_evidence": {
-        "support_reviews": 62,
-        "mean_model_confidence": 0.9823,
+        "support_reviews": 61,
         "source_review_ids": [
           "en_0106295",
           "en_0154009",
@@ -5679,7 +5793,6 @@
           "en_0386117",
           "en_0397018",
           "en_0459643",
-          "en_0546875",
           "en_0621804",
           "en_0633148",
           "en_0647120",
@@ -5750,15 +5863,22 @@
           "quote": "El perfume recuerda pero no se le parece ni es igual"
         }
       ],
-      "possible_cause": "评论集中提及“气味”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“气味”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有61条评论负向提及气味；产品气味、使用情境与页面预期是三类需要区分且可能重叠的待验证假设，评论数据不能确定具体原因或责任路径。",
+      "product_recommendation": "先把评论分为产品气味、使用情境与页面预期三类待验证假设；仅将验证后的产品气味子类转交产品调查，页面预期子类另交详情页负责人核验。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“气味常见问题与正确使用方式”内容。",
+      "content_topic": "仅在分类与核验确认存在使用或页面信息缺口后，再制作对应说明内容。",
       "sample_size_and_confidence": {
-        "support_reviews": 62,
+        "support_reviews": 61,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -5770,14 +5890,21 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 61,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.061
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善气味相关痛点",
-      "support_count": 62,
-      "support_rate": 0.062,
+      "finding": "改善气味相关痛点",
+      "support_count": 61,
+      "support_rate": 0.061,
       "representative_review_ids": [
         "en_0106295",
         "en_0154009",
@@ -5792,7 +5919,6 @@
         "en_0386117",
         "en_0397018",
         "en_0459643",
-        "en_0546875",
         "en_0621804",
         "en_0633148",
         "en_0647120",
@@ -5842,8 +5968,8 @@
         "es_0974997",
         "es_0984864"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“气味”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "先把评论分为产品气味、使用情境与页面预期三类待验证假设；仅将验证后的产品气味子类转交产品调查，页面预期子类另交详情页负责人核验。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -5854,7 +5980,7 @@
       "insight_id": "negative_aspects:product.usability.ease_of_use",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善易用性相关痛点",
+      "title": "改善易用性相关痛点",
       "affected_audience": {
         "languages": {
           "en": 29,
@@ -5870,7 +5996,6 @@
       },
       "data_evidence": {
         "support_reviews": 54,
-        "mean_model_confidence": 0.9791,
         "source_review_ids": [
           "en_0008853",
           "en_0028305",
@@ -5942,21 +6067,28 @@
           "quote": "al meter la sombras no se puede cerrar"
         },
         {
-          "review_id": "en_0033882",
+          "review_id": "en_0046271",
           "language": "en",
           "stars": 2,
-          "quote": "there was no cleaning brush"
+          "quote": "Attaching is a little awkward until you get used to them"
         }
       ],
-      "possible_cause": "评论集中提及“易用性”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“易用性”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有评论提及“易用性”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "基于支持评论梳理“易用性”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“易用性常见问题与正确使用方式”内容。",
+      "content_topic": "制作“易用性问题与排查说明”内容，仅采用已验证的产品信息。",
       "sample_size_and_confidence": {
         "support_reviews": 54,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -5968,12 +6100,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 54,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.054
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善易用性相关痛点",
+      "finding": "改善易用性相关痛点",
       "support_count": 54,
       "support_rate": 0.054,
       "representative_review_ids": [
@@ -6032,8 +6171,8 @@
         "es_0946231",
         "es_0987614"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“易用性”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "基于支持评论梳理“易用性”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -6042,9 +6181,9 @@
     },
     {
       "insight_id": "negative_aspects:packaging.arrival_condition",
-      "category": "product_improvement",
-      "category_name": "产品改进",
-      "title": "优先改善到货状态相关痛点",
+      "category": "packaging_improvement",
+      "category_name": "包装改进",
+      "title": "调查到货状态异常",
       "affected_audience": {
         "languages": {
           "en": 23,
@@ -6060,7 +6199,6 @@
       },
       "data_evidence": {
         "support_reviews": 52,
-        "mean_model_confidence": 0.9885,
         "source_review_ids": [
           "en_0049170",
           "en_0061577",
@@ -6136,15 +6274,23 @@
           "quote": "arrived broken"
         }
       ],
-      "possible_cause": "评论集中提及“到货状态”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“到货状态”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
-      "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“到货状态常见问题与正确使用方式”内容。",
+      "possible_cause": "所选分层样本中有评论提及“到货状态”，可能反映包装设计、密封、仓储或运输保护环节存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "先将“到货状态”事件分类：包装设计或密封假设交包装与运营负责人建立调查工单，仓储、运输或履约假设交物流与运营负责人建立调查工单；各路径验证后再决定是否建立修复工单。",
+      "marketing_recommendation": "完成包装与到货验证前，不将包装保护作为强承诺卖点。",
+      "content_topic": "仅在事件分类与调查确认存在可说明的信息缺口后，再制作“到货状态检查与异常处理”内容。",
       "sample_size_and_confidence": {
         "support_reviews": 52,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
+      "operations_recommendation": "先将“到货状态”事件分类：包装设计或密封假设交包装与运营负责人建立调查工单，仓储、运输或履约假设交物流与运营负责人建立调查工单；各路径验证后再决定是否建立修复工单。",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -6156,12 +6302,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 52,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.052
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善到货状态相关痛点",
+      "finding": "调查到货状态异常",
       "support_count": 52,
       "support_rate": 0.052,
       "representative_review_ids": [
@@ -6218,9 +6371,9 @@
         "es_0921969",
         "es_0938467"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“到货状态”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
-      "action_type": "product",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "先将“到货状态”事件分类：包装设计或密封假设交包装与运营负责人建立调查工单，仓储、运输或履约假设交物流与运营负责人建立调查工单；各路径验证后再决定是否建立修复工单。",
+      "action_type": "packaging",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
         "Review associations indicate a direction; they do not prove causality."
@@ -6230,7 +6383,7 @@
       "insight_id": "low_star_issues:no_effect",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善效果无效相关痛点",
+      "title": "改善效果无效相关痛点",
       "affected_audience": {
         "languages": {
           "en": 26,
@@ -6246,7 +6399,6 @@
       },
       "data_evidence": {
         "support_reviews": 51,
-        "mean_model_confidence": 0.9827,
         "source_review_ids": [
           "en_0010279",
           "en_0023033",
@@ -6321,15 +6473,22 @@
           "quote": "didn't notice a single change in my scar"
         }
       ],
-      "possible_cause": "评论集中提及“效果无效”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“效果无效”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有评论提及“效果无效”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "基于支持评论梳理“效果无效”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“效果无效常见问题与正确使用方式”内容。",
+      "content_topic": "制作“效果无效问题与排查说明”内容，仅采用已验证的产品信息。",
       "sample_size_and_confidence": {
         "support_reviews": 51,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -6341,12 +6500,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 51,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.051
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善效果无效相关痛点",
+      "finding": "改善效果无效相关痛点",
       "support_count": 51,
       "support_rate": 0.051,
       "representative_review_ids": [
@@ -6402,8 +6568,8 @@
         "es_0987614",
         "es_0992473"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“效果无效”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "基于支持评论梳理“效果无效”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -6414,7 +6580,7 @@
       "insight_id": "negative_aspects:value.price_value",
       "category": "product_improvement",
       "category_name": "产品改进",
-      "title": "优先改善价格性价比相关痛点",
+      "title": "改善价格性价比相关痛点",
       "affected_audience": {
         "languages": {
           "en": 27,
@@ -6430,7 +6596,6 @@
       },
       "data_evidence": {
         "support_reviews": 51,
-        "mean_model_confidence": 0.9829,
         "source_review_ids": [
           "en_0008853",
           "en_0080627",
@@ -6505,15 +6670,22 @@
           "quote": "Waste of money"
         }
       ],
-      "possible_cause": "评论集中提及“价格性价比”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“价格性价比”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "possible_cause": "所选分层样本中有评论提及“价格性价比”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "基于支持评论梳理“价格性价比”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“价格性价比常见问题与正确使用方式”内容。",
+      "content_topic": "先调查评论中的具体价格与价值关注点；仅在确认存在使用或信息缺口后，再制作相应说明内容。",
       "sample_size_and_confidence": {
         "support_reviews": 51,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -6525,12 +6697,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 51,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.051
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善价格性价比相关痛点",
+      "finding": "改善价格性价比相关痛点",
       "support_count": 51,
       "support_rate": 0.051,
       "representative_review_ids": [
@@ -6586,8 +6765,8 @@
         "es_0869815",
         "es_0910634"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“价格性价比”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "基于支持评论梳理“价格性价比”的可验证表现，将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。",
       "action_type": "product",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
@@ -6596,9 +6775,9 @@
     },
     {
       "insight_id": "negative_aspects:fulfillment.delivery",
-      "category": "product_improvement",
-      "category_name": "产品改进",
-      "title": "优先改善配送相关痛点",
+      "category": "fulfillment_improvement",
+      "category_name": "履约改进",
+      "title": "改善配送相关履约问题",
       "affected_audience": {
         "languages": {
           "en": 18,
@@ -6614,7 +6793,6 @@
       },
       "data_evidence": {
         "support_reviews": 51,
-        "mean_model_confidence": 0.99,
         "source_review_ids": [
           "en_0025136",
           "en_0049170",
@@ -6689,15 +6867,23 @@
           "quote": "I NEVER RECEIVED THIS PRODUCT"
         }
       ],
-      "possible_cause": "评论集中提及“配送”，可能反映产品表现、使用方式或页面预期之间存在差异；评论数据只能提示方向，不能证明因果。",
-      "product_recommendation": "按评论证据拆分“配送”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
-      "marketing_recommendation": "改进完成并验证前，不将该项作为强承诺卖点。",
-      "content_topic": "制作“配送常见问题与正确使用方式”内容。",
+      "possible_cause": "所选分层样本中有评论提及“配送”，可能反映库存、仓储、承运、跟踪信息或履约协同环节存在差异；评论数据只能提示方向，不能证明因果。",
+      "product_recommendation": "将库存、仓储、承运与跟踪列为“配送”的待验证潜在原因，先建立调查工单；完成事件分类与验证后，再由物流与运营负责人决定是否建立修复工单。",
+      "marketing_recommendation": "在履约链路完成验证前，不承诺未经证实的配送表现。",
+      "content_topic": "仅在事件分类与调查确认存在跟踪或支持信息缺口后，再制作“配送进度查询与异常处理”内容。",
       "sample_size_and_confidence": {
         "support_reviews": 51,
         "evidence_quotes": 3,
-        "grade": "high"
+        "grade": "high_support_volume",
+        "grade_semantics": "deterministic_support_volume_only",
+        "configured_min_support": 5,
+        "thresholds": {
+          "medium": 10,
+          "high": 20
+        }
       },
+      "support_volume_tier": "high",
+      "operations_recommendation": "将库存、仓储、承运与跟踪列为“配送”的待验证潜在原因，先建立调查工单；完成事件分类与验证后，再由物流与运营负责人决定是否建立修复工单。",
       "analysis_scope": {
         "field": null,
         "value": null,
@@ -6709,12 +6895,19 @@
         "population_prevalence_supported": false,
         "warning": null
       },
+      "support_rate_audit": {
+        "numerator": 51,
+        "denominator": 1000,
+        "denominator_semantics": "selected unique review records",
+        "calculation": "support_count / selected_records",
+        "value": 0.051
+      },
       "scope": {
         "type": "global",
         "field": null,
         "value": null
       },
-      "finding": "优先改善配送相关痛点",
+      "finding": "改善配送相关履约问题",
       "support_count": 51,
       "support_rate": 0.051,
       "representative_review_ids": [
@@ -6770,9 +6963,9 @@
         "es_0852234",
         "es_0980676"
       ],
-      "confidence_or_evidence_grade": "high",
-      "recommended_action": "按评论证据拆分“配送”的规格、使用与履约失败路径，将支持量最高的一项建立修复工单。",
-      "action_type": "product",
+      "confidence_or_evidence_grade": "high_support_volume",
+      "recommended_action": "将库存、仓储、承运与跟踪列为“配送”的待验证潜在原因，先建立调查工单；完成事件分类与验证后，再由物流与运营负责人决定是否建立修复工单。",
+      "action_type": "fulfillment",
       "limitations": [
         "Language × star strata were sampled deliberately. Percentages are descriptive for the selected sample and do not estimate natural market prevalence.",
         "Review associations indicate a direction; they do not prove causality."

@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "currency": "USD",
+  "verified_at": "2026-08-09",
+  "source_url": "https://developers.openai.com/api/docs/models/compare",
+  "models": {
+    "gpt-5.6-luna": {
+      "input_usd_per_million_tokens": 0.2,
+      "cached_input_usd_per_million_tokens": 0.02,
+      "output_usd_per_million_tokens": 1.2,
+      "max_output_tokens": 128000,
+      "long_context_threshold_tokens": 272000,
+      "long_context_input_multiplier": 2.0,
+      "long_context_output_multiplier": 1.5
+    },
+    "gpt-5.6-terra": {
+      "input_usd_per_million_tokens": 2.0,
+      "cached_input_usd_per_million_tokens": 0.2,
+      "output_usd_per_million_tokens": 12.0,
+      "max_output_tokens": 128000,
+      "long_context_threshold_tokens": 272000,
+      "long_context_input_multiplier": 2.0,
+      "long_context_output_multiplier": 1.5
+    },
+    "gpt-5.6-sol": {
+      "input_usd_per_million_tokens": 5.0,
+      "cached_input_usd_per_million_tokens": 0.5,
+      "output_usd_per_million_tokens": 30.0,
+      "max_output_tokens": 128000,
+      "long_context_threshold_tokens": 272000,
+      "long_context_input_multiplier": 2.0,
+      "long_context_output_multiplier": 1.5
+    },
+    "gpt-5.4-nano-2026-03-17": {
+      "input_usd_per_million_tokens": 0.2,
+      "cached_input_usd_per_million_tokens": 0.02,
+      "output_usd_per_million_tokens": 1.25,
+      "max_output_tokens": 128000,
+      "long_context_threshold_tokens": 400000,
+      "long_context_input_multiplier": 1.0,
+      "long_context_output_multiplier": 1.0,
+      "verified_at": "2026-08-12",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.4-nano"
+    },
+    "gpt-5.4-2026-03-05": {
+      "input_usd_per_million_tokens": 2.5,
+      "cached_input_usd_per_million_tokens": 0.25,
+      "output_usd_per_million_tokens": 15.0,
+      "max_output_tokens": 128000,
+      "long_context_threshold_tokens": 272000,
+      "long_context_input_multiplier": 2.0,
+      "long_context_output_multiplier": 1.5,
+      "verified_at": "2026-08-12",
+      "source_url": "https://developers.openai.com/api/docs/models/gpt-5.4"
+    }
+  }
+}

@@ -63,3 +63,6 @@ dashboard/public/data/dashboard-data.json
 
 # Temporary portfolio-build files
 .codex-tmp/
+
+# Private multi-model review inputs, packets, results and run outputs
+.private/

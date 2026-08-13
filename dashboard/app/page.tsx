@@ -83,7 +83,11 @@ type Insight = {
     support_reviews: number;
     evidence_quotes: number;
     grade: string;
+    grade_semantics?: string;
+    configured_min_support?: number;
+    thresholds?: { medium: number; high: number };
   };
+  support_volume_tier?: string;
   finding?: string;
   support_count?: number;
   support_rate?: number;

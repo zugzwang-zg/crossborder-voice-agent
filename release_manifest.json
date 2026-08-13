@@ -2,16 +2,195 @@
   "schema_version": "1.0",
   "target_version": "v0.2.0",
   "candidate_version": "v0.2.0-rc.1",
-  "release_created": false,
-  "release_status": "blocked_pending_maintainer_decisions",
-  "required_human_decisions": [
-    "select_and_add_repository_license",
-    "review_local_release_diff_before_tag_or_push"
-  ],
-  "pending_evaluation": [
+  "release_created": true,
+  "release_status": "released_via_git_tag",
+  "intended_release_claim_scope": "ai_pre_reviewed_prototype_no_new_human_evaluation_claims",
+  "maintainer_signoff": {
+    "status": "accepted",
+    "accepted_at": "2026-08-13",
+    "scope": "remediation_4_formal_ai_review_and_recorded_scope_correction"
+  },
+  "local_release_diff_review": {
+    "status": "completed",
+    "completed_at": "2026-08-13",
+    "resolved_findings": [
+      "ignore_all_private_review_inputs_packets_results_and_run_outputs",
+      "regenerate_public_dashboard_demo_from_remediation_4_report",
+      "carry_only_exact_context_seeded_adjudications",
+      "publish_hash_only_ai_review_attestation",
+      "pin_optional_openai_sdk_to_audited_version",
+      "align_dashboard_package_with_v0.2.0"
+    ],
+    "commit_created": true,
+    "tag_created": true,
+    "push_performed": true
+  },
+  "git_release": {
+    "status": "published",
+    "published_at": "2026-08-13",
+    "branch": "phase-7-license-and-review-plan",
+    "tag": "v0.2.0",
+    "tag_type": "annotated",
+    "remote": "origin",
+    "branch_push_performed": true,
+    "tag_push_performed": true,
+    "github_release_created": false
+  },
+  "ai_pre_review_candidate": {
+    "preparation_status": "remediation_4_accepted_and_release_diff_reviewed",
+    "config": "config/ai_review_release_candidate.json",
+    "review_config": "config/ai_review_roles_gpt54_snapshot.json",
+    "private_output": ".private/ai_review/release-candidate/v0.2.0-rc.1-remediation-4",
+    "item_count": 15,
+    "frozen_input_sha256": "6a14a10c77856e6878365449d7ed12421a43b3a326cc11d0a58040c0f803f7bc",
+    "input_file_sha256": "7723d8987f5566c6d0708da4ddcd30c0c3cc166e6ae4c038e0afc423953ef4f0",
+    "remediation_3": {
+      "source_run_id": "20260812T072313649196Z-4eddf183f10c",
+      "source_run_status": "completed",
+      "source_decisions": {"pass": 5, "revise": 9, "block": 1},
+      "owner_acceptance_status": "findings_accepted_for_remediation",
+      "business_or_evidence_changed_items": 9,
+      "provenance_only_remediated_items": 1,
+      "full_candidate_hashes_changed": 15,
+      "requires_fresh_hash_bound_review": false,
+      "fresh_hash_bound_review_completed": true
+    },
+    "remediation_4": {
+      "source_run_id": "20260813T064923280049Z-2d2b1aad3c0a",
+      "source_run_status": "completed",
+      "source_decisions": {"pass": 11, "revise": 4, "block": 0},
+      "owner_acceptance_status": "findings_accepted_for_remediation",
+      "changed_item_count": 4,
+      "unchanged_item_count": 11,
+      "changed_item_ids": [
+        "rc1-insight-03-positive-aspects-product-efficacy-general-effect",
+        "rc1-insight-06-positive-aspects-value-price-value",
+        "rc1-insight-09-negative-aspects-product-quality-durability-breakage",
+        "rc1-insight-10-negative-aspects-product-sensory-scent"
+      ],
+      "requires_fresh_hash_bound_review": false,
+      "fresh_hash_bound_review_completed": true
+    },
+    "prior_formal_audit": {
+      "input_sha256": "4eddf183f10c85400c332b970fc4891fa7f2a3fa80329028b2c8b3a7cfba4b5a",
+      "models": {
+        "mechanical_screen": "gpt-5.4-2026-03-05",
+        "semantic_review": "gpt-5.6-terra",
+        "risk_review": "gpt-5.6-sol",
+        "adjudication": "gpt-5.6-sol",
+        "external_cross_provider_adversarial_reviewer": "deepseek-v4-pro"
+      },
+      "usage": {
+        "api_calls": 62,
+        "tokens": 1033482,
+        "cost_usd": "9.1978775"
+      },
+      "claim_boundary": "superseded_input_review_retained_as_remediation_evidence_only"
+    },
+    "source_external_review": {
+      "role": "cross_provider_adversarial_reviewer",
+      "model_label": "deepseek-v4-pro",
+      "identity_status": "maintainer_configured_unverified",
+      "status": "completed_and_strictly_validated",
+      "result_path": ".private/deepseek-r3-results.jsonl",
+      "result_sha256": "de4f1310e40fb45851e12728d07ea25a73033ddb647a9b7ca11b202543a10e74",
+      "result_count": 15,
+      "decisions": {"pass": 15, "revise": 0, "block": 0},
+      "low_severity_findings": 2
+    },
+    "external_review": {
+      "role": "cross_provider_adversarial_reviewer",
+      "model_label": "deepseek-v4-pro",
+      "identity_status": "maintainer_configured_unverified",
+      "status": "merged_and_strictly_validated_without_api_calls",
+      "result_path": ".private/deepseek-r4-results.jsonl",
+      "manifest_path": ".private/deepseek-r4-results.manifest.json",
+      "result_file_sha256": "9021684475ced7202c23e0c0534c63412edc92dcb77d2b2bb038c92367bf0f22",
+      "result_count": 15,
+      "reused_hash_compatible_results": 11,
+      "new_changed_item_results": 4,
+      "discarded_stale_results": 4,
+      "decisions": {"pass": 15, "revise": 0, "block": 0},
+      "findings": {"low": 1, "info": 1}
+    },
+    "current_review_status": "completed_all_15_pass_owner_signoff_accepted",
+    "openai_seed_plan": {
+      "source_run_id": "20260813T064923280049Z-2d2b1aad3c0a",
+      "stages": ["mechanical_screen", "semantic_review", "risk_review"],
+      "eligible_item_stage_reviews": 45,
+      "carried_hash_compatible_reviews": 33,
+      "skipped_hash_incompatible_reviews": 12,
+      "items_requiring_new_primary_reviews": 4,
+      "minimum_new_primary_calls": 12,
+      "adjudication": "only_if_required_by_new_combined_results"
+    },
+    "source_formal_audit": {
+      "run_id": "20260813T064923280049Z-2d2b1aad3c0a",
+      "status": "completed",
+      "input_sha256": "2d2b1aad3c0ab03266243bc4f9c6647885f6ad8fa3c888cb45100cd68e399b54",
+      "config_sha256": "916041f22781776ed24ae5f4052699bb5000829670e82a63a1c068de7b6ffe9d",
+      "completed_items": 15,
+      "failed_items": 0,
+      "decisions": {"pass": 11, "revise": 4, "block": 0},
+      "adjudicated_items": 11,
+      "adjudication_pending_items": 0,
+      "models": {
+        "mechanical_screen": "gpt-5.4-2026-03-05",
+        "semantic_review": "gpt-5.6-terra",
+        "risk_review": "gpt-5.6-sol",
+        "adjudication": "gpt-5.6-sol"
+      },
+      "usage": {
+        "api_calls": 63,
+        "tokens": 588371,
+        "cost_usd": "3.0859485",
+        "unverified_calls": 0
+      }
+    },
+    "formal_audit": {
+      "run_id": "20260813T075034450135Z-6a14a10c7785",
+      "status": "completed",
+      "input_sha256": "6a14a10c77856e6878365449d7ed12421a43b3a326cc11d0a58040c0f803f7bc",
+      "public_attestation_path": "reports/ai_review_attestation.json",
+      "public_attestation_sha256": "72c9ceb720818f876b8f7e665bdf723f630a1feb85a9dc0747a48a8f4f8d494d",
+      "private_evidence_availability": "maintainer_local_only_not_distributed",
+      "run_manifest_path": ".private/ai_review/release-candidate/v0.2.0-rc.1-remediation-4/openai-review/20260813T075034450135Z-6a14a10c7785/run_manifest.json",
+      "run_manifest_sha256": "ffe730cc55bf93f047ebac66168424a8a50c31f39baf33fbe19e642f4845d79e",
+      "summary_path": ".private/ai_review/release-candidate/v0.2.0-rc.1-remediation-4/openai-review/20260813T075034450135Z-6a14a10c7785/summary.jsonl",
+      "summary_sha256": "6493a1a36d0829e5779311d422b223f736a3e3a0c1dc19e562bef8d87dea64d6",
+      "scope_correction_manifest_path": ".private/ai_review/release-candidate/v0.2.0-rc.1-remediation-4/openai-review/20260813T075034450135Z-6a14a10c7785/scope_correction_manifest.json",
+      "scope_correction_manifest_sha256": "09317cb5aeb20bfdde70d94773e91d324093d622189ca259ef45c08ed3af80c9",
+      "completed_items": 15,
+      "failed_items": 0,
+      "adjudication_pending_items": 0,
+      "decisions": {"pass": 15, "revise": 0, "block": 0},
+      "changed_items": 4,
+      "new_primary_stage_results": 12,
+      "new_necessary_adjudications": 4,
+      "carried_hash_compatible_primary_reviews": 33,
+      "carried_exact_context_prior_adjudications": 7,
+      "usage": {
+        "api_calls": 23,
+        "tokens": 238479,
+        "cost_usd": "1.4106930",
+        "unverified_calls": 1
+      },
+      "scope_exception": {
+        "persisted_out_of_scope_adjudications": 3,
+        "interrupted_unverified_reservations": 1,
+        "out_of_scope_results_excluded_from_final_summary": true
+      }
+    },
+    "model_api_calls_made": 23,
+    "external_transfer_authorized": true
+  },
+  "required_human_decisions": [],
+  "pending_evaluation": [],
+  "deferred_optional_evaluation": [
     "frozen_40_review_challenge_set_requires_two_independent_annotations"
   ],
   "validation_commands": [
+    "python tools/audit_third_party_assets.py --check-installed",
     "python -m unittest discover -s tests -q",
     "cd dashboard && pnpm lint",
     "cd dashboard && pnpm test"

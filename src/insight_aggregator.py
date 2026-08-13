@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 import statistics
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
@@ -137,11 +138,36 @@ CATEGORY_NAMES = {
     "advertising_selling_point": "广告卖点",
     "content_topic": "内容选题",
     "customer_service_faq": "客服FAQ",
+    "packaging_improvement": "包装改进",
+    "fulfillment_improvement": "履约改进",
 }
+
+# Keep the original cross-category coverage contract stable. Packaging and
+# fulfillment candidates remain eligible by score, but adding their explicit
+# labels must not reorder or displace the existing release-candidate set.
+CORE_COVERAGE_CATEGORIES = (
+    "product_improvement",
+    "listing_optimization",
+    "advertising_selling_point",
+    "content_topic",
+    "customer_service_faq",
+)
 
 VALID_SCOPE_FIELDS = {"product_id", "product_subcategory"}
 UNKNOWN_SCOPE_VALUES = {"", "unknown", "null", "none"}
 DEFAULT_SMALL_SAMPLE_THRESHOLD = 30
+
+SCENT_EVIDENCE_TERMS = {
+    "aroma", "aromas", "aromatic", "fragancia", "fragancias", "fragrance",
+    "fragrances", "huele", "odor", "odors", "odour", "odours", "oler",
+    "olor", "olores", "perfume", "perfumes", "scent", "scents", "smell",
+    "smelled", "smelling", "smells",
+}
+TASTE_ONLY_CONFLICT_TERMS = {
+    "deliciosa", "delicioso", "delicious", "flavor", "flavors", "flavour",
+    "flavours", "sabor", "sabores", "sabrosa", "sabroso", "taste", "tasted",
+    "tastes", "tasting",
+}
 
 
 def _normalized_scope_value(value: Any) -> str:
@@ -360,17 +386,93 @@ def _first_evidence(value: Any) -> str:
     return ""
 
 
-def _selected_evidence(bucket: StatBucket, limit: int = 3) -> list[dict[str, Any]]:
+def _aspect_evidence_quote(aspect: str, evidence: Any) -> str | None:
+    """Select aspect-relevant evidence or reject a narrow explicit conflict."""
+
+    if isinstance(evidence, str):
+        quotes = [evidence] if evidence else []
+    elif isinstance(evidence, list):
+        quotes = [quote for quote in evidence if isinstance(quote, str) and quote]
+    else:
+        quotes = []
+    if aspect != "product.sensory.scent":
+        return quotes[0] if quotes else ""
+    tokenized = [
+        set(re.findall(r"[^\W_]+", quote.casefold(), flags=re.UNICODE))
+        for quote in quotes
+    ]
+    for quote, words in zip(quotes, tokenized):
+        if words & SCENT_EVIDENCE_TERMS:
+            return quote
+    if any(words & TASTE_ONLY_CONFLICT_TERMS for words in tokenized):
+        return None
+    return quotes[0] if quotes else ""
+
+
+GENERAL_EFFECT_EVIDENCE_TERMS = {
+    "effect", "effective", "efectivo", "efectiva", "funcion", "funciona",
+    "función", "help", "helped", "helps", "result", "resultado", "resultados",
+    "work", "worked", "working", "works",
+}
+POSITIVE_SCENT_TERMS = {
+    "agradable", "amazing", "bien", "bueno", "encanta", "favorite", "fresh",
+    "good", "great", "gusta", "incredible", "increíble", "love", "loved",
+    "nice", "pleasant",
+}
+INSUFFICIENT_EFFECT_RETENTION_CONFLICTS = (
+    "hold your hair in place",
+    "stay in place",
+)
+DURABILITY_EVIDENCE_CONFLICTS = {
+    "cheaply made",
+}
+
+
+def _representative_evidence_allowed(
+    family: str | None, code: str | None, item: EvidenceItem
+) -> bool:
+    words = set(re.findall(r"[^\W_]+", item.quote.casefold(), flags=re.UNICODE))
+    if family == "positive_aspects" and code == "product.efficacy.general_effect":
+        return bool(words & GENERAL_EFFECT_EVIDENCE_TERMS)
+    if family == "positive_aspects" and code == "product.sensory.scent":
+        return bool(words & SCENT_EVIDENCE_TERMS) and bool(words & POSITIVE_SCENT_TERMS)
+    if family == "negative_aspects" and code == "product.usability.ease_of_use":
+        missing_brush = bool(words & {"brush", "cepillo"}) and bool(
+            words & {"missing", "no", "sin"}
+        )
+        return not missing_brush
+    if family == "low_star_issues" and code == "insufficient_effect":
+        normalized_quote = item.quote.casefold()
+        return not any(
+            phrase in normalized_quote
+            for phrase in INSUFFICIENT_EFFECT_RETENTION_CONFLICTS
+        )
+    if family == "negative_aspects" and code == "product.quality.durability_breakage":
+        return item.quote.strip().casefold() not in DURABILITY_EVIDENCE_CONFLICTS
+    return True
+
+
+def _selected_evidence(
+    bucket: StatBucket,
+    limit: int = 3,
+    *,
+    family: str | None = None,
+    code: str | None = None,
+) -> list[dict[str, Any]]:
+    eligible = [
+        item for item in bucket.evidence
+        if _representative_evidence_allowed(family, code, item)
+    ]
     selected: list[EvidenceItem] = []
     used_languages: set[str] = set()
-    for item in bucket.evidence:
+    for item in eligible:
         if item.language not in used_languages:
             selected.append(item)
             used_languages.add(item.language)
         if len(selected) >= limit:
             break
     if len(selected) < limit:
-        for item in bucket.evidence:
+        for item in eligible:
             if item in selected:
                 continue
             selected.append(item)
@@ -423,12 +525,17 @@ def build_groups(
         analysis = record["analysis"]
         stars = int(record["source"]["stars"])
         for item in analysis["aspects"]:
+            aspect_evidence = _aspect_evidence_quote(
+                item["aspect"], item["evidence"]
+            )
+            if aspect_evidence is None:
+                continue
             _register(
                 groups,
                 "aspects",
                 item["aspect"],
                 record,
-                item["evidence"],
+                aspect_evidence,
                 item["polarity"],
             )
             if item["polarity"] == "positive":
@@ -437,7 +544,7 @@ def build_groups(
                     "positive_aspects",
                     item["aspect"],
                     record,
-                    item["evidence"],
+                    aspect_evidence,
                     item["polarity"],
                 )
             elif item["polarity"] in {"negative", "mixed"}:
@@ -446,7 +553,7 @@ def build_groups(
                     "negative_aspects",
                     item["aspect"],
                     record,
-                    item["evidence"],
+                    aspect_evidence,
                     item["polarity"],
                 )
         for item in analysis["issue_types"]:
@@ -644,24 +751,64 @@ def _candidate(
     bucket: StatBucket,
     min_support: int,
 ) -> dict[str, Any] | None:
-    evidence = _selected_evidence(bucket)
+    evidence = _selected_evidence(bucket, family=family, code=code)
     if bucket.support_count < min_support or len(evidence) < 2:
         return None
+    if family == "speech_acts" and code == "repurchase_intent":
+        name = "复购行为与意向"
+    support_volume_tier = _confidence_grade(bucket, min_support)
+    support_volume_thresholds = {
+        "medium": max(8, min_support * 2),
+        "high": max(20, min_support * 4),
+    }
     if category == "product_improvement":
-        title = f"优先改善{name}相关痛点"
+        title = f"改善{name}相关痛点"
         product_action = (
-            f"按评论证据拆分“{name}”的规格、使用与履约失败路径，"
-            "将支持量最高的一项建立修复工单。"
+            f"基于支持评论梳理“{name}”的可验证表现，"
+            "将支持量最高且证据充分的一项建立调查工单；验证后再转为修复工单。"
         )
         marketing_action = "改进完成并验证前，不将该项作为强承诺卖点。"
-        content_topic = f"制作“{name}常见问题与正确使用方式”内容。"
+        content_topic = (
+            f"制作“{name}问题与排查说明”内容，仅采用已验证的产品信息。"
+        )
+        if code == "value.price_value":
+            content_topic = (
+                "先调查评论中的具体价格与价值关注点；仅在确认存在使用或信息缺口后，"
+                "再制作相应说明内容。"
+            )
+        elif family == "negative_aspects" and code == "product.efficacy.general_effect":
+            title = "调查“总体效果”下的异质结果信号"
+            product_action = (
+                "先按评论明确提及的结果类型与使用情境拆分支持评论；各子类达到证据要求后"
+                "分别建立调查工单，验证后再决定是否建立修复工单。"
+            )
+            content_topic = (
+                "完成结果类型分层与产品事实核验后，再决定是否制作对应的具体问题说明；"
+                "不把异质评论合并为单一效果结论。"
+            )
+        elif code == "product.quality.durability_breakage":
+            content_topic = (
+                "先验证具体失效模式、涉及部件与产品事实；确认存在可说明的信息缺口后，"
+                "再制作对应内容。"
+            )
+        elif family == "negative_aspects" and code == "product.sensory.scent":
+            product_action = (
+                "先把评论分为产品气味、使用情境与页面预期三类待验证假设；仅将验证后的"
+                "产品气味子类转交产品调查，页面预期子类另交详情页负责人核验。"
+            )
+            content_topic = (
+                "仅在分类与核验确认存在使用或页面信息缺口后，再制作对应说明内容。"
+            )
     elif category == "listing_optimization":
         title = f"在详情页前置说明{name}"
         product_action = "逐项核对实物、规格与页面承诺，并记录不一致字段。"
         marketing_action = (
-            f"把已验证的“{name}”边界写入首屏图片或前两条卖点。"
+            f"核验后，把评论中反复出现的“{name}”边界写入首屏图片或前两条卖点。"
         )
-        content_topic = f"制作“购买前如何判断{name}”说明内容。"
+        content_topic = (
+            f"梳理“{name}”对应的预期结果、使用条件、时间范围与页面表述；"
+            "核验后再制作购买前说明内容。"
+        )
     elif category == "advertising_selling_point":
         title = f"验证后强化{name}卖点"
         product_action = (
@@ -671,17 +818,117 @@ def _candidate(
             f"从引用评论提炼一条可核验的“{name}”表达，并先做小流量素材测试。"
         )
         content_topic = f"使用可追溯评论制作“{name}”案例，并标注适用条件。"
+        if family == "positive_aspects" and code == "product.efficacy.general_effect":
+            title = "验证“有效或有帮助”的个体体验表达"
+            product_action = (
+                "对评论中明确提及有效、有帮助或能发挥作用的个体体验做批次抽查，"
+                "记录稳定性与异常反馈后再决定是否用于传播。"
+            )
+            marketing_action = (
+                "仅从引用评论提炼“有效或有帮助”的个体体验表达，并先做小流量素材测试；"
+                "不扩展为总体效果承诺。"
+            )
+            content_topic = (
+                "使用可追溯评论制作“有效或有帮助的个体体验”案例，"
+                "不添加原评论未提及的适用条件。"
+            )
+        elif family == "positive_aspects" and code == "value.price_value":
+            product_action = (
+                "广告测试前，先书面核验当前在售产品及版本、当前价格与拟声明的适用条件；"
+                "历史评论仅作为方向性证据。"
+            )
+            marketing_action = (
+                "先完成当前在售产品及版本、当前价格与适用条件核验，并将相关评论明确标注为"
+                "2015—2019年历史证据；核验后的小流量测试仅衡量创意表现，不验证声明真实性。"
+            )
+            content_topic = (
+                "仅在当前产品与价格核验完成后，使用可追溯的历史评论制作价格性价比案例，"
+                "并保留原评论中的限定条件。"
+            )
     elif category == "customer_service_faq":
         title = f"建立{name}客服FAQ"
-        product_action = "将高频咨询和失败原因反馈给产品与运营团队。"
-        marketing_action = "在购买前提示适用条件、处理方式和服务边界。"
+        product_action = (
+            f"将{name}相关评论反馈给客服与履约运营团队，并将潜在原因明确标为待验证假设。"
+        )
+        marketing_action = (
+            f"说明{name}的响应步骤和升级渠道；更广泛的购买条件与服务边界仅作为待验证假设。"
+        )
         content_topic = f"制作“{name}处理步骤”FAQ内容。"
+    elif category == "packaging_improvement":
+        title = f"调查{name}异常"
+        product_action = (
+            f"先将“{name}”事件分类：包装设计或密封假设交包装与运营负责人建立调查工单，"
+            "仓储、运输或履约假设交物流与运营负责人建立调查工单；各路径验证后再决定是否建立修复工单。"
+        )
+        marketing_action = "完成包装与到货验证前，不将包装保护作为强承诺卖点。"
+        content_topic = (
+            f"仅在事件分类与调查确认存在可说明的信息缺口后，再制作“{name}检查与异常处理”内容。"
+        )
+        operations_action = product_action
+    elif category == "fulfillment_improvement":
+        title = f"改善{name}相关履约问题"
+        product_action = (
+            f"将库存、仓储、承运与跟踪列为“{name}”的待验证潜在原因，"
+            "先建立调查工单；完成事件分类与验证后，再由物流与运营负责人决定是否建立修复工单。"
+        )
+        marketing_action = "在履约链路完成验证前，不承诺未经证实的配送表现。"
+        content_topic = (
+            f"仅在事件分类与调查确认存在跟踪或支持信息缺口后，再制作“{name}进度查询与异常处理”内容。"
+        )
+        operations_action = product_action
     else:
         title = f"围绕{name}建设内容专题"
         product_action = "把当前信号加入访谈提纲，用目标用户样本验证需求。"
         marketing_action = f"分别为英语与西语样本制作“{name}”素材并记录测试结果。"
         content_topic = f"制作“{name}场景指南与案例”系列。"
-    return {
+    if family == "speech_acts" and code == "repurchase_intent":
+        possible_cause = (
+            "评论中的复购表述可能反映产品体验、价格或品类偏好与再次购买意愿"
+            "之间的关联；评论数据只能提示方向，不能证明因果。"
+        )
+        product_action = "把历史评论中的复购表述加入访谈提纲，用目标用户样本验证需求。"
+    elif family == "low_star_issues" and code == "late_not_delivered":
+        possible_cause = (
+            "评论中的延迟或未送达可能与库存、仓储、承运、跟踪信息或履约协同"
+            "有关；评论数据不能定位具体责任环节，也不能证明因果。"
+        )
+    elif category == "packaging_improvement":
+        possible_cause = (
+            f"所选分层样本中有评论提及“{name}”，可能反映包装设计、密封、仓储或运输保护"
+            "环节存在差异；评论数据只能提示方向，不能证明因果。"
+        )
+    elif family == "positive_aspects" and code == "product.sensory.scent":
+        possible_cause = (
+            f"所选分层样本中有{bucket.support_count}条评论正向提及气味；"
+            "这些关联仅支持进一步验证，不能确定评价形成的原因。"
+        )
+    elif family == "positive_aspects" and code == "product.efficacy.general_effect":
+        possible_cause = (
+            f"所选分层样本中有{bucket.support_count}条评论正向提及总体效果；"
+            "现有评论数据不能确定评价形成的原因或证明因果。"
+        )
+    elif family == "negative_aspects" and code == "product.sensory.scent":
+        possible_cause = (
+            f"所选分层样本中有{bucket.support_count}条评论负向提及气味；"
+            "产品气味、使用情境与页面预期是三类需要区分且可能重叠的待验证假设，"
+            "评论数据不能确定具体原因或责任路径。"
+        )
+    elif family == "negative_aspects" and code == "product.efficacy.general_effect":
+        possible_cause = (
+            f"所选分层样本中有{bucket.support_count}条评论被归入“总体效果”，"
+            "但其中结果类型与使用情境并不相同；该汇总只表示异质信号，不能证明单一原因。"
+        )
+    elif category == "fulfillment_improvement":
+        possible_cause = (
+            f"所选分层样本中有评论提及“{name}”，可能反映库存、仓储、承运、跟踪信息或履约"
+            "协同环节存在差异；评论数据只能提示方向，不能证明因果。"
+        )
+    else:
+        possible_cause = (
+            f"所选分层样本中有评论提及“{name}”，可能反映产品表现、使用方式或页面预期"
+            "之间存在差异；评论数据只能提示方向，不能证明因果。"
+        )
+    result = {
         "insight_id": f"{family}:{code}",
         "category": category,
         "category_name": CATEGORY_NAMES[category],
@@ -694,28 +941,31 @@ def _candidate(
         },
         "data_evidence": {
             "support_reviews": bucket.support_count,
-            "mean_model_confidence": bucket.mean_confidence,
             "source_review_ids": sorted(bucket.review_ids),
         },
         "representative_quotes": evidence,
-        "possible_cause": (
-            f"评论集中提及“{name}”，可能反映产品表现、使用方式或页面预期"
-            "之间存在差异；评论数据只能提示方向，不能证明因果。"
-        ),
+        "possible_cause": possible_cause,
         "product_recommendation": product_action,
         "marketing_recommendation": marketing_action,
         "content_topic": content_topic,
         "sample_size_and_confidence": {
             "support_reviews": bucket.support_count,
             "evidence_quotes": len(evidence),
-            "grade": _confidence_grade(bucket, min_support),
+            "grade": f"{support_volume_tier}_support_volume",
+            "grade_semantics": "deterministic_support_volume_only",
+            "configured_min_support": min_support,
+            "thresholds": support_volume_thresholds,
         },
+        "support_volume_tier": support_volume_tier,
         "_score": (
             bucket.support_count * 10
             + min(bucket.languages["en"], bucket.languages["es"]) * 2
             + round(bucket.mean_confidence * 5, 2)
         ),
     }
+    if category in {"packaging_improvement", "fulfillment_improvement"}:
+        result["operations_recommendation"] = operations_action
+    return result
 
 
 def generate_insights(
@@ -776,6 +1026,10 @@ def generate_insights(
                 # behavior table, but are too broad to become recommendations.
                 continue
             actual_category = category
+            if family == "negative_aspects" and code.startswith("packaging."):
+                actual_category = "packaging_improvement"
+            elif family == "negative_aspects" and code.startswith("fulfillment."):
+                actual_category = "fulfillment_improvement"
             if code in {
                 "request_help",
                 "return_refund_intent",
@@ -798,7 +1052,7 @@ def generate_insights(
     candidates.sort(key=lambda item: (-item["_score"], item["insight_id"]))
     selected: list[dict[str, Any]] = []
     selected_ids: set[str] = set()
-    for category in CATEGORY_NAMES:
+    for category in CORE_COVERAGE_CATEGORIES:
         match = next(
             (
                 item
@@ -866,6 +1120,14 @@ def aggregate_records(
             ),
             "content_topic": ("content", "content_topic"),
             "customer_service_faq": ("faq", "content_topic"),
+            "packaging_improvement": (
+                "packaging",
+                "operations_recommendation",
+            ),
+            "fulfillment_improvement": (
+                "fulfillment",
+                "operations_recommendation",
+            ),
         }
         action_type, action_field = action_fields[insight["category"]]
         support_count = insight["data_evidence"]["support_reviews"]
@@ -882,6 +1144,18 @@ def aggregate_records(
             ],
             "warning": sampling["warning"],
         }
+        support_rate = (
+            round(support_count / len(scoped_records), 4)
+            if scoped_records
+            else 0
+        )
+        insight["support_rate_audit"] = {
+            "numerator": support_count,
+            "denominator": len(scoped_records),
+            "denominator_semantics": sampling["denominator"],
+            "calculation": "support_count / selected_records",
+            "value": support_rate,
+        }
         insight.update(
             {
                 "scope": {
@@ -891,17 +1165,13 @@ def aggregate_records(
                 },
                 "finding": insight["title"],
                 "support_count": support_count,
-                "support_rate": (
-                    round(support_count / len(scoped_records), 4)
-                    if scoped_records
-                    else 0
-                ),
+                "support_rate": support_rate,
                 "representative_review_ids": insight["data_evidence"][
                     "source_review_ids"
                 ],
-                "confidence_or_evidence_grade": insight[
-                    "sample_size_and_confidence"
-                ]["grade"],
+                "confidence_or_evidence_grade": (
+                    f"{insight['support_volume_tier']}_support_volume"
+                ),
                 "recommended_action": insight[action_field],
                 "action_type": action_type,
                 "limitations": [
@@ -1049,7 +1319,8 @@ def markdown_report(report: dict[str, Any], *, title: str) -> str:
                 (
                     "- 数据证据："
                     f"{evidence['support_reviews']} 条独立评论；"
-                    f"平均模型置信度 {evidence['mean_model_confidence']}"
+                    f"支持率 {item['support_rate']}（分母："
+                    f"{item['support_rate_audit']['denominator']} 条所选独立评论）"
                 ),
                 "- 典型原话：",
                 "",
@@ -1068,7 +1339,7 @@ def markdown_report(report: dict[str, Any], *, title: str) -> str:
                 f"- 营销建议：{item['marketing_recommendation']}",
                 f"- 内容选题：{item['content_topic']}",
                 (
-                    "- 样本量与可信度："
+                    "- 样本量与支持量级："
                     f"{item['sample_size_and_confidence']}"
                 ),
                 "",

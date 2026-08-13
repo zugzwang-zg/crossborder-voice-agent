@@ -17,6 +17,9 @@ test("public demo bundle preserves sample traceability", async () => {
   const reviewIds = new Set(payload.records.map((record) => record.id));
   let insightsWithEvidence = 0;
   for (const insight of payload.insights) {
+    assert.equal("mean_model_confidence" in insight.data_evidence, false);
+    assert.equal(insight.support_volume_tier, "high");
+    assert.equal(insight.confidence_or_evidence_grade, "high_support_volume");
     if (insight.data_evidence.source_review_ids.length) insightsWithEvidence += 1;
     for (const reviewId of insight.data_evidence.source_review_ids) {
       assert.ok(reviewIds.has(reviewId), `${reviewId} must resolve to a source review`);
