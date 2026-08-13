@@ -35,8 +35,13 @@ market.
 
 ## Upload, retention and third parties
 
-The current public Dashboard has no file-upload control and calls no model API.
-It fetches packaged local JSON data. Reviewer feedback is stored separately in
+The public free-trial page accepts CSV, TSV and XLSX files and calls no model
+API. File bytes and parsed rows stay in the current browser, are not sent to the
+site server, and are cleared when the page is closed or reset. Result downloads
+are also created locally. The fast trial uses transparent keyword and rating
+rules for triage and is separate from the formal model-analysis pipeline.
+
+The full project demo fetches packaged local JSON data. Reviewer feedback is stored separately in
 the browser under `crossborder-voice.insight-feedback.v1`; clearing site storage
 removes that browser copy. Export occurs only when the reviewer chooses
 “导出反馈”. The Python feedback store appends to a caller-selected local JSONL

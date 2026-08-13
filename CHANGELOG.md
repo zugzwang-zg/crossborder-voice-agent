@@ -8,11 +8,15 @@ All notable changes will be documented in this file.
 
 - Portfolio-focused Chinese and English landing pages, a current product brief,
   solution-landscape comparison, product decision log and project retrospective.
+- A no-sign-up, browser-only CSV/TSV/XLSX trial that validates the review
+  template, analyzes up to 500 rows, summarizes themes and exports results.
 
 ### Changed
 
 - Reframed the repository overview around target users, product choices,
   operating actions, verified outcomes and claim boundaries.
+- Rewrote the public dashboard navigation, summaries, limitations and action
+  workflow in plain language for nontechnical ecommerce operators.
 - Replaced the stale top-level project brief and corrected the documented
   automated regression count to 118 Python tests plus 4 Dashboard tests.
 

@@ -11,7 +11,7 @@
 
 CrossBorder Voice is a bilingual consumer-insight prototype for cross-border ecommerce product, content, and customer-service operations. It turns reviews into filterable pain points, value propositions, and action candidates while preserving sample scope, support counts, and source evidence for human review.
 
-[Live dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
+[Free upload trial](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
 [Product brief](docs/PRODUCT_BRIEF.md) ·
 [Insight report](reports/consumer_insights.md) ·
 [Decision log](docs/PRODUCT_DECISIONS.md) ·
@@ -61,15 +61,15 @@ Case-study materials:
 | v0.2.0 AI pre-review | 15 / 15 pass | Multi-role AI pre-review, not independent human annotation |
 | Automated regression | 118 Python + 4 dashboard tests | Core pipeline, release controls, audit, and UI behavior |
 
-## Try it in 30 seconds
+## Try it free in 30 seconds
 
-Open the [public dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site):
+Open the [public site](https://crossborder-voice-86182.reidmozzie.chatgpt.site):
 
-1. narrow the sample by language, rating, or sentiment;
-2. open an AI Insight and inspect its support volume and limits;
-3. return to the linked review excerpts before accepting an action.
+1. download the CSV template and paste English or Spanish reviews;
+2. upload a CSV, TSV, or XLSX file to see common themes and suggested next steps;
+3. download the annotated result or continue into the full project demo.
 
-The public site uses 10 safe demo records and never calls a paid model API.
+Files are read only in the current browser and are not uploaded to a server. The free trial supports up to 500 rows or 5MB, does not call a paid model API, and is intended for triage rather than final decisions.
 
 ## From reviews to actions
 

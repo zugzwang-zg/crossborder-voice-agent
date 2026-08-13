@@ -219,6 +219,19 @@
     },
     {
       "ecosystem": "npm",
+      "name": "read-excel-file",
+      "license": "MIT",
+      "source_url": "https://www.npmjs.com/package/read-excel-file",
+      "declarations": [
+        {
+          "manifest": "dashboard/package.json",
+          "scope": "runtime",
+          "specifier": "9.3.10"
+        }
+      ]
+    },
+    {
+      "ecosystem": "npm",
       "name": "react-server-dom-webpack",
       "license": "MIT",
       "source_url": "https://www.npmjs.com/package/react-server-dom-webpack",
@@ -312,7 +325,7 @@
   "lockfiles": [
     {
       "path": "dashboard/pnpm-lock.yaml",
-      "sha256": "224a36785db1e6a05157a54467aa4c3ac8d560b2549dfc2d2679bd5667f67de7"
+      "sha256": "6df633429e12606f108f4f46eae13e15332aba711e3ada4d7097d7395b1efe28"
     }
   ],
   "installed_node_review": {
@@ -354,10 +367,11 @@
       "path_patterns": [
         "assets/**",
         "dashboard/public/favicon.svg",
+        "dashboard/public/og.png",
         "dashboard/public/social-preview.png",
         "label_dictionary.xlsx"
       ],
-      "origin": "Project-created presentation, screenshots and demo script.",
+      "origin": "Project-created presentation, screenshots and demo script; the free-trial social preview was created with AI image-generation assistance and reviewed by the maintainer.",
       "rights_status": "project_created",
       "license_or_terms": "Apache-2.0",
       "redistribution": "May be redistributed with the repository; no third-party stock media is declared."

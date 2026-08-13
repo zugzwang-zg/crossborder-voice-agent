@@ -48,12 +48,13 @@ test(
   },
 );
 
-test("dashboard implements scope and analysis filters plus five views", async () => {
+test("dashboard implements a local-file free trial plus six plain-language views", async () => {
   const page = await readFile(new URL("app/page.tsx", root), "utf8");
+  const trial = await readFile(new URL("app/TrialPage.tsx", root), "utf8");
   for (const filter of ["product", "subcategory", "language", "stars", "sentiment", "aspect", "issue", "scenario"]) {
     assert.match(page, new RegExp(`filters\\.${filter}`));
   }
-  for (const view of ["overview", "pain", "motivation", "language", "insights"]) {
+  for (const view of ["trial", "overview", "pain", "motivation", "language", "insights"]) {
     assert.match(page, new RegExp(`key: "${view}"`));
   }
   assert.match(page, /ReviewDrawer/);
@@ -66,10 +67,10 @@ test("dashboard implements scope and analysis filters plus five views", async ()
   assert.match(page, /HighlightText/);
   assert.match(page, /loadAttempt/);
   assert.match(page, /data_evidence\.source_review_ids/);
-  assert.match(page, /评论证据库/);
+  assert.match(page, /查看评论原文/);
   assert.match(page, /dashboard-data\.demo\.json/);
-  assert.match(page, /不生成虚假的单品洞察/);
-  assert.match(page, /分层样本，不代表真实市场占比/);
+  assert.match(page, /演示数据没有商品名称/);
+  assert.match(page, /结果只说明这批评论，不代表整个市场/);
   assert.match(page, /scope-decision-card/);
   for (const status of ["new", "needs_validation", "accepted", "rejected", "resolved"]) {
     assert.match(page, new RegExp(`${status}:`));
@@ -79,11 +80,19 @@ test("dashboard implements scope and analysis filters plus five views", async ()
   assert.match(page, /证据不足/);
   assert.match(page, /建议无效/);
   assert.match(page, /导出反馈/);
-  assert.match(page, /人工反馈独立保存/);
+  assert.match(page, /处理记录单独保存在当前浏览器/);
   assert.match(page, /crossborder-voice\.insight-comparison\.v1/);
   assert.match(page, /洞察版本对比/);
   assert.match(page, /新增、消失与支持量变化/);
-  assert.match(page, /未校准，不是正确概率/);
+  assert.match(page, /数量表示“被提到多少次”/);
+  assert.match(trial, /read-excel-file\/browser/);
+  assert.match(trial, /文件只在当前浏览器中读取/);
+  assert.match(trial, /CSV、TSV 和 XLSX/);
+  assert.match(trial, /MAX_ROWS = 500/);
+  assert.match(trial, /MAX_FILE_BYTES = 5 \* 1024 \* 1024/);
+  assert.match(trial, /下载 CSV 模板/);
+  assert.match(trial, /下载分析结果/);
+  assert.match(trial, /没有可分析的评论/);
 });
 
 test("production HTML renders the branded dashboard shell", async () => {
@@ -97,7 +106,7 @@ test("production HTML renders the branded dashboard shell", async () => {
   );
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Crossborder Voice/);
-  assert.match(html, /跨境电商评论洞察台/);
+  assert.match(html, /CrossBorder Voice/);
+  assert.match(html, /免费评论表格分析/);
   assert.doesNotMatch(html, /codex-preview/);
 });

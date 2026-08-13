@@ -11,7 +11,7 @@
 
 CrossBorder Voice 是一个面向跨境电商产品、内容与客服运营的双语消费者洞察原型。它不止判断正负面，而是把评论整理为可筛选的痛点、卖点和行动候选，并保留支持量、样本范围与原文证据，方便运营人员复核后再决策。
 
-[在线体验](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
+[免费上传试用](https://crossborder-voice-86182.reidmozzie.chatgpt.site) ·
 [产品简报](docs/PRODUCT_BRIEF.md) ·
 [运营洞察报告](reports/consumer_insights.md) ·
 [产品决策日志](docs/PRODUCT_DECISIONS.md) ·
@@ -61,15 +61,15 @@ CrossBorder Voice 是一个面向跨境电商产品、内容与客服运营的�
 | v0.2.0 AI 预评审 | 15 / 15 pass | 多角色独立 AI 预评审；不能替代独立人类标注，[查看公开证明](reports/ai_review_attestation.json) |
 | 自动化回归 | 118 Python + 4 Dashboard | 核心链路、发布清单、审计与 UI 行为测试 |
 
-## 30 秒在线体验
+## 30 秒免费试用
 
-打开[公开 Dashboard](https://crossborder-voice-86182.reidmozzie.chatgpt.site)：
+打开[公开网页](https://crossborder-voice-86182.reidmozzie.chatgpt.site)，可以直接：
 
-1. 在总览页按语言、星级和情感缩小范围；
-2. 进入“AI 洞察报告”，选择一条行动候选；
-3. 打开右侧证据，核对支持评论、原文片段和适用限制。
+1. 下载 CSV 模板并粘贴自己的英语/西班牙语评论；
+2. 上传 CSV、TSV 或 XLSX 表格，自动查看高频问题、反馈方向和下一步建议；
+3. 下载带快速判断和主题的分析结果，或继续浏览完整项目演示。
 
-网页默认使用 10 条安全演示样本，不调用付费模型 API。完整演示路径见[五分钟演示脚本](docs/DEMO_SCRIPT.md)。
+文件只在当前浏览器中读取，不上传服务器，也不调用付费模型 API。单次支持 500 行、5MB；快速结果用于初筛，仍需人工复核。完整项目演示路径见[五分钟演示脚本](docs/DEMO_SCRIPT.md)。
 
 ## 从评论到运营动作
 

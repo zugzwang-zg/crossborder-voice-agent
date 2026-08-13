@@ -26,6 +26,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import TrialPage from "./TrialPage";
 
 type CodedEvidence = { code: string; evidence: string };
 type Aspect = {
@@ -66,7 +67,7 @@ type Insight = {
   };
   data_evidence: {
     support_reviews: number;
-    mean_model_confidence: number;
+    mean_model_confidence?: number;
     source_review_ids: string[];
   };
   representative_quotes: {
@@ -124,7 +125,7 @@ type DashboardData = {
   records: Review[];
   insights: Insight[];
 };
-type PageKey = "overview" | "pain" | "motivation" | "language" | "insights";
+type PageKey = "trial" | "overview" | "pain" | "motivation" | "language" | "insights";
 type ReviewSort = "relevance" | "stars_desc" | "stars_asc" | "intensity" | "date_desc";
 type Filters = {
   product: string;
@@ -208,11 +209,12 @@ const PAGE_ITEMS: {
   subtitle: string;
   icon: typeof BarChart3;
 }[] = [
-  { key: "overview", number: "01", label: "市场总览", subtitle: "样本与情绪", icon: BarChart3 },
-  { key: "pain", number: "02", label: "产品痛点", subtitle: "问题与属性", icon: CircleDot },
-  { key: "motivation", number: "03", label: "购买动机", subtitle: "场景与卖点", icon: ShoppingBag },
-  { key: "language", number: "04", label: "跨语对照", subtitle: "英语 vs 西语", icon: Languages },
-  { key: "insights", number: "05", label: "AI 洞察报告", subtitle: "证据到行动", icon: Lightbulb },
+  { key: "trial", number: "01", label: "免费试用", subtitle: "上传表格自动分析", icon: Sparkles },
+  { key: "overview", number: "02", label: "整体情况", subtitle: "评分与反馈", icon: BarChart3 },
+  { key: "pain", number: "03", label: "顾客不满", subtitle: "问题排行", icon: CircleDot },
+  { key: "motivation", number: "04", label: "顾客喜欢", subtitle: "原因与场景", icon: ShoppingBag },
+  { key: "language", number: "05", label: "语言对比", subtitle: "英语与西语", icon: Languages },
+  { key: "insights", number: "06", label: "行动清单", subtitle: "原文到建议", icon: Lightbulb },
 ];
 
 const sentimentColors: Record<string, string> = {
@@ -372,9 +374,10 @@ function OverviewPage({
   const sentiments = countBy(records, (r) => r.sentiment);
   const negative = sentiments.find(([key]) => key === "negative")?.[1] || 0;
   const highRating = records.filter((r) => r.stars >= 4).length;
-  const avgConfidence = records.length
-    ? records.reduce((sum, r) => sum + r.confidence, 0) / records.length
-    : 0;
+  const topicCount = new Set(records.flatMap((r) => [
+    ...r.aspects.map((item) => item.code),
+    ...r.issues.map((item) => item.code),
+  ])).size;
   const evidence = [...records]
     .sort((a, b) => b.intensity - a.intensity || a.stars - b.stars)
     .slice(0, 3);
@@ -383,11 +386,11 @@ function OverviewPage({
 
   return (
     <section className="page-section">
-      <div className="page-kicker">MARKET PULSE / 市场信号</div>
+      <div className="page-kicker">整体情况</div>
       <div className="headline-block">
         <div>
-          <h1>均衡星级样本中，负向表达仍占 {pct(negative, records.length)}</h1>
-          <p>当前筛选覆盖 {records.length} 条英语 / 西语评论；评分与文本情绪分开计算，避免只用星级替代消费者真实表达。</p>
+          <h1>当前评论中，{pct(negative, records.length)} 表达了明显不满</h1>
+          <p>这里汇总 {records.length} 条英语和西班牙语评论。星级和评论文字分开看，避免把“打了几星”直接当成顾客真正想表达的内容。</p>
         </div>
         <div className="headline-stamp">
           <span>可追溯评论</span>
@@ -413,9 +416,9 @@ function OverviewPage({
           <small>基于文本判断</small>
         </div>
         <div>
-          <span>模型自报分数</span>
-          <strong>{(avgConfidence * 100).toFixed(1)}%</strong>
-          <small>未校准，不是正确概率</small>
+          <span>谈到的主题</span>
+          <strong>{topicCount}</strong>
+          <small>类产品与服务话题</small>
         </div>
       </div>
 
@@ -472,8 +475,8 @@ function OverviewPage({
 
         <article className="analysis-panel evidence-panel">
           <header>
-            <span>高强度信号</span>
-            <strong>从数字直达评论原文</strong>
+            <span>优先阅读</span>
+            <strong>先看表达最强烈的评论</strong>
           </header>
           <div className="evidence-stack">
             {evidence.map((review) => (
@@ -509,24 +512,24 @@ function PainPage({
 
   return (
     <section className="page-section">
-      <div className="page-kicker">FRICTION MAP / 产品摩擦点</div>
+      <div className="page-kicker">顾客不满</div>
       <div className="headline-block pain-headline">
         <div>
-          <h1>{leader ? `${labelOf(labels.issues, leader[0])} 是当前第一问题信号` : "当前筛选下未识别明确问题"}</h1>
-          <p>问题类型用于定位失败路径，产品属性用于解释问题落点；两者并列查看，避免把“哪里不好”和“为什么不好”混为一谈。</p>
+          <h1>{leader ? `顾客最常提到的问题是“${labelOf(labels.issues, leader[0])}”` : "当前没有集中出现的问题"}</h1>
+          <p>左侧告诉你顾客遇到了什么问题，右侧告诉你问题集中在哪些产品或服务环节。点击评论可以直接核对原文。</p>
         </div>
         <div className="headline-stamp signal">
           <span>问题提及</span>
           <strong>{issueMentions.length}</strong>
-          <small>可回溯证据片段</small>
+          <small>次问题提及</small>
         </div>
       </div>
 
       <div className="two-column">
         <article className="analysis-panel ranked-panel">
           <header>
-            <span>负向问题排行</span>
-            <strong>优先处理高频失败路径</strong>
+            <span>问题排行</span>
+            <strong>先看提及次数较多的问题</strong>
           </header>
           <ol className="rank-list">
             {issues.map(([code, count], index) => (
@@ -546,8 +549,8 @@ function PainPage({
 
         <article className="analysis-panel aspect-panel">
           <header>
-            <span>高频产品属性</span>
-            <strong>正负口碑在同一属性上分化</strong>
+            <span>顾客在评价什么</span>
+            <strong>同一方面可能既有好评也有差评</strong>
           </header>
           <div className="aspect-balance-list">
             {aspectCodes.map(([code]) => {
@@ -580,7 +583,7 @@ function PainPage({
         <header>
           <div>
             <span>典型负向评论</span>
-            <strong>消费者原话是问题定义的最后一跳</strong>
+            <strong>做决定前，先核对顾客原话</strong>
           </div>
           <small>{typical.length} 条高信息密度样本</small>
         </header>
@@ -625,11 +628,11 @@ function MotivationPage({
 
   return (
     <section className="page-section">
-      <div className="page-kicker">DEMAND SIGNAL / 需求信号</div>
+      <div className="page-kicker">顾客喜欢</div>
       <div className="headline-block motivation-headline">
         <div>
           <h1>{leader ? `高评分口碑最常落在“${labelOf(labels.aspects, leader[0])}”` : "当前筛选下高评分卖点信号有限"}</h1>
-          <p>购买原因解释“为什么下单”，使用场景说明“在何时何地使用”，高评分属性才是可验证的内容卖点。</p>
+          <p>购买原因说明顾客为什么下单，使用场景说明他们在什么情况下使用。只有得到高评分评论支持的内容，才值得继续验证为卖点。</p>
         </div>
         <div className="headline-stamp green">
           <span>高评分评论</span>
@@ -682,7 +685,7 @@ function MotivationPage({
         <article className="analysis-panel selling-panel">
           <header>
             <span>高评分卖点</span>
-            <strong>优先放大已有正向证据</strong>
+            <strong>先验证已有好评支持的亮点</strong>
           </header>
           <div className="selling-list">
             {highAspects.map(([code, count]) => (
@@ -701,8 +704,8 @@ function MotivationPage({
 
       <div className="translation-board">
         <div className="translation-title">
-          <span>可转化营销表达</span>
-          <h2>从统计信号，到可验证的内容命题</h2>
+          <span>内容方向</span>
+          <h2>把顾客原话整理成待验证的内容主题</h2>
         </div>
         <div className="translation-list">
           {marketing.map((insight, index) => (
@@ -767,11 +770,11 @@ function LanguagePage({
 
   return (
     <section className="page-section">
-      <div className="page-kicker">CROSS-LANGUAGE LENS / 跨语镜像</div>
+      <div className="page-kicker">语言对比</div>
       <div className="headline-block language-headline">
         <div>
-          <h1>英语与西语的关注对象接近，表达策略并不完全相同</h1>
-          <p>对比属性焦点、情绪强度与言语行为，可以把“翻译”升级为面向市场语境的本地化表达。</p>
+          <h1>英语和西班牙语评论关注点相近，表达方式不完全一样</h1>
+          <p>分别看两种语言常谈什么、抱怨什么、如何提出建议，帮助内容团队在保持同一产品事实的前提下调整表达顺序。</p>
         </div>
         <div className="language-key">
           <span><i className="key-en" /> EN {groups.en.length}</span>
@@ -787,13 +790,13 @@ function LanguagePage({
             <article key={language} className={`language-column ${language}`}>
               <header>
                 <div>
-                  <span>{language === "en" ? "ENGLISH MARKET" : "MERCADO ESPAÑOL"}</span>
+                  <span>{language === "en" ? "ENGLISH REVIEWS" : "RESEÑAS EN ESPAÑOL"}</span>
                   <strong>{language === "en" ? "英语评论" : "西语评论"}</strong>
                 </div>
                 <span className="language-badge">{language.toUpperCase()}</span>
               </header>
               <div className="intensity-stat">
-                <span>平均情绪强度</span>
+                <span>平均表达强烈程度</span>
                 <strong>{stats.avgIntensity.toFixed(2)}<small>/ 3</small></strong>
                 <div className="intensity-dots">
                   {[1, 2, 3].map((value) => (
@@ -837,8 +840,8 @@ function LanguagePage({
           <Languages size={22} />
           <div>
             <span>本地化启示</span>
-            <strong>保留同一产品事实，按市场常见表达方式重写证据顺序</strong>
-            <p>英语内容可先给结果和使用门槛；西语内容可增加体验过程与使用语境。该建议来自表达分布差异，不等同于对所有消费者的刻板假设。</p>
+            <strong>产品事实不变，根据不同语言评论调整信息顺序</strong>
+            <p>这些差异只来自当前评论样本，适合用来提出内容测试方向，不代表所有英语或西班牙语消费者。</p>
           </div>
         </div>
         <div className="bilingual-evidence">
@@ -995,21 +998,21 @@ function InsightsPage({
 
   return (
     <section className="page-section insights-page">
-      <div className="page-kicker">EVIDENCE BRIEF / 洞察简报</div>
+      <div className="page-kicker">行动清单</div>
       <div className="headline-block insight-headline">
         <div>
-          <h1>{scopeLabel}的证据、判断与下一步动作</h1>
-          <p>洞察始终显示分析范围、当前支持量与原文证据；商品筛选只在来源字段已知时开放。</p>
+          <h1>{scopeLabel}：顾客说了什么，下一步可以做什么</h1>
+          <p>每条建议都会同时显示参考了多少评论、适用于哪批数据和对应原文。数据中有明确商品名称时，才会开放商品筛选。</p>
         </div>
         <div className="trace-status">
           <Sparkles size={18} />
-          <div><strong>TRACE PASS</strong><span>0 条失联证据</span></div>
+          <div><strong>原文已连接</strong><span>每条建议都能返回评论</span></div>
         </div>
       </div>
 
       <article className={`scope-decision-card ${productScopeSelected ? "scoped" : "boundary"}`}>
         <div className="scope-decision-label">
-          <span>DECISION SCOPE</span>
+          <span>本次查看范围</span>
           <strong>{scopeLabel}</strong>
         </div>
         {issueLeader ? (
@@ -1036,7 +1039,7 @@ function InsightsPage({
 
       <section className="version-compare" aria-label="洞察版本对比">
         <header>
-          <div><span>VERSION DELTA</span><strong>洞察版本对比</strong></div>
+          <div><span>前后对比</span><strong>查看建议如何变化</strong></div>
           <button onClick={handleCaptureComparisonBaseline}><RotateCcw size={14} />将当前结果设为比较基线</button>
         </header>
         {comparisonBaseline ? (
@@ -1056,7 +1059,7 @@ function InsightsPage({
       <div className="insight-workbench">
         <aside className="insight-index">
           <div className="insight-index-head">
-            <span>洞察目录</span>
+            <span>建议目录</span>
             <strong>{visibleInsights.length} / {insights.length}</strong>
           </div>
           {visibleInsights.map(({ insight, matchedIds }, index) => (
@@ -1068,7 +1071,7 @@ function InsightsPage({
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <strong>{insight.title}</strong>
-                <small>{matchedIds.length} 条当前证据 · {STATUS_META[latestByInsight[insight.insight_id]?.status || "new"].short}</small>
+                <small>{matchedIds.length} 条当前评论 · {STATUS_META[latestByInsight[insight.insight_id]?.status || "new"].short}</small>
               </div>
               <ChevronRight size={15} />
             </button>
@@ -1103,7 +1106,7 @@ function InsightsPage({
               </div>
               <button className="ticket-export" onClick={exportFeedback} disabled={!feedbackEvents.length}><Download size={15} />导出反馈</button>
             </div>
-            <div className="feedback-separation"><CheckCircle2 size={15} /><span>人工反馈独立保存，不会覆盖模型洞察、证据或建议。</span></div>
+            <div className="feedback-separation"><CheckCircle2 size={15} /><span>你的处理记录单独保存在当前浏览器，不会改写原始评论和建议。</span></div>
             <details className="ticket-history">
               <summary><Clock3 size={15} />历史记录 · {selectedHistory.length}</summary>
               {selectedHistory.length ? selectedHistory.map((event) => (
@@ -1121,16 +1124,16 @@ function InsightsPage({
             <div className="spine-step">
               <span className="step-node">01</span>
               <div>
-                <small>统计证据</small>
+                <small>有多少评论提到</small>
                 <strong>{selected.matchedIds.length} 条当前筛选评论</strong>
-                <p>全量支持 {selected.insight.data_evidence.support_reviews} 条；模型自报分数均值 {(selected.insight.data_evidence.mean_model_confidence * 100).toFixed(1)}%（未校准，不是正确概率）。</p>
+                <p>完整样本中共有 {selected.insight.data_evidence.support_reviews} 条相关评论。数量表示“被提到多少次”，不表示问题原因已经确定。</p>
               </div>
             </div>
             <div className="spine-step">
               <span className="step-node">02</span>
               <div>
-                <small>消费者原话</small>
-                <strong>代表性证据片段</strong>
+                <small>顾客原话</small>
+                <strong>抽查几条代表性评论</strong>
                 <div className="spine-quotes">
                   {representative.length ? (
                     representative.map((review) => (
@@ -1145,8 +1148,8 @@ function InsightsPage({
             <div className="spine-step action-step">
               <span className="step-node">03</span>
               <div>
-                <small>业务动作</small>
-                <strong>从证据出发，不做超范围承诺</strong>
+                <small>下一步怎么做</small>
+                <strong>先验证，再决定是否执行</strong>
                 <div className="action-grid">
                   <div>
                     <span>产品建议</span>
@@ -1231,13 +1234,13 @@ function ReviewDrawer({
   ] : [];
   const jumpToSource = () => document.getElementById("review-source-text")?.scrollIntoView({ behavior: "smooth", block: "center" });
   return (
-    <div className="drawer-layer" role="dialog" aria-modal="true" aria-label="评论证据库">
-      <button className="drawer-backdrop" onClick={onClose} aria-label="关闭评论证据库" />
+    <div className="drawer-layer" role="dialog" aria-modal="true" aria-label="评论原文">
+      <button className="drawer-backdrop" onClick={onClose} aria-label="关闭评论原文" />
       <aside className="review-drawer">
         <header className="drawer-header">
           <div>
             <span>EVIDENCE LIBRARY</span>
-            <strong>评论证据库</strong>
+            <strong>评论原文</strong>
           </div>
           <button className="icon-button" onClick={onClose} aria-label="关闭">
             <X size={20} />
@@ -1265,7 +1268,7 @@ function ReviewDrawer({
               <option value="relevance">相关性</option>
               <option value="stars_desc">星级：高到低</option>
               <option value="stars_asc">星级：低到高</option>
-              <option value="intensity">情绪强度</option>
+              <option value="intensity">表达强烈程度</option>
               <option value="date_desc" disabled={!hasReviewDates}>时间（当前数据缺失）</option>
             </select>
           </label>
@@ -1299,12 +1302,12 @@ function ReviewDrawer({
                 <span>{active.language.toUpperCase()}</span>
                 <StarLine stars={active.stars} />
                 <span>{labelOf(labels.sentiments, active.sentiment)}</span>
-                <span>模型自报 {(active.confidence * 100).toFixed(0)}% · 未校准</span>
+                <span>快速判断：{labelOf(labels.sentiments, active.sentiment)}</span>
               </div>
               <h2>{active.title || "无标题评论"}</h2>
               <blockquote id="review-source-text"><HighlightText text={active.body} needles={highlightNeedles} /></blockquote>
               <div className="annotation-section">
-                <span className="annotation-label">属性与观点证据</span>
+                <span className="annotation-label">评论提到了哪些方面</span>
                 {active.aspects.length ? active.aspects.map((aspect, index) => (
                   <div className="annotation-row" key={`${aspect.code}-${index}`}>
                     <div>
@@ -1347,7 +1350,7 @@ function ReviewDrawer({
               <footer>
                 <span>原始评论 ID</span>
                 <strong>{active.id}</strong>
-                <small>每个判断均保留直接证据片段</small>
+                <small>每个判断都能回到对应原文</small>
               </footer>
             </article>
           ) : (
@@ -1362,7 +1365,7 @@ function ReviewDrawer({
 export default function Home() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState("");
-  const [page, setPage] = useState<PageKey>("overview");
+  const [page, setPage] = useState<PageKey>("trial");
   const [filters, setFilters] = useState<Filters>(INITIAL_FILTERS);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
@@ -1431,7 +1434,7 @@ export default function Home() {
       ? `${filters.subcategory} 子品类`
       : productOptions.length || subcategoryOptions.length
         ? "全部已知商品"
-        : "全局语料演示";
+        : "全部演示评论";
   const openReview = (review: Review) => {
     setSelectedReview(review);
     setDrawerOpen(true);
@@ -1469,13 +1472,14 @@ export default function Home() {
     return (
       <main className="loading-screen">
         <div className="loading-mark"><span /><span /><span /></div>
-        <strong>正在装载评论证据</strong>
-        <span>构建双语市场视图…</span>
+        <strong>正在准备评论分析</strong>
+        <span>马上就好…</span>
       </main>
     );
   }
 
   const renderPage = () => {
+    if (page === "trial") return <TrialPage onExploreDemo={() => setPage("overview")} />;
     if (!filtered.length) return <EmptyState onReset={() => setFilters(INITIAL_FILTERS)} />;
     if (page === "overview") return <OverviewPage records={filtered} labels={data.labels} onOpen={openReview} />;
     if (page === "pain") return <PainPage records={filtered} labels={data.labels} onOpen={openReview} />;
@@ -1491,7 +1495,7 @@ export default function Home() {
           <div className="brand-mark">CV</div>
           <div>
             <strong>Crossborder Voice</strong>
-            <span>评论洞察 AGENT</span>
+            <span>评论分析助手</span>
           </div>
           <button className="sidebar-close" onClick={() => setMobileNavOpen(false)} aria-label="关闭导航">
             <X size={18} />
@@ -1520,28 +1524,25 @@ export default function Home() {
         <div className="dataset-seal">
           <span className="seal-dot" />
           <div>
-            <strong>{data.meta.mode === "demo" ? "PUBLIC DEMO" : "DATASET LOCKED"}</strong>
+            <strong>{data.meta.mode === "demo" ? "公开演示数据" : "完整分析数据"}</strong>
             <small>
               {data.meta.mode === "demo"
-                ? `${data.records.length} sample records · full analysis ${data.meta.fullDatasetRecords}`
-                : `v11 · ${data.records.length} records`}
+                ? `${data.records.length} 条示例 · 完整分析 ${data.meta.fullDatasetRecords} 条`
+                : `${data.records.length} 条评论`}
             </small>
           </div>
         </div>
-        <div className="sidebar-foot">
-          <span>Prompt {data.meta.promptVersion.replace("v9_", "v9 · ")}</span>
-          <span>Schema {data.meta.schemaVersion}</span>
-        </div>
+        <div className="sidebar-foot"><span>上传文件只在浏览器内处理</span><span>快速分析结果请人工复核</span></div>
       </aside>
 
       <div className="workspace">
-        <header className="topbar">
+        {page !== "trial" && <><header className="topbar">
           <button className="mobile-menu" onClick={() => setMobileNavOpen(true)} aria-label="打开导航">
             <Menu size={20} />
           </button>
           <div className="filter-title">
             <Filter size={16} />
-            <span>全局筛选</span>
+            <span>筛选评论</span>
             {activeFilters > 0 && <b>{activeFilters}</b>}
           </div>
           <div className="filters common-filters">
@@ -1569,7 +1570,7 @@ export default function Home() {
             </label>
           </div>
           <details className="advanced-filters">
-            <summary><SlidersHorizontal size={15} /><span>高级筛选</span><b>{[filters.aspect, filters.issue, filters.scenario].filter((value) => value !== "all").length}</b></summary>
+            <summary><SlidersHorizontal size={15} /><span>更多条件</span><b>{[filters.aspect, filters.issue, filters.scenario].filter((value) => value !== "all").length}</b></summary>
             <div>
               <label>
                 <span>产品属性</span>
@@ -1602,7 +1603,7 @@ export default function Home() {
             )}
             <button className="library-button" onClick={() => { setSelectedReview(null); setDrawerOpen(true); }}>
               <BookOpenText size={17} />
-              <span>评论证据库</span>
+              <span>查看评论原文</span>
               <b>{filtered.length}</b>
             </button>
           </div>
@@ -1617,7 +1618,7 @@ export default function Home() {
         <section className={`scope-rail ${productOptions.length || subcategoryOptions.length ? "scope-ready" : "scope-missing"}`} aria-label="商品分析范围">
           <div className="scope-rail-title">
             <ShoppingBag size={17} />
-            <div><span>SCOPE / 分析范围</span><strong>{scopeLabel}</strong></div>
+            <div><span>正在查看</span><strong>{scopeLabel}</strong></div>
           </div>
           <label>
             <span>商品</span>
@@ -1646,12 +1647,12 @@ export default function Home() {
             <span>
               {productOptions.length || subcategoryOptions.length
                 ? "筛选仅使用来源字段，不从评论文本推断商品。"
-                : "当前数据只能做全局语料方法演示，不生成虚假的单品洞察。"}
+                : "演示数据没有商品名称，因此只展示全部评论，不猜测具体商品。"}
             </span>
           </div>
           <div className={`sample-boundary ${filtered.length < 30 ? "warning" : ""}`}>
-            <strong>{filtered.length < 30 ? "低样本" : "描述性样本"}</strong>
-            <span>{filtered.length} 条 · 分层样本，不代表真实市场占比</span>
+            <strong>{filtered.length < 30 ? "评论较少" : "当前样本"}</strong>
+            <span>{filtered.length} 条 · 结果只说明这批评论，不代表整个市场</span>
           </div>
         </section>
 
@@ -1661,13 +1662,14 @@ export default function Home() {
             <Filter size={15} /> 筛选
           </button>
         </div>
+        </>}
 
         <div className="page-canvas">
           {renderPage()}
-          <footer className="data-footer">
-            <span><MessageSquareQuote size={14} /> {filtered.length} 条当前样本 · 原文可追溯</span>
-            <span>数据源 {data.meta.source} · 统计为描述性结论，不作因果推断</span>
-          </footer>
+          {page !== "trial" && <footer className="data-footer">
+            <span><MessageSquareQuote size={14} /> 当前查看 {filtered.length} 条评论 · 可返回原文</span>
+            <span>结果只描述当前数据，不能单独证明问题原因</span>
+          </footer>}
         </div>
       </div>
 
