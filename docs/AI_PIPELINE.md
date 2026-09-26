@@ -28,7 +28,7 @@ Missing evidence results in sparse output rather than inferred labels.
 
 ## Reproducibility and auditability
 
-Prompt and schema versions are written into run metadata. JSONL output is append-only during processing, and completed review IDs are detected before a resumed run. Errors are isolated per record so one malformed response does not discard the batch.
+Prompt and schema versions are written into run metadata. JSONL output is append-only during processing, and completed review IDs are reused only after every existing record matches the current run fingerprint. The fingerprint binds the full input file, prompt text/version, provider endpoint, model parameters, schema and local validator. Changing only the row limit is supported; changing the dataset requires a new output path. Legacy outputs without a fingerprint are rejected. Validation happens before any request or artifact modification. Use a new output path to preserve an earlier experiment; `--no-resume` explicitly replaces the output. Errors are isolated per record so one malformed response does not discard the batch.
 
 The core implementation is in:
 

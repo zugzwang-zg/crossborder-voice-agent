@@ -174,3 +174,10 @@ pnpm dev
 ## 技术栈
 
 Python · JSON Schema · OpenAI-compatible Responses API · Prompt Engineering · Human Evaluation · Next.js · React · TypeScript · Data Visualization
+
+## 新增验证与改进计划
+
+- `cd dashboard` 后运行 `pnpm exec playwright install chromium`、`pnpm test:e2e`，验证筛选、建议与原文回查。
+- 断点续跑现在检查实验指纹；旧输出没有指纹时请使用新输出路径，或明确用 `--no-resume` 覆盖。
+- [下一轮质量与业务验证计划](docs/NEXT_EVALUATION.md)：重点补漏召回和建议可执行性，尚未产生新的实测分数。
+- 当前主分支包含 Python 与看板 CI，使用公开样本和 mock，不调用付费 API。

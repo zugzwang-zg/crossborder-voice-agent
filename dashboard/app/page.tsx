@@ -19,85 +19,9 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import type { Review, Insight, Labels, DashboardData } from "../lib/types";
+import { selectInsights } from "../lib/evidence";
 
-type CodedEvidence = { code: string; evidence: string };
-type Aspect = {
-  code: string;
-  polarity: "positive" | "negative" | "mixed" | "neutral";
-  evidence: string[];
-  opinion: string;
-};
-type Review = {
-  id: string;
-  language: "en" | "es";
-  stars: number;
-  title: string;
-  body: string;
-  sentiment: string;
-  intensity: number;
-  confidence: number;
-  aspects: Aspect[];
-  issues: CodedEvidence[];
-  motivations: CodedEvidence[];
-  scenarios: CodedEvidence[];
-  speechActs: CodedEvidence[];
-  actions: { audience: string; action: string; evidence: string }[];
-  expectationGap: { present: boolean; type: string; evidence: string[] };
-};
-type Insight = {
-  insight_id: string;
-  category: string;
-  category_name: string;
-  title: string;
-  affected_audience: {
-    languages: Record<string, number>;
-    star_distribution: Record<string, number>;
-  };
-  data_evidence: {
-    support_reviews: number;
-    mean_model_confidence: number;
-    source_review_ids: string[];
-  };
-  representative_quotes: {
-    review_id: string;
-    language: string;
-    stars: number;
-    quote: string;
-  }[];
-  possible_cause: string;
-  product_recommendation: string;
-  marketing_recommendation: string;
-  content_topic: string;
-  sample_size_and_confidence: {
-    support_reviews: number;
-    evidence_quotes: number;
-    grade: string;
-  };
-};
-type Labels = {
-  aspects: Record<string, string>;
-  issues: Record<string, string>;
-  motivations: Record<string, string>;
-  scenarios: Record<string, string>;
-  speechActs: Record<string, string>;
-  expectationGaps: Record<string, string>;
-  sentiments: Record<string, string>;
-};
-type DashboardData = {
-  meta: {
-    title: string;
-    source: string;
-    generatedFrom: number;
-    traceability: { status: string; insights_checked: number; failures: number };
-    promptVersion: string;
-    schemaVersion: string;
-    mode?: "demo";
-    fullDatasetRecords?: number;
-  };
-  labels: Labels;
-  records: Review[];
-  insights: Insight[];
-};
 type PageKey = "overview" | "pain" | "motivation" | "language" | "insights";
 type Filters = {
   language: string;
@@ -492,8 +416,8 @@ function MotivationPage({
     highReviews.flatMap((r) => r.aspects.filter((a) => a.polarity === "positive")),
     (item) => item.code,
   ).slice(0, 6);
-  const marketing = insights
-    .filter((insight) => insight.marketing_recommendation)
+  const marketing = selectInsights(insights, records)
+    .filter(({ insight }) => insight.marketing_recommendation)
     .slice(0, 4);
   const evidence = highReviews
     .filter((r) => r.motivations.length || r.scenarios.length)
@@ -582,16 +506,17 @@ function MotivationPage({
       <div className="translation-board">
         <div className="translation-title">
           <span>可转化营销表达</span>
-          <h2>从统计信号，到可验证的内容命题</h2>
+          <h2>从统计信号，到可验证的内容命题</h2><p>建议来自完整分析，仅展示当前筛选有证据支持的条目；筛选不会重新生成结论。</p>
         </div>
         <div className="translation-list">
-          {marketing.map((insight, index) => (
+          {!marketing.length && <p role="status">当前筛选没有可追溯的营销建议。</p>}
+          {marketing.map(({ insight, matchedIds }, index) => (
             <div key={insight.insight_id}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <strong>{insight.title}</strong>
                 <p>{insight.marketing_recommendation}</p>
-                <small>{insight.data_evidence.support_reviews} 条评论支撑</small>
+                <small>{matchedIds.length} 条当前证据 · 全量支持 {insight.data_evidence.support_reviews} 条</small>
               </div>
             </div>
           ))}
@@ -741,13 +666,7 @@ function InsightsPage({
   onOpen: (review: Review) => void;
 }) {
   const recordMap = useMemo(() => new Map(records.map((record) => [record.id, record])), [records]);
-  const visibleInsights = insights
-    .map((insight) => {
-      const matchedIds = insight.data_evidence.source_review_ids.filter((id) => recordMap.has(id));
-      return { insight, matchedIds };
-    })
-    .filter((item) => item.matchedIds.length)
-    .sort((a, b) => b.matchedIds.length - a.matchedIds.length);
+  const visibleInsights = selectInsights(insights, records);
   const [selectedId, setSelectedId] = useState<string>("");
   const selected = visibleInsights.find((item) => item.insight.insight_id === selectedId) || visibleInsights[0];
 
@@ -761,12 +680,12 @@ function InsightsPage({
       <div className="page-kicker">EVIDENCE BRIEF / 洞察简报</div>
       <div className="headline-block insight-headline">
         <div>
-          <h1>15 条业务洞察，每一条都能回到评论证据</h1>
-          <p>点击左侧洞察，右侧依次展示统计支撑、消费者原话和可执行建议；筛选器会同步收缩证据范围。</p>
+          <h1>完整分析 {insights.length} 条洞察 · 当前可追溯 {visibleInsights.length} 条</h1>
+          <p>仅展示当前数据和筛选范围内能打开评论证据的洞察。公开样本不覆盖全部洞察；全量支持数来自完整分析，筛选不会重新生成结论。</p>
         </div>
         <div className="trace-status">
           <Sparkles size={18} />
-          <div><strong>TRACE PASS</strong><span>0 条失联证据</span></div>
+          <div><strong>当前证据可打开</strong><span>{visibleInsights.length} / {insights.length} 条洞察有当前证据</span></div>
         </div>
       </div>
 
@@ -989,19 +908,30 @@ export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
     const loadDashboardData = async () => {
       for (const candidate of [
         "/data/dashboard-data.json",
         "/data/dashboard-data.demo.json",
       ]) {
-        const response = await fetch(candidate);
-        if (response.ok) return response.json();
+        try {
+          const response = await fetch(candidate, { signal: controller.signal });
+          if (!response.ok) continue;
+          const value: unknown = await response.json();
+          if (!value || typeof value !== "object") continue;
+          const payload = value as Partial<DashboardData>;
+          if (!Array.isArray(payload.records) || !Array.isArray(payload.insights) || !payload.meta || !payload.labels) continue;
+          return payload as DashboardData;
+        } catch (reason) {
+          if (controller.signal.aborted) throw reason;
+        }
       }
       throw new Error("正式数据包与演示数据包均不可用");
     };
     loadDashboardData()
-      .then(setData)
-      .catch((reason) => setError(String(reason)));
+      .then((payload) => { if (!controller.signal.aborted) setData(payload); })
+      .catch((reason) => { if (!controller.signal.aborted) setError(String(reason)); });
+    return () => controller.abort();
   }, []);
 
   const filtered = useMemo(() => {
