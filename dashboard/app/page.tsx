@@ -1024,7 +1024,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="workspace">
+      <div className="workspace"><p className="dataset-notice">模型标签仍需复核；已完成公开 10 条样本的单一 AI 评审。<a href="https://github.com/zugzwang-zg/crossborder-voice-agent/blob/main/reports/ai_review_2026-09-30.md" target="_blank" rel="noreferrer">查看发现与局限</a></p>
         <header className="topbar">
           <button className="mobile-menu" onClick={() => setMobileNavOpen(true)} aria-label="打开导航">
             <Menu size={20} />

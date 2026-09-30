@@ -1,5 +1,7 @@
 # CrossBorder Voice
 
+> 2026-09-30：已完成[单一 AI 评审](reports/ai_review_2026-09-30.md)，含逐条证据与修订清单；不等同于独立人工评测。
+
 **A traceable bilingual review-insight agent for cross-border beauty operations**
 
 CrossBorder Voice 将 Amazon 英语与西班牙语美妆评论转换为可筛选、可复核的产品与内容运营洞察。系统覆盖确定性抽样、语言学标签体系、LLM 结构化分析、冻结测试集评测、证据聚合与交互式看板。
