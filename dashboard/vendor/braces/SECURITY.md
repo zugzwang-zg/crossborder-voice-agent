@@ -1,0 +1,3 @@
+# Local security backport
+
+Upstream: micromatch/braces 3.0.3 (MIT). GHSA-vfj7-8cjw-p6xm has no published patched release as of 2026-10-03. This local revision caps parser stack depth at 128 and checks AST depth, size and cycles iteratively before compile/expand/stringify, including direct library entrypoints. Parent/prev links are intentionally excluded. Normal brace/range behavior remains upstream; unusually deep patterns now throw SyntaxError. This mitigation covers the reported stack exhaustion; it is not a general expansion resource budget. Replace this vendor with an upstream fixed version when one is published. The regression test uses 10,000-level strings and ASTs.

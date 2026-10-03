@@ -1,3 +1,6 @@
+packages:
+  - "vendor/*"
+
 allowBuilds:
   esbuild: true
   sharp: true
@@ -10,15 +13,16 @@ onlyBuiltDependencies:
   - workerd
 
 overrides:
-  fast-uri: 3.1.6
+  fast-uri: 3.1.8
   js-yaml: 4.3.2
   sharp: 0.35.4
-  undici: 7.29.0
+  undici: 7.29.1
   ws: 8.21.0
   postcss: 8.5.25
   nanoid: 3.3.18
   image-size: 2.0.3
-  "brace-expansion@1": 1.1.18
-  "brace-expansion@5": 5.0.9
+  "brace-expansion@1": 1.1.21
+  "brace-expansion@5": 5.0.12
   vite: 8.2.1
   react-server-dom-webpack: 19.2.8
+  braces: link:vendor/braces
