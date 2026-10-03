@@ -42,3 +42,8 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+/playwright-report/
+/test-results/
+
+*.tsbuildinfo

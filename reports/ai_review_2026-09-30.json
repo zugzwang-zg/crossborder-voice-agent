@@ -1,0 +1,133 @@
+{
+  "review_date": "2026-09-30",
+  "reviewer": "Codex AI assistant in this task",
+  "review_type": "single_assistant_non_blind_development_review",
+  "independent_human_evaluation": false,
+  "new_model_pipeline_run": false,
+  "scope": {
+    "source": "dashboard/public/data/dashboard-data.demo.json",
+    "source_sha256": "151acc923f04416c3973df5e4a784cae606af74e9b655d16ab5092775e635b8e",
+    "item_count": 10,
+    "reference": "annotation_guideline.md",
+    "historical_100_gold_reproduced": false,
+    "full_1000_dataset_reviewed": false
+  },
+  "rubric": {
+    "scale": "1=unsupported core conclusion; 2=material omission or label issue; 3=minor omission or ambiguity; 4=core interpretation supported",
+    "decision": "Review label/evidence fit; do not use existing model outputs as gold labels"
+  },
+  "summary": {
+    "usable_with_limits": 3,
+    "revise": 7,
+    "model_accuracy_estimated": false,
+    "public_demo_decision": "publish_as_inspection_tool_with_model_label_caveat"
+  },
+  "items": [
+    {
+      "id": "en_0008853",
+      "language": "en",
+      "record_sha256": "19792cd3ba3ef71b8ae119ad590741b969db64cc92842d8046b6d57265913de5",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "Dont waste your money",
+      "reason": "漏掉面向他人的 warning；Not flexible 缺乏产品语境，texture_consistency 分类需保留歧义。",
+      "recommended_action": "补 warning，核实产品类别后再确定材质/质地属性。"
+    },
+    {
+      "id": "en_0023033",
+      "language": "en",
+      "record_sha256": "f1a3432e24b8560c532a1adae8fef56a93ecb5da6edde6cca34415a04235e64e",
+      "semantic_support_score": 4,
+      "decision": "usable_with_limits",
+      "evidence_excerpt": "didn't notice a single change in my scar",
+      "reason": "负向效果与比较有原文支持；其他凝胶更快不能变成当前产品绝对速度结论。",
+      "recommended_action": "先记录消费者感受与适用条件；不把评论改写成疤痕治疗功效承诺。"
+    },
+    {
+      "id": "en_0006118",
+      "language": "en",
+      "record_sha256": "1b0a2a9c05da9b75ef82d964caab00ea615af22003336c222863e4c1b6be3e46",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "Once you sew more tracks in, it will be absolutely stunning.",
+      "reason": "赞美带有改造后条件；不宜当成开箱即有的效果。daily wig wearer 场景未保留。",
+      "recommended_action": "保留改造条件并补日常使用语境；将 large gaps 列入待核实问题。"
+    },
+    {
+      "id": "en_0001788",
+      "language": "en",
+      "record_sha256": "0eceb38900c23622273428a7747573f14299a75c631b6589473e628a064c8946",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "However I enjoy a stronger mist.",
+      "reason": "总体偏正面可以解释，但遗漏更强雾量偏好，不能只显示 praise。",
+      "recommended_action": "补雾量相关的偏好/轻微不满及歧义说明，不强行标为产品故障。"
+    },
+    {
+      "id": "en_0000309",
+      "language": "en",
+      "record_sha256": "f891c392429c39ed90e917318170995106e972f01521516609154b70485cd172",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "cool to the touch",
+      "reason": "灯具外壳温度被映射为美妆舒适刺激标签，类别迁移有歧义。",
+      "recommended_action": "核实品类并展示标签适用范围；不把不烫手当作皮肤安全证据。"
+    },
+    {
+      "id": "es_0003172",
+      "language": "es",
+      "record_sha256": "2d370a127ad6b3caa9cad342f19ad0a9d491f49d7c017d71a6ce3537e80b9ea8",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "No lo recomiendo.",
+      "reason": "按手册 recommendation 表示认可并推荐；此处是否定推荐，应为 warning。",
+      "recommended_action": "把否定推荐列入修正清单，保留原始模型输出以便比较。"
+    },
+    {
+      "id": "es_0011097",
+      "language": "es",
+      "record_sha256": "82656289734216f7365194817a212d37a2e76382fa026594152c430128b469ad",
+      "semantic_support_score": 3,
+      "decision": "revise",
+      "evidence_excerpt": "estoy muy contenta",
+      "reason": "正面清洁效果有支持；漏掉明确 praise 和每两天使用的语境。",
+      "recommended_action": "补赞美与频次说明；不由频次推断安全性。"
+    },
+    {
+      "id": "es_0013574",
+      "language": "es",
+      "record_sha256": "1ff1eb94213a7eb5742ecc39598509b573df332590bc237fd8faeb8a46a17332",
+      "semantic_support_score": 4,
+      "decision": "usable_with_limits",
+      "evidence_excerpt": "me llegó solo protegido por un trozo de cartón con fixo dentro de una bolsa",
+      "reason": "产品正面与包装负面分开合理；包装建议应分派履约而非自动归因配方。",
+      "recommended_action": "由履约负责人核对包装照片、运输环节并试验防护；不改产品功效。"
+    },
+    {
+      "id": "es_0003547",
+      "language": "es",
+      "record_sha256": "7cf3a01eb04d2a943711a7f0bbd97351506d4dd41d88c20d7d209e107272b281",
+      "semantic_support_score": 3,
+      "decision": "usable_with_limits",
+      "evidence_excerpt": "más efectivo, cómodo, sano y duradero",
+      "reason": "效果/持久/价值有文本依据；cómodo 映射易用性仍有歧义，sano 不能成为健康事实。",
+      "recommended_action": "保留消费者原话并限制健康推断；不将价格比较外推为当前市场结论。"
+    },
+    {
+      "id": "es_0027587",
+      "language": "es",
+      "record_sha256": "481207ecceeea2f790a673216f4cec150204813439d3ac59b993b06c9077a985",
+      "semantic_support_score": 2,
+      "decision": "revise",
+      "evidence_excerpt": "muy probablemente no vuelva a hacerlo jamás",
+      "reason": "气味、吸收和购买需求有支持；漏掉明确的拒绝复购言语行为。",
+      "recommended_action": "增加 rejection_no_repurchase 候选标签并保留 probably 的不确定语气。"
+    }
+  ],
+  "limitations": [
+    "The reviewer also implemented the fixes; this is not independent.",
+    "Existing visible samples are not a new holdout set.",
+    "No user adoption, measured narration time, professional sign-off or business ROI was measured.",
+    "Historical benchmark scores and labels have not been overwritten."
+  ]
+}

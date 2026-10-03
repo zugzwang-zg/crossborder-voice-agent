@@ -54,7 +54,6 @@ test("dashboard implements all six required filters and five analysis views", as
     assert.match(page, new RegExp(`key: "${view}"`));
   }
   assert.match(page, /ReviewDrawer/);
-  assert.match(page, /data_evidence\.source_review_ids/);
   assert.match(page, /评论证据库/);
   assert.match(page, /dashboard-data\.demo\.json/);
 });

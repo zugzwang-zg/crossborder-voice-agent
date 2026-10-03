@@ -386,7 +386,30 @@ def estimate_cost(
     )
 
 
-def read_completed_ids(output_path: Path) -> set[str]:
+def run_fingerprint(config: dict[str, Any], provider_name: str, input_path: Path, prompt_path: Path) -> str:
+    """Identify the data, model request and local interpretation of a run.
+
+    Exclude credentials and operational settings such as retry delay. The input
+    hash covers all rows so changing --limit can safely continue the same run.
+    """
+    identity = {
+        "input_sha256": sha256_file(input_path),
+        "prompt_sha256": sha256_file(prompt_path),
+        "prompt_version": config["prompt_version"],
+        "provider": provider_name,
+        "model": config["model"],
+        "endpoint": responses_endpoint(config) if provider_name == "openai" else None,
+        "parameters": {key: config.get(key) for key in (
+            "reasoning_effort", "text_verbosity", "max_output_tokens",
+        )},
+        "schema_sha256": schema_hash(),
+        "api_schema_sha256": api_schema_hash(),
+        "validator_sha256": sha256_file(Path(__file__).with_name("schema.py")),
+    }
+    return hashlib.sha256(json.dumps(identity, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def read_completed_ids(output_path: Path, expected_fingerprint: str | None = None) -> set[str]:
     completed: set[str] = set()
     if not output_path.exists():
         return completed
@@ -396,8 +419,21 @@ def read_completed_ids(output_path: Path) -> set[str]:
                 continue
             try:
                 record = json.loads(line)
+                if not isinstance(record, dict) or not isinstance(record.get("review_id"), str):
+                    raise ValueError("Expected an object with a string review_id")
+                if record["review_id"] in completed:
+                    raise ValueError("Duplicate review_id")
+                if expected_fingerprint is not None and (
+                    not isinstance(record.get("_run"), dict)
+                    or record["_run"].get("fingerprint") != expected_fingerprint
+                ):
+                    raise RuntimeError(
+                        f"Cannot resume: run fingerprint mismatch at {output_path}:{line_number}. "
+                        "Input, prompt, model or schema changed, or this is a legacy output. "
+                        "Use a new output path, or --no-resume to explicitly replace it."
+                    )
                 completed.add(record["review_id"])
-            except (json.JSONDecodeError, KeyError) as error:
+            except (ValueError, KeyError) as error:
                 raise RuntimeError(
                     f"Cannot resume: invalid JSONL at "
                     f"{output_path}:{line_number}"
@@ -461,6 +497,9 @@ def load_reviews(input_path: Path, limit: int | None) -> list[dict[str, str]]:
     missing = required - set(reviews[0] if reviews else [])
     if missing:
         raise ValueError(f"Input CSV missing columns: {sorted(missing)}")
+    ids = [row["review_id"] for row in reviews]
+    if any(not review_id.strip() for review_id in ids) or len(ids) != len(set(ids)):
+        raise ValueError("Input CSV must contain unique, nonempty review_id values")
     return reviews[:limit] if limit is not None else reviews
 
 
@@ -511,7 +550,9 @@ def run_pipeline(
     started_at = utc_now()
     prompt = prompt_path.read_text(encoding="utf-8")
     reviews = load_reviews(input_path, limit)
-    completed_ids = read_completed_ids(output_path) if resume else set()
+    fingerprint = run_fingerprint(config, provider.name, input_path, prompt_path)
+    # Validate before modifying output, errors or logs, or making provider calls.
+    completed_ids = read_completed_ids(output_path, fingerprint) if resume else set()
     if not resume:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text("", encoding="utf-8")
@@ -593,6 +634,7 @@ def run_pipeline(
                     "analysis": analysis,
                     "_run": {
                         **result.metadata,
+                        "fingerprint": fingerprint,
                         "prompt_version": config["prompt_version"],
                         "schema_version": SCHEMA_VERSION,
                         "attempts": attempt,
@@ -701,6 +743,7 @@ def run_pipeline(
     )
     parse_success_rate = success_count / processed if processed else None
     run_log = {
+        "fingerprint": fingerprint,
         "status": (
             "aborted_fatal_provider_error"
             if aborted_early
